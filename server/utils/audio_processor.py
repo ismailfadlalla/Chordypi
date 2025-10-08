@@ -40,12 +40,22 @@ def download_youtube_audio(url):
     The YouTube video player still works normally for playback!
     """
     
+    print(f"=" * 80)
+    print(f"🎵 DOWNLOAD_YOUTUBE_AUDIO called for: {url}")
+    print(f"=" * 80)
+    
     # STEP 1: Try RapidAPI YouTube Downloader (BEST METHOD)
+    print("📋 STEP 1: Checking RapidAPI YouTube Downloader...")
     try:
+        print("   🔍 Attempting to import youtube_api_downloader...")
         from utils.youtube_api_downloader import download_youtube_audio_rapidapi
+        print("   ✅ Import successful!")
         
+        print("   🔑 Checking for RAPIDAPI_KEY environment variable...")
         rapidapi_key = os.getenv('RAPIDAPI_KEY')
+        
         if rapidapi_key:
+            print(f"   ✅ RAPIDAPI_KEY found! (length: {len(rapidapi_key)} chars)")
             print("🚀 Trying RapidAPI YouTube MP3 Downloader (Method 1 - Best)")
             print("   ✅ 100% reliable, no IP blocking")
             print("   ✅ 500 free downloads/month")
@@ -58,13 +68,16 @@ def download_youtube_audio(url):
             else:
                 print(f"⚠️ RapidAPI failed, trying fallback methods...")
         else:
+            print("   ❌ RAPIDAPI_KEY not found in environment variables")
             print("⚠️ RAPIDAPI_KEY not set - skipping RapidAPI method")
             print("💡 Add RAPIDAPI_KEY to Render for 500 free downloads/month")
             
     except ImportError as e:
-        print(f"⚠️ RapidAPI downloader not available: {e}")
+        print(f"❌ RapidAPI downloader IMPORT FAILED: {e}")
+        print(f"   Import error type: {type(e).__name__}")
     except Exception as e:
-        print(f"⚠️ RapidAPI error: {e}")
+        print(f"❌ RapidAPI error: {e}")
+        print(f"   Error type: {type(e).__name__}")
         print(f"   Falling back to yt-dlp...")
     
     # STEP 2: Try yt-dlp (with or without proxy)
