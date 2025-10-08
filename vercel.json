@@ -8,8 +8,16 @@
       "destination": "https://chordypi.onrender.com/api/analyze-song"
     },
     {
+      "source": "/api/analyze-audio-upload",
+      "destination": "https://chordypi.onrender.com/api/analyze-audio-upload"
+    },
+    {
       "source": "/api/search-songs",
       "destination": "https://chordypi.onrender.com/api/search-songs"
+    },
+    {
+      "source": "/api/featured-songs",
+      "destination": "https://chordypi.onrender.com/api/featured-songs"
     },
     {
       "source": "/api/songs/:path*",
@@ -22,6 +30,25 @@
     {
       "source": "/(.*)",
       "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
     }
   ]
 }
