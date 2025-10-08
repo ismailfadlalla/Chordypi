@@ -4,11 +4,28 @@ Provides REAL chord progression analysis and serves web build files
 Pi Network Integration - HTTPS Required
 """
 
+# CRITICAL: Clear Python bytecode cache first!
+import os
+import shutil
+import sys
+
+print("=" * 80)
+print("🧹 CLEARING PYTHON BYTECODE CACHE BEFORE STARTUP")
+print("=" * 80)
+
+# Remove all __pycache__ directories
+for root, dirs, files in os.walk('.'):
+    if '__pycache__' in dirs:
+        cache_path = os.path.join(root, '__pycache__')
+        print(f"Removing: {cache_path}")
+        shutil.rmtree(cache_path)
+
+# Disable bytecode writing for this session
+sys.dont_write_bytecode = True
+
 print("=" * 80)
 print("🚀 APP.PY STARTING - ChordyPi v3.0 with RapidAPI")
 print("=" * 80)
-
-import os
 import tempfile
 import requests
 import random
