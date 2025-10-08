@@ -5,19 +5,19 @@
   "rewrites": [
     {
       "source": "/api/analyze-song",
-      "destination": "https://chordypi-api.onrender.com/api/analyze-song"
+      "destination": "https://chordypi.onrender.com/api/analyze-song"
     },
     {
       "source": "/api/search-songs",
-      "destination": "https://chordypi-api.onrender.com/api/search-songs"
+      "destination": "https://chordypi.onrender.com/api/search-songs"
     },
     {
       "source": "/api/songs/:path*",
-      "destination": "https://chordypi-api.onrender.com/api/songs/:path*"
+      "destination": "https://chordypi.onrender.com/api/songs/:path*"
     },
     {
       "source": "/api/library/:path*",
-      "destination": "https://chordypi-api.onrender.com/api/library/:path*"
+      "destination": "https://chordypi.onrender.com/api/library/:path*"
     },
     {
       "source": "/(.*)",
