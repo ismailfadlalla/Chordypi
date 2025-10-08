@@ -108,7 +108,16 @@ def analyze_song():
             audio_path, duration, title = download_youtube_audio(analysis_url)
             
             if not audio_path:
-                raise Exception("Failed to download audio from YouTube")
+                error_msg = str(title) if title else "Failed to download audio from YouTube"
+                print(f"❌ YouTube download failed: {error_msg}")
+                
+                # Provide helpful error message based on the error
+                if "bot detection" in error_msg.lower() or "sign in" in error_msg.lower():
+                    user_error = "YouTube blocked the download (bot detection). This is a limitation of free cloud hosting. Try: 1) Use a different song, or 2) Wait a few minutes and try again."
+                else:
+                    user_error = f"Could not download audio: {error_msg}"
+                    
+                raise Exception(user_error)
             
             # Try AI-enhanced detection first
             try:
@@ -193,6 +202,8 @@ def analyze_song():
             error_msg = str(analysis_error)
             if "Could not detect chord progression" in error_msg:
                 user_msg = "Unable to detect chord progression. Try a different song with clear chords."
+            elif "YouTube download failed" in error_msg or "IP restrictions" in error_msg:
+                user_msg = "YouTube blocked the download request. This is a known issue with cloud servers. We're working on a fix!"
             else:
                 user_msg = f"Chord analysis failed: {error_msg}"
 
@@ -200,7 +211,8 @@ def analyze_song():
                 "status": "error",
                 "error": user_msg,
                 "song_name": song_name,
-                "analysis_attempted": True
+                "analysis_attempted": True,
+                "error_details": error_msg if "YouTube" in error_msg else None
             }), 400
     except Exception as e:
         import traceback
