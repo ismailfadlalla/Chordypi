@@ -1,6 +1,11 @@
 """
 ChordyPi Audio Processor Utilities
 Contains functions for processing audio files, including downloading and converting formats.
+
+YOUTUBE DOWNLOAD PRIORITY:
+1. RapidAPI YouTube MP3 Downloader (100% reliable, 500 free/month)
+2. yt-dlp with proxy (if configured)
+3. yt-dlp direct (last resort, often fails)
 """
 
 import os
@@ -23,7 +28,46 @@ def convert_audio_format(input_file, output_format='wav'):
         return None
 
 def download_youtube_audio(url):
-    """Download audio from YouTube URL and return audio path, duration, and title."""
+    """
+    Download audio from YouTube URL and return audio path, duration, and title.
+    
+    Priority order:
+    1. RapidAPI YouTube MP3 Downloader (100% reliable, no IP blocking)
+    2. yt-dlp with proxy (if configured)
+    3. yt-dlp direct connection (fallback)
+    
+    NOTE: This only downloads AUDIO for chord analysis.
+    The YouTube video player still works normally for playback!
+    """
+    
+    # STEP 1: Try RapidAPI YouTube Downloader (BEST METHOD)
+    try:
+        from utils.youtube_api_downloader import download_youtube_audio_rapidapi
+        
+        rapidapi_key = os.getenv('RAPIDAPI_KEY')
+        if rapidapi_key:
+            print("🚀 Trying RapidAPI YouTube MP3 Downloader (Method 1 - Best)")
+            print("   ✅ 100% reliable, no IP blocking")
+            print("   ✅ 500 free downloads/month")
+            
+            audio_path, duration, title = download_youtube_audio_rapidapi(url)
+            
+            if audio_path and os.path.exists(audio_path):
+                print(f"✅ SUCCESS with RapidAPI!")
+                return audio_path, duration, title
+            else:
+                print(f"⚠️ RapidAPI failed, trying fallback methods...")
+        else:
+            print("⚠️ RAPIDAPI_KEY not set - skipping RapidAPI method")
+            print("💡 Add RAPIDAPI_KEY to Render for 500 free downloads/month")
+            
+    except ImportError as e:
+        print(f"⚠️ RapidAPI downloader not available: {e}")
+    except Exception as e:
+        print(f"⚠️ RapidAPI error: {e}")
+        print(f"   Falling back to yt-dlp...")
+    
+    # STEP 2: Try yt-dlp (with or without proxy)
     try:
         # Import proxy configuration
         try:
