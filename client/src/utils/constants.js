@@ -1,13 +1,24 @@
 // Use current window location to avoid CORS issues between localhost/127.0.0.1
 const getApiBaseUrl = () => {
     if (typeof window !== 'undefined') {
-        // Use the same host as the current page to avoid CORS
-        const protocol = window.location.protocol;
         const hostname = window.location.hostname;
-        return `${protocol}//${hostname}:5000/api`;
+        
+        // If running on Vercel (production), use the deployed backend
+        if (hostname === 'chordypi.vercel.app') {
+            return 'https://chordypi.onrender.com/api';
+        }
+        
+        // If running locally, use local backend
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            const protocol = window.location.protocol;
+            return `${protocol}//${hostname}:5000/api`;
+        }
+        
+        // Default to production backend
+        return 'https://chordypi.onrender.com/api';
     }
-    // Fallback for server-side rendering or non-browser environments (HTTPS for Pi Network)
-    return 'https://localhost:5000/api';
+    // Fallback for server-side rendering (use production)
+    return 'https://chordypi.onrender.com/api';
 };
 
 const API_BASE_URL = getApiBaseUrl();
