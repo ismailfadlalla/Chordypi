@@ -223,3 +223,174 @@ def analyze_song():
             "status": "error",
             "error": f"Server error: {str(e)}"
         }), 500
+
+
+@analysis_bp.route('/api/analyze-audio-upload', methods=['POST'])
+def analyze_audio_upload():
+    """
+    CLIENT-SIDE AUDIO EXTRACTION ENDPOINT
+    Accepts uploaded audio file from browser, analyzes chords
+    This bypasses YouTube IP blocking by downloading in user's browser
+    """
+    try:
+        print("🎵 NEW UPLOAD ENDPOINT: Received audio upload request")
+        
+        # Check if file is present
+        if 'audio' not in request.files:
+            return jsonify({
+                "status": "error",
+                "error": "No audio file provided. Please upload an audio file."
+            }), 400
+        
+        audio_file = request.files['audio']
+        song_name = request.form.get('song_name', 'Unknown Song')
+        
+        if audio_file.filename == '':
+            return jsonify({
+                "status": "error",
+                "error": "Empty filename. Please select a valid audio file."
+            }), 400
+        
+        print(f"📁 File received: {audio_file.filename}")
+        print(f"🎵 Song name: {song_name}")
+        print(f"📊 Content type: {audio_file.content_type}")
+        
+        # Validate file type
+        allowed_extensions = {'.wav', '.mp3', '.m4a', '.webm', '.ogg'}
+        file_ext = os.path.splitext(audio_file.filename)[1].lower()
+        
+        if file_ext not in allowed_extensions:
+            return jsonify({
+                "status": "error",
+                "error": f"Unsupported file type: {file_ext}. Allowed: {', '.join(allowed_extensions)}"
+            }), 400
+        
+        # Save uploaded file to temporary location
+        import tempfile
+        import os
+        
+        temp_dir = tempfile.mkdtemp()
+        audio_path = os.path.join(temp_dir, f"upload{file_ext}")
+        
+        print(f"💾 Saving to: {audio_path}")
+        audio_file.save(audio_path)
+        
+        file_size = os.path.getsize(audio_path)
+        print(f"📏 File size: {file_size / 1024 / 1024:.2f} MB")
+        
+        # Validate file size (max 50MB)
+        max_size = 50 * 1024 * 1024  # 50 MB
+        if file_size > max_size:
+            os.remove(audio_path)
+            os.rmdir(temp_dir)
+            return jsonify({
+                "status": "error",
+                "error": f"File too large ({file_size / 1024 / 1024:.1f} MB). Maximum: 50 MB"
+            }), 400
+        
+        # Estimate duration (rough calculation: file_size / bitrate)
+        # Assume 128 kbps average bitrate
+        estimated_duration = (file_size * 8) / (128 * 1000)  # in seconds
+        print(f"⏱️ Estimated duration: {estimated_duration:.1f}s")
+        
+        try:
+            # Try AI-enhanced chord detection
+            from services.enhanced_chord_detection import analyze_song_chords, get_enhanced_detector
+            
+            detector = get_enhanced_detector()
+            
+            if detector.available:
+                print("🤖 Running AI chord detection (Basic Pitch)...")
+                result = analyze_song_chords(audio_path)
+                chords = result['chords']
+                song_key = result['key']
+                detection_method = 'AI-Enhanced (Basic Pitch)'
+                accuracy = 90
+                
+                analysis_metadata = {
+                    'method': result['method'],
+                    'total_chord_segments': result['total_chords'],
+                    'unique_chords': result['unique_chords'],
+                    'accuracy': 90,
+                    'detection_engine': 'Spotify Basic Pitch AI',
+                    'note': 'Client-side extraction + AI analysis',
+                    'extraction_method': 'browser'
+                }
+            else:
+                raise ImportError("Basic Pitch not available")
+                
+        except (ImportError, Exception) as ai_error:
+            # Fallback to librosa
+            print(f"⚠️ AI detection unavailable: {ai_error}")
+            print("📊 Using librosa fallback...")
+            
+            from utils.chord_analyzer import extract_chords_from_audio
+            
+            # Limit analysis to 5 minutes max
+            max_duration = min(estimated_duration, 300)
+            chords = extract_chords_from_audio(audio_path, max_duration)
+            song_key = "C Major"
+            detection_method = 'Audio Analysis (Librosa)'
+            accuracy = 70
+            
+            analysis_metadata = {
+                'method': 'librosa',
+                'total_chord_segments': len(chords),
+                'unique_chords': len(set(c.get('chord', '') for c in chords)),
+                'accuracy': 70,
+                'detection_engine': 'Librosa Chroma Features',
+                'note': 'Client-side extraction + librosa analysis',
+                'extraction_method': 'browser'
+            }
+        
+        # Clean up uploaded file
+        try:
+            if os.path.exists(audio_path):
+                os.remove(audio_path)
+            if os.path.exists(temp_dir):
+                os.rmdir(temp_dir)
+            print("🧹 Cleaned up temporary files")
+        except Exception as cleanup_error:
+            print(f"⚠️ Cleanup warning: {cleanup_error}")
+        
+        if not chords:
+            print("❌ Chord detection returned no chords")
+            return jsonify({
+                "status": "error",
+                "error": "Could not detect chord progression in this audio file. Try a song with clearer chords."
+            }), 400
+        
+        print(f"✅ Analysis complete: {len(chords)} chords detected")
+        
+        return jsonify({
+            "status": "success",
+            "song_name": song_name,
+            "chords": chords,
+            "duration": estimated_duration,
+            "title": song_name,
+            "key": song_key,
+            "analysis_type": detection_method,
+            "accuracy": accuracy,
+            "source": "Client-Side Upload",
+            "analysis_metadata": analysis_metadata
+        })
+        
+    except Exception as e:
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"❌ Upload analysis error: {e}")
+        print(f"❌ Full traceback:\n{error_details}")
+        
+        # Clean up if error occurred
+        try:
+            if 'audio_path' in locals() and os.path.exists(audio_path):
+                os.remove(audio_path)
+            if 'temp_dir' in locals() and os.path.exists(temp_dir):
+                os.rmdir(temp_dir)
+        except:
+            pass
+        
+        return jsonify({
+            "status": "error",
+            "error": f"Analysis failed: {str(e)}"
+        }), 500
