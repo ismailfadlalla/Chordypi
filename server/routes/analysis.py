@@ -105,7 +105,19 @@ def analyze_song():
             print(f"🎯 Starting AI-enhanced audio analysis for URL: {analysis_url}")
             
             # Download audio
+            print("=" * 80)
+            print("🔴 ABOUT TO CALL download_youtube_audio() FROM ROUTES/ANALYSIS.PY")
+            print(f"🔴 URL: {analysis_url}")
+            print("=" * 80)
+            
             audio_path, duration, title = download_youtube_audio(analysis_url)
+            
+            print("=" * 80)
+            print(f"🔴 download_youtube_audio() RETURNED")
+            print(f"🔴 audio_path: {audio_path}")
+            print(f"🔴 duration: {duration}")
+            print(f"🔴 title: {title}")
+            print("=" * 80)
             
             if not audio_path:
                 error_msg = str(title) if title else "Failed to download audio from YouTube"
