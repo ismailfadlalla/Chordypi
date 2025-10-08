@@ -77,6 +77,12 @@ def download_youtube_audio(url):
             # Extract info first to get title and duration
             print("📝 Extracting video info...")
             info = ydl.extract_info(url, download=False)
+            
+            if not info:
+                print("❌ YouTube blocked the request - bot detection triggered")
+                print("💡 This is a known issue with cloud servers (Render, Heroku, etc.)")
+                return None, 0, "YouTube bot detection - try a different deployment platform or use cookies"
+            
             title = info.get('title', 'Unknown')
             duration = info.get('duration', 240)  # Default 4 minutes
             
