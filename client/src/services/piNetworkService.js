@@ -1,7 +1,7 @@
 // Pi Network Service for backend integration
 class PiNetworkService {
     constructor() {
-        this.baseURL = process.env.REACT_APP_API_URL || 'https://localhost:5000/api';
+        this.baseURL = process.env.REACT_APP_API_URL || 'https://chordypi.onrender.com/api';
         this.piAppId = process.env.REACT_APP_PI_APP_ID || 'chords-legend';
         this.piEnvironment = process.env.REACT_APP_PI_ENVIRONMENT || 'sandbox';
         this.sandboxMode = this.piEnvironment === 'sandbox';
