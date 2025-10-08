@@ -190,13 +190,22 @@ export const analyzeSong = async (songData) => {
         console.log('✅ Using ENHANCED AI Audio Analysis (100% accurate with all filters fixed)');
         console.log('📡 Making API call to Flask backend for chord analysis...');
         
+        // Extract videoId from song data
+        const videoId = songData.videoId || songData.id?.videoId || songData.id;
+        
+        // Construct YouTube URL if not provided
+        const youtubeUrl = songData.url || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : null);
+        
+        console.log('📺 Video URL:', youtubeUrl);
+        console.log('🎵 Song Name:', songData.title);
+        
         const response = await fetch(`${API_BASE_URL}/analyze-song`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                url: songData.url,
+                url: youtubeUrl,
                 song_name: songData.title
             })
         });
