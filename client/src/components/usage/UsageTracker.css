@@ -1,0 +1,329 @@
+/* Usage Tracker Styles */
+.usage-tracker {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.usage-tracker.compact {
+    padding: 0.8rem 1rem;
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.usage-tracker.premium {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(139, 195, 74, 0.2));
+    border-color: #4CAF50;
+    box-shadow: 0 5px 20px rgba(76, 175, 80, 0.2);
+}
+
+.usage-tracker.near-limit {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.2));
+    border-color: #FFC107;
+    box-shadow: 0 5px 20px rgba(255, 193, 7, 0.2);
+}
+
+.usage-tracker.limit-reached {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(233, 30, 99, 0.2));
+    border-color: #f44336;
+    box-shadow: 0 5px 20px rgba(244, 67, 54, 0.2);
+    animation: pulse-red 2s ease-in-out infinite;
+}
+
+@keyframes pulse-red {
+    0%, 100% { box-shadow: 0 5px 20px rgba(244, 67, 54, 0.2); }
+    50% { box-shadow: 0 5px 30px rgba(244, 67, 54, 0.4); }
+}
+
+.usage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.usage-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #ffd700;
+}
+
+.usage-count, .unlimited-badge {
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.premium-indicator {
+    color: #4CAF50;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.usage-bar {
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    height: 8px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.usage-tracker.compact .usage-bar {
+    flex: 1;
+    height: 6px;
+    margin: 0;
+}
+
+.usage-progress {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #4CAF50, #66BB6A);
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.usage-tracker.near-limit .usage-progress {
+    background: linear-gradient(90deg, #FFC107, #FFD54F);
+}
+
+.usage-tracker.limit-reached .usage-progress {
+    background: linear-gradient(90deg, #f44336, #e57373);
+}
+
+.usage-text {
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+}
+
+.usage-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.remaining-count {
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+.limit-message {
+    color: #f44336;
+    font-weight: 600;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.reset-info {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.premium-benefits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.8rem;
+}
+
+.benefit {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 8px;
+    border-left: 3px solid #4CAF50;
+}
+
+/* Upgrade Prompt */
+.upgrade-prompt {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1));
+    border: 2px solid #ffd700;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.prompt-content h4 {
+    margin-bottom: 1rem;
+    color: #ffd700;
+    font-size: 1.3rem;
+}
+
+.prompt-content p {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.upgrade-benefits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+.benefit-item {
+    font-size: 0.9rem;
+    padding: 0.8rem;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 10px;
+    border-left: 3px solid #4CAF50;
+    text-align: left;
+}
+
+.pricing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.pricing .price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffd700;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.pricing .value {
+    font-size: 1rem;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+.upgrade-btn {
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    color: #333;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+    min-width: 200px;
+}
+
+.upgrade-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.6);
+}
+
+.upgrade-btn:active {
+    transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .usage-tracker {
+        padding: 1rem;
+    }
+    
+    .usage-header {
+        flex-direction: column;
+        gap: 0.8rem;
+        text-align: center;
+    }
+    
+    .usage-details {
+        flex-direction: column;
+        gap: 0.8rem;
+        text-align: center;
+    }
+    
+    .premium-benefits,
+    .upgrade-benefits {
+        grid-template-columns: 1fr;
+    }
+    
+    .upgrade-prompt {
+        padding: 1.5rem;
+    }
+    
+    .pricing .price {
+        font-size: 1.7rem;
+    }
+    
+    .upgrade-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .usage-tracker {
+        padding: 0.8rem;
+    }
+    
+    .usage-tracker.compact {
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: stretch;
+    }
+    
+    .usage-tracker.compact .usage-bar {
+        margin: 0.5rem 0;
+    }
+    
+    .prompt-content h4 {
+        font-size: 1.1rem;
+    }
+    
+    .prompt-content p {
+        font-size: 0.9rem;
+    }
+    
+    .upgrade-prompt {
+        padding: 1rem;
+    }
+    
+    .pricing {
+        padding: 1rem;
+    }
+    
+    .pricing .price {
+        font-size: 1.5rem;
+    }
+}
+
+/* Special animations for different states */
+.usage-tracker.premium .unlimited-badge {
+    animation: glow-green 3s ease-in-out infinite;
+}
+
+@keyframes glow-green {
+    0%, 100% { box-shadow: 0 0 10px rgba(76, 175, 80, 0.3); }
+    50% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.6); }
+}
+
+.usage-tracker.near-limit {
+    animation: pulse-yellow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-yellow {
+    0%, 100% { box-shadow: 0 5px 20px rgba(255, 193, 7, 0.2); }
+    50% { box-shadow: 0 5px 30px rgba(255, 193, 7, 0.4); }
+}

@@ -1,0 +1,243 @@
+/* Image asset styles for ChordsLegend */
+
+/* Responsive image container */
+.responsive-image-container {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.responsive-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.responsive-image:hover {
+    transform: scale(1.05);
+}
+
+.image-fallback {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #FFD700;
+    font-size: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Background image styles */
+.background-image {
+    position: relative;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Home page background - full screen fixed */
+.home-page-bg {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 0 !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+}
+
+/* Logo styles */
+.app-logo {
+    max-height: 60px;
+    width: auto;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
+}
+
+.app-logo:hover {
+    transform: scale(1.1);
+}
+
+/* Hero section with background image */
+.hero-with-image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-with-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+.hero-with-image > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Guitar hero image */
+.guitar-hero-image {
+    max-width: 400px;
+    height: auto;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Chord diagram background */
+.chord-diagram-container {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 15px;
+    padding: 20px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+/* Music notes decoration */
+.music-notes-decoration {
+    position: absolute;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Player background with image */
+.player-with-background {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    position: relative;
+}
+
+.player-with-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    z-index: 1;
+}
+
+.player-with-background > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Analyzing screen with custom background */
+.analyzing-with-image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000;
+}
+
+.analyzing-with-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    z-index: 1;
+}
+
+.analyzing-with-image .analyzing-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Image optimization for different screen sizes */
+@media (max-width: 768px) {
+    .guitar-hero-image {
+        max-width: 250px;
+    }
+    
+    .app-logo {
+        max-height: 40px;
+    }
+    
+    .background-image {
+        background-attachment: scroll;
+    }
+    
+    .player-with-background,
+    .analyzing-with-image {
+        background-attachment: scroll;
+    }
+}
+
+/* Loading state for images */
+.image-loading {
+    background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+    background-size: 200% 200%;
+    animation: loading-shimmer 2s ease-in-out infinite;
+}
+
+@keyframes loading-shimmer {
+    0% {
+        background-position: 200% 200%;
+    }
+    100% {
+        background-position: -200% -200%;
+    }
+}
+
+/* High-DPI display support */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .responsive-image {
+        /* Edge fallback */
+        image-rendering: -webkit-optimize-contrast;
+        /* Firefox */
+        image-rendering: -moz-crisp-edges;
+    }
+    
+    /* Modern browsers that support crisp-edges */
+    @supports (image-rendering: crisp-edges) {
+        .responsive-image {
+            image-rendering: crisp-edges;
+        }
+    }
+}

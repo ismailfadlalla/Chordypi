@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "buildCommand": "cd client && npm install && npm run build",
+  "outputDirectory": "client/dist",
+  "rewrites": [
+    {
+      "source": "/api/analyze-song",
+      "destination": "https://chordypi-api.onrender.com/api/analyze-song"
+    },
+    {
+      "source": "/api/search-songs",
+      "destination": "https://chordypi-api.onrender.com/api/search-songs"
+    },
+    {
+      "source": "/api/songs/:path*",
+      "destination": "https://chordypi-api.onrender.com/api/songs/:path*"
+    },
+    {
+      "source": "/api/library/:path*",
+      "destination": "https://chordypi-api.onrender.com/api/library/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

@@ -1,0 +1,319 @@
+/**
+ * 🔘 ChordyPi Unified Button System
+ * Consistent button styles across the entire application
+ */
+
+/* ============================================
+   BASE BUTTON STYLES
+   ============================================ */
+
+.btn {
+  /* Base structure */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  
+  /* Typography */
+  font-family: var(--font-primary);
+  font-weight: var(--font-semibold);
+  text-decoration: none;
+  white-space: nowrap;
+  
+  /* Interaction */
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari 3+, Safari on iOS 3+ */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none;
+  border: none;
+  outline: none;
+  
+  /* Animation */
+  transition: all var(--transition-base);
+  
+  /* Accessibility */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ============================================
+   BUTTON SIZES
+   ============================================ */
+
+.btn-sm {
+  padding: var(--btn-padding-sm);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-md);
+  min-height: var(--input-height-sm);
+}
+
+.btn-md {
+  padding: var(--btn-padding-md);
+  font-size: var(--text-base);
+  border-radius: var(--radius-lg);
+  min-height: var(--input-height-md);
+}
+
+.btn-lg {
+  padding: var(--btn-padding-lg);
+  font-size: var(--text-lg);
+  border-radius: var(--radius-xl);
+  min-height: var(--input-height-lg);
+}
+
+.btn-pill {
+  border-radius: var(--radius-pill);
+}
+
+/* ============================================
+   PRIMARY BUTTON - AI Gradient
+   ============================================ */
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: var(--light-text);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   GLASS BUTTON - Glassmorphism
+   ============================================ */
+
+.btn-glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur)); /* Safari 9+ */
+  backdrop-filter: blur(var(--glass-blur));
+  border: 2px solid var(--glass-border);
+  color: var(--light-text);
+}
+
+.btn-glass:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--accent-gold);
+  box-shadow: var(--shadow-gold-glow);
+}
+
+/* ============================================
+   SECONDARY BUTTON - Outline Style
+   ============================================ */
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--glass-border);
+  color: var(--light-text);
+}
+
+.btn-secondary:hover {
+  background: var(--glass-bg);
+  border-color: var(--accent-purple);
+  box-shadow: var(--shadow-glow);
+}
+
+/* ============================================
+   GOLD BUTTON - Call to Action
+   ============================================ */
+
+.btn-gold {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #1a1a2e;
+  font-weight: var(--font-bold);
+  box-shadow: var(--shadow-gold-glow);
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+/* ============================================
+   SUCCESS BUTTON - Green Gradient
+   ============================================ */
+
+.btn-success {
+  background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+  color: white;
+  box-shadow: var(--shadow-success-glow);
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px var(--success-glow);
+}
+
+/* ============================================
+   DANGER BUTTON - Red Gradient
+   ============================================ */
+
+.btn-danger {
+  background: linear-gradient(135deg, #ff6b6b 0%, #fa5252 100%);
+  color: white;
+  box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
+}
+
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 107, 107, 0.4);
+}
+
+/* ============================================
+   GHOST BUTTON - Minimal Style
+   ============================================ */
+
+.btn-ghost {
+  background: transparent;
+  color: var(--muted-text);
+  border: none;
+}
+
+.btn-ghost:hover {
+  background: var(--glass-bg);
+  color: var(--light-text);
+}
+
+/* ============================================
+   ICON BUTTON - Circular Icon Only
+   ============================================ */
+
+.btn-icon {
+  padding: var(--space-3);
+  border-radius: var(--radius-circle);
+  aspect-ratio: 1;
+  min-width: 44px;
+}
+
+.btn-icon-sm {
+  padding: var(--space-2);
+  min-width: 36px;
+  font-size: var(--text-sm);
+}
+
+.btn-icon-lg {
+  padding: var(--space-4);
+  min-width: 52px;
+  font-size: var(--text-xl);
+}
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+
+.btn-loading {
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+}
+
+.btn-loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   BUTTON GROUPS
+   ============================================ */
+
+.btn-group {
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+.btn-group-vertical {
+  flex-direction: column;
+}
+
+.btn-group-joined .btn {
+  border-radius: 0;
+}
+
+.btn-group-joined .btn:first-child {
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+
+.btn-group-joined .btn:last-child {
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+
+/* ============================================
+   SPECIAL EFFECTS
+   ============================================ */
+
+.btn-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.btn-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    left: 100%;
+  }
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+
+@media (max-width: 640px) {
+  .btn-lg {
+    padding: var(--btn-padding-md);
+    font-size: var(--text-base);
+  }
+  
+  .btn-group {
+    width: 100%;
+  }
+  
+  .btn-group .btn {
+    flex: 1;
+  }
+}

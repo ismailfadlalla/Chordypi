@@ -1,0 +1,400 @@
+/* Professional Chord Progression Display - Demo Style */
+
+.professional-chord-learning-interface {
+    width: 100%;
+    padding: 20px;
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Professional Chord Showcase - Horizontal Fretboards */
+.professional-chord-showcase {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.showcase-chord-panel {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    border: 2px solid rgba(108, 92, 231, 0.3);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.showcase-chord-panel.current {
+    border-color: #FFD700;
+    background: rgba(255, 215, 0, 0.05);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+.showcase-chord-panel.next {
+    border-color: rgba(108, 92, 231, 0.5);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.status-indicator {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.status-indicator.current {
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.status-indicator.next {
+    color: #6c5ce7;
+}
+
+.chord-position {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+}
+
+.countdown-badge {
+    background: linear-gradient(135deg, #6c5ce7, #a55eea);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+}
+
+.panel-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Horizontal Fretboard - Demo Style */
+.demo-fretboard-container {
+    width: 100%;
+}
+
+.demo-fretboard-container.large .demo-chord-label {
+    font-size: 4rem;
+    margin-bottom: 30px;
+}
+
+.demo-fretboard-container.large .demo-fretboard-visual {
+    padding: 35px;
+}
+
+.demo-chord-label {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #FFD700;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+    font-family: 'Arial Black', Arial, sans-serif;
+}
+
+.demo-fretboard-visual {
+    background: linear-gradient(135deg, #2c2416, #3d3021);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(139, 90, 43, 0.3);
+}
+
+/* Fret Numbers - Positioned at Bottom OUTSIDE fretboard */
+.fret-numbers {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Match the gap between fret positions */
+    margin-top: 20px; /* Space from fretboard */
+    margin-bottom: 0;
+    padding-left: 50px; /* 30px string label + 20px gap to first fret */
+    position: relative; /* Ensure it's not affected by parent positioning */
+    z-index: 100; /* High z-index to be on top */
+}
+
+.string-label-spacer {
+    width: 30px;
+    flex-shrink: 0;
+}
+
+.fret-number {
+    width: 50px; /* Match demo-fret-position width */
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #1a1a1a;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border: 2px solid rgba(255, 215, 0, 0.8);
+    border-radius: 6px;
+    padding: 6px 0;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 4px 8px rgba(0, 0, 0, 0.4);
+    position: relative;
+    z-index: 10;
+    flex-shrink: 0; /* Prevent shrinking */
+    transform: translateX(30px); /* Shift right to align with dot centers */
+}
+
+.demo-fretboard-strings {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.demo-fretboard-string {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+}
+
+.demo-fretboard-string::before {
+    content: '';
+    position: absolute;
+    left: 50px;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0.3) 0%, 
+        rgba(255, 255, 255, 0.2) 50%, 
+        rgba(255, 255, 255, 0.1) 100%
+    );
+    z-index: 0;
+}
+
+.string-label {
+    width: 30px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #FFD700;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.demo-fret-position {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s;
+}
+
+.demo-fret-position.active {
+    background: #6c5ce7;
+    border-color: #FFD700;
+    box-shadow: 0 0 20px rgba(108, 92, 231, 0.8);
+    animation: fretGlow 1.5s ease-in-out infinite;
+}
+
+.demo-fret-position.barre {
+    background: #6c5ce7;
+    border-color: #FFD700;
+    position: relative;
+}
+
+/* Barre chords - vertical line rendered via inline styles in component */
+
+.demo-finger-number {
+    color: white;
+    font-weight: bold;
+    font-size: 1.3rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.demo-barre-indicator {
+    color: #FFD700;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+@keyframes fretGlow {
+    0%, 100% { 
+        box-shadow: 0 0 20px rgba(108, 92, 231, 0.8);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 40px rgba(108, 92, 231, 1), 0 0 60px rgba(255, 215, 0, 0.5);
+        transform: scale(1.05);
+    }
+}
+
+/* Chord Metadata */
+.chord-metadata {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+}
+
+.chord-metadata.compact {
+    padding: 15px;
+    gap: 10px;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.chord-metadata.compact .meta-item {
+    flex-direction: row;
+    gap: 8px;
+}
+
+.meta-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.meta-value {
+    font-size: 1rem;
+    color: #fff;
+    font-weight: 700;
+}
+
+.meta-badge {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.meta-badge.beginner {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    box-shadow: 0 2px 10px rgba(76, 175, 80, 0.4);
+}
+
+.meta-badge.intermediate {
+    background: linear-gradient(135deg, #FFB74D, #FFA726);
+    color: white;
+    box-shadow: 0 2px 10px rgba(255, 183, 77, 0.4);
+}
+
+.meta-badge.advanced {
+    background: linear-gradient(135deg, #EF5350, #E53935);
+    color: white;
+    box-shadow: 0 2px 10px rgba(239, 83, 80, 0.4);
+}
+
+.meta-badge.unknown {
+    background: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .professional-chord-showcase {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .demo-fretboard-container.large .demo-chord-label {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .professional-chord-learning-interface {
+        padding: 15px;
+    }
+    
+    .showcase-chord-panel {
+        padding: 20px;
+    }
+    
+    .demo-chord-label {
+        font-size: 2rem;
+    }
+    
+    .demo-fretboard-container.large .demo-chord-label {
+        font-size: 2.5rem;
+    }
+    
+    .demo-fretboard-visual {
+        padding: 15px;
+    }
+    
+    .demo-fretboard-strings {
+        gap: 10px;
+    }
+    
+    .demo-fret-position {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .demo-finger-number {
+        font-size: 1.1rem;
+    }
+    
+    .chord-metadata {
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .demo-chord-label {
+        font-size: 1.5rem;
+    }
+    
+    .demo-fretboard-string::before {
+        left: 35px;
+    }
+    
+    .string-label {
+        width: 25px;
+        font-size: 0.85rem;
+    }
+    
+    .demo-fretboard-strings {
+        gap: 8px;
+    }
+    
+    .demo-fret-position {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .demo-finger-number {
+        font-size: 1rem;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
