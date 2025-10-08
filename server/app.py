@@ -168,12 +168,46 @@ def serve_react_app():
     except Exception as e:
         return jsonify({"error": "Frontend not available", "details": str(e)}), 404
 
+# Legal document routes (Pi Network compliance)
+LEGAL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'legal')
+
+@app.route('/legal/<filename>')
+def serve_legal_document(filename):
+    """Serve legal documents (terms, privacy policy) - Required for Pi Network"""
+    try:
+        return send_from_directory(LEGAL_PATH, filename)
+    except FileNotFoundError:
+        return jsonify({
+            "error": "Legal document not found",
+            "available_documents": [
+                "terms-of-service.html",
+                "privacy-policy.html"
+            ]
+        }), 404
+
+@app.route('/legal/')
+def legal_index():
+    """List available legal documents"""
+    return jsonify({
+        "message": "ChordyPi Legal Documents",
+        "available_documents": {
+            "terms_of_service": "/legal/terms-of-service.html",
+            "privacy_policy": "/legal/privacy-policy.html"
+        },
+        "note": "These documents are accessible for Pi Network compliance"
+    })
+
 # Catch-all route for React Router (SPA routing) - only for non-API, non-asset paths
 @app.route('/<path:path>')
 def serve_react_app_routes(path):
     # Don't serve SPA for API routes
     if path.startswith('api/'):
         return jsonify({"error": "API endpoint not found"}), 404
+    
+    # Don't serve SPA for legal routes
+    if path.startswith('legal/'):
+        filename = path.replace('legal/', '')
+        return serve_legal_document(filename)
     
     # Don't serve SPA for static assets
     if any(path.endswith(ext) for ext in ['.js', '.css', '.ico', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.woff', '.woff2', '.ttf', '.eot']):
