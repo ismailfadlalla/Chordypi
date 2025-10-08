@@ -1,5 +1,5 @@
 """
-ChordyPi Audio Processor Utilities
+ChordyPi Audio Processor Utilities - UPDATED WITH RAPIDAPI v2
 Contains functions for processing audio files, including downloading and converting formats.
 
 YOUTUBE DOWNLOAD PRIORITY:
@@ -7,6 +7,10 @@ YOUTUBE DOWNLOAD PRIORITY:
 2. yt-dlp with proxy (if configured)
 3. yt-dlp direct (last resort, often fails)
 """
+
+print("=" * 80)
+print("🔥 AUDIO_PROCESSOR.PY LOADED - VERSION 2 WITH RAPIDAPI DEBUG")
+print("=" * 80)
 
 import os
 import tempfile
