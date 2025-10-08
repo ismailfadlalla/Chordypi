@@ -34,26 +34,18 @@ const AnalyzingPage = () => {
         }
 
         const analyzeSongAndNavigate = async () => {
-            console.log('🎵 AnalyzingPage: Starting CLIENT-SIDE analysis for:', song.title);
+            console.log('🎵 AnalyzingPage: Starting analysis for:', song.title);
             
             const startTime = Date.now();
-            const minimumDisplayTime = 3000; // Show overlay for at least 3 seconds
+            const minimumDisplayTime = 5000; // Show overlay for at least 5 seconds
 
             try {
-                // Analyze the song with progress tracking
-                const data = await analyzeSong(song, (progressInfo) => {
-                    // Update progress based on extraction step
-                    if (progressInfo.step) {
-                        console.log(`📊 ${progressInfo.step} - ${progressInfo.percent.toFixed(1)}%`);
-                        setProgress(progressInfo.percent);
-                    }
-                });
-                
+                // Analyze the song
+                const data = await analyzeSong(song);
                 console.log('📦 AnalyzingPage: API response received:', data);
 
                 if (data.status === 'success' && data.analysis?.chords?.length > 0) {
                     console.log('✅ Analysis complete:', data.analysis.chords.length, 'chords');
-                    console.log('💡 Extraction method:', data.analysis.analysis_metadata?.extraction_method);
                     
                     const songVideoId = song.videoId || song.id?.videoId || song.id;
                     
@@ -62,7 +54,7 @@ const AnalyzingPage = () => {
                         ...song,
                         chords: data.analysis.chords,
                         duration: data.analysis.duration,
-                        analysis_type: data.analysis.analysis_type || 'client_side_extraction',
+                        analysis_type: data.analysis.analysis_type || 'mock_progression',
                         title: song.title,
                         key: data.analysis.key,
                         bpm: data.analysis.bpm,

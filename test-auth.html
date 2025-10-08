@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Test - ChordyPi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #6c5ce7 0%, #a855f7 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .test-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        .test-result {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .success {
+            background: rgba(46, 204, 113, 0.3);
+            border: 1px solid #2ecc71;
+        }
+        .error {
+            background: rgba(231, 76, 60, 0.3);
+            border: 1px solid #e74c3c;
+        }
+        .info {
+            background: rgba(52, 152, 219, 0.3);
+            border: 1px solid #3498db;
+        }
+        button {
+            background: linear-gradient(135deg, #6c5ce7, #a855f7);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: 600;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+        input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 5px;
+            width: 200px;
+        }
+        .status {
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .storage-display {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 ChordyPi Authentication Testing Dashboard</h1>
+        <p>This tool helps you test signup and signin functionality without needing a backend.</p>
+
+        <div class="test-section">
+            <h2>📊 Current Status</h2>
+            <div id="currentStatus" class="status info">Checking authentication status...</div>
+            <button id="checkStatusBtn">🔍 Refresh Status</button>
+            <button id="clearAllBtn">🧹 Clear All Data</button>
+        </div>
+
+        <div class="test-section">
+            <h2>📝 Test Signup</h2>
+            <form id="signupForm">
+                <input type="text" id="signupUsername" placeholder="Username" value="testuser123">
+                <input type="email" id="signupEmail" placeholder="Email" value="test@example.com">
+                <input type="password" id="signupPassword" placeholder="Password" value="password123" autocomplete="new-password">
+                <button type="button" id="signupBtn">🚀 Test Signup</button>
+            </form>
+            <div id="signupResult"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔑 Test Sign In</h2>
+            <form id="signinForm">
+                <input type="email" id="signinEmail" placeholder="Email" value="test@example.com">
+                <input type="password" id="signinPassword" placeholder="Password" value="password123" autocomplete="current-password">
+                <button type="button" id="signinBtn">🔑 Test Sign In</button>
+            </form>
+            <div id="signinResult"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>👤 User Management</h2>
+            <button id="getCurrentUserBtn">👤 Get Current User</button>
+            <button id="signOutBtn">🚪 Sign Out</button>
+            <div id="userResult"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>📱 Application Links</h2>
+            <a href="https://localhost:3443" target="_blank" rel="noopener">
+                <button>🏠 Home Page</button>
+            </a>
+            <a href="https://localhost:3443/signup" target="_blank" rel="noopener">
+                <button>📝 Signup Page</button>
+            </a>
+            <a href="https://localhost:3443/signin" target="_blank" rel="noopener">
+                <button>🔑 Signin Page</button>
+            </a>
+            <a href="https://localhost:3443/logout" target="_blank" rel="noopener">
+                <button>🚪 Logout (Clear Session)</button>
+            </a>
+        </div>
+
+        <div class="test-section">
+            <h2>💾 Local Storage Data</h2>
+            <button onclick="viewStorageData()">👁️ View Storage</button>
+            <div id="storageData" style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; margin-top: 10px; font-family: monospace; white-space: pre-wrap;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication Service Functions (copied from your app)
+        const generateToken = () => {
+            return 'token_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+        };
+
+        const generateUserId = () => {
+            return 'user_' + Math.random().toString(36).substr(2, 9);
+        };
+
+        const signUp = async (userData) => {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            const existingUser = users.find(user => user.email === userData.email);
+            if (existingUser) {
+                throw { error: 'User with this email already exists' };
+            }
+            
+            const newUser = {
+                id: generateUserId(),
+                username: userData.username,
+                email: userData.email,
+                password: userData.password,
+                createdAt: Date.now()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            return { 
+                status: 'success',
+                message: 'User created successfully',
+                user: { id: newUser.id, username: newUser.username, email: newUser.email }
+            };
+        };
+
+        const signIn = async (credentials) => {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            const user = users.find(u => u.email === credentials.email && u.password === credentials.password);
+            if (!user) {
+                throw { error: 'Invalid email or password' };
+            }
+            
+            const token = generateToken();
+            const userSession = {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                token: token
+            };
+            
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(userSession));
+            
+            return {
+                status: 'success',
+                user: userSession,
+                token: token
+            };
+        };
+
+        // Test Functions
+        function showResult(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="test-result ${type}">${message}</div>`;
+        }
+
+        async function testSignup() {
+            console.log('testSignup function called');
+            const username = document.getElementById('signupUsername').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            console.log('Signup data:', { username, email, password: password ? '***' : 'empty' });
+
+            try {
+                showResult('signupResult', '⏳ Creating account...', 'info');
+                const result = await signUp({ username, email, password });
+                console.log('Signup result:', result);
+                showResult('signupResult', `✅ Signup successful! User: ${result.user.username} (${result.user.email})`, 'success');
+                checkStatus();
+            } catch (error) {
+                console.error('Signup error:', error);
+                showResult('signupResult', `❌ Signup failed: ${error.error}`, 'error');
+            }
+        }
+
+        async function testSignin() {
+            console.log('testSignin function called');
+            const email = document.getElementById('signinEmail').value;
+            const password = document.getElementById('signinPassword').value;
+
+            console.log('Signin data:', { email, password: password ? '***' : 'empty' });
+
+            try {
+                showResult('signinResult', '⏳ Signing in...', 'info');
+                const result = await signIn({ email, password });
+                console.log('Signin result:', result);
+                showResult('signinResult', `✅ Signin successful! Welcome back ${result.user.username}!`, 'success');
+                checkStatus();
+            } catch (error) {
+                console.error('Signin error:', error);
+                showResult('signinResult', `❌ Signin failed: ${error.error}`, 'error');
+            }
+        }
+
+        function getCurrentUser() {
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            const token = localStorage.getItem('token');
+            
+            if (user && token) {
+                showResult('userResult', `👤 Current user: ${user.username} (${user.email})`, 'success');
+            } else {
+                showResult('userResult', `❌ No user signed in`, 'error');
+            }
+        }
+
+        function signOut() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            showResult('userResult', `✅ Signed out successfully`, 'success');
+            checkStatus();
+        }
+
+        function checkStatus() {
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const token = localStorage.getItem('token');
+
+            let statusMessage = '';
+            if (user && token) {
+                statusMessage = `✅ Signed in as: ${user.username} | Total users: ${users.length}`;
+                document.getElementById('currentStatus').className = 'status success';
+            } else {
+                statusMessage = `❌ Not signed in | Total users: ${users.length}`;
+                document.getElementById('currentStatus').className = 'status error';
+            }
+
+            document.getElementById('currentStatus').textContent = statusMessage;
+        }
+
+        function clearAll() {
+            localStorage.removeItem('users');
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            localStorage.removeItem('piNetworkUser');
+            localStorage.removeItem('piNetworkAuth');
+            
+            showResult('userResult', '🧹 All data cleared', 'info');
+            checkStatus();
+            document.getElementById('storageData').textContent = '';
+        }
+
+        function viewStorageData() {
+            const data = {
+                users: JSON.parse(localStorage.getItem('users') || '[]'),
+                currentUser: JSON.parse(localStorage.getItem('user') || 'null'),
+                token: localStorage.getItem('token'),
+                piUser: JSON.parse(localStorage.getItem('piNetworkUser') || 'null')
+            };
+            
+            document.getElementById('storageData').textContent = JSON.stringify(data, null, 2);
+        }
+
+        // Add event listeners when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Setting up event listeners...');
+            
+            // Add event listeners for all buttons
+            document.getElementById('checkStatusBtn').addEventListener('click', checkStatus);
+            document.getElementById('clearAllBtn').addEventListener('click', clearAll);
+            document.getElementById('signupBtn').addEventListener('click', testSignup);
+            document.getElementById('signinBtn').addEventListener('click', testSignin);
+            document.getElementById('getCurrentUserBtn').addEventListener('click', getCurrentUser);
+            document.getElementById('signOutBtn').addEventListener('click', signOut);
+            document.getElementById('viewStorageBtn').addEventListener('click', viewStorageData);
+            
+            // Initialize status
+            checkStatus();
+            console.log('Event listeners set up successfully!');
+        });
+    </script>
+</body>
+</html>

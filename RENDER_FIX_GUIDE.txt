@@ -1,0 +1,161 @@
+╔══════════════════════════════════════════════════════════╗
+║         🔧 RENDER SETTINGS FIX - QUICK GUIDE 🔧          ║
+╚══════════════════════════════════════════════════════════╝
+
+⚠️  ISSUE: Deployment started without Root Directory and Environment Variables
+
+✅ SOLUTION: Update settings (Render auto-redeploys after changes)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 STEP 1: SET ROOT DIRECTORY (2 minutes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+In Render Dashboard:
+
+1. Click on your service name: "chordypi-api" (or whatever you named it)
+   
+2. In the left sidebar, click: "Settings"
+
+3. Scroll down to section: "Build & Deploy"
+
+4. Find field: "Root Directory"
+   (It's probably empty or set to "/" right now)
+
+5. Type in: server
+   ⚠️  Just the word "server" - no slashes, no quotes
+
+6. Click: "Save Changes" button at bottom
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 STEP 2: ADD ENVIRONMENT VARIABLES (5 minutes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Still in your service settings:
+
+1. In the left sidebar, click: "Environment"
+
+2. Click button: "Add Environment Variable"
+
+3. Add these 7 variables ONE BY ONE:
+   (Copy from RENDER_ENV_VARS.txt file)
+
+   Variable #1:
+   Key:   FLASK_ENV
+   Value: production
+   
+   Variable #2:
+   Key:   FLASK_APP
+   Value: app.py
+   
+   Variable #3:
+   Key:   PORT
+   Value: 10000
+   
+   Variable #4:
+   Key:   PYTHON_VERSION
+   Value: 3.10.0
+   
+   Variable #5:
+   Key:   CORS_ORIGINS
+   Value: https://chordypi.vercel.app,http://localhost:3000
+   
+   Variable #6:
+   Key:   SECRET_KEY
+   Value: BqxdpEIyDLoU5SwQrzlWM46Ku8k2mPcZ90Y1H3jnThRaOFvVGAJNfC7itXgebs
+   
+   Variable #7:
+   Key:   JWT_SECRET_KEY
+   Value: 50tG23YKHrLvghlsRJdWPijqEyDOoMCnx9cSQT4e67BpN1zUbZumF8fVAwkXaI
+
+4. After adding ALL variables, click: "Save Changes"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 STEP 3: WAIT FOR AUTO-REDEPLOY (3-5 minutes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After saving:
+
+1. Render will automatically trigger a new deployment
+   
+2. Watch the "Events" or "Logs" tab for progress
+
+3. You'll see:
+   - "Deploy triggered"
+   - "Building..."
+   - "Build successful"
+   - "Your service is live" ✅
+
+4. Look for green "Live" status indicator
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 WHAT HAPPENS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Root Directory = "server"
+   → Render looks in ChordyPi/server/ folder
+   → Finds requirements.txt
+   → Finds app.py
+   → Builds correctly!
+
+✅ Environment Variables set
+   → Flask runs in production mode
+   → Correct port configured
+   → CORS allows your Vercel frontend
+   → Security keys configured
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🐛 IF BUILD STILL FAILS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Check logs for common errors:
+
+Error: "requirements.txt not found"
+→ Solution: Make sure Root Directory = "server" (no capital S)
+
+Error: "Module not found"
+→ Solution: Check requirements.txt is complete
+
+Error: "Port binding failed"
+→ Solution: Verify PORT=10000 is set in env vars
+
+Error: "TensorFlow installation failed" (AI packages too large)
+→ Solution: This is OK - app will use fallback chord detection
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ CHECKLIST:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ ] Root Directory set to "server"
+[ ] All 7 environment variables added
+[ ] Changes saved
+[ ] New deployment triggered automatically
+[ ] Build logs showing "Building from /server"
+[ ] Build successful
+[ ] Service shows "Live" status
+[ ] Copy your Render URL: https://your-app.onrender.com
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 AFTER SUCCESS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Copy your Render URL
+2. Test: https://your-render-url.onrender.com/api/health
+3. Should see: {"status": "healthy"}
+4. Go to: https://chordypi.vercel.app
+5. Search for a song
+6. Verify chord analysis works!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⏱️  TOTAL TIME: ~10 minutes
+💰 COST: Still $0 (Free tier)
+🎉 RESULT: Fully deployed app!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
