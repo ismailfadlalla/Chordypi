@@ -1,8 +1,12 @@
 """
-ChordyPi Flask API Server
+ChordyPi Flask API Server - v3.0 WITH RAPIDAPI
 Provides REAL chord progression analysis and serves web build files
 Pi Network Integration - HTTPS Required
 """
+
+print("=" * 80)
+print("🚀 APP.PY STARTING - ChordyPi v3.0 with RapidAPI")
+print("=" * 80)
 
 import os
 import tempfile
