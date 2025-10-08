@@ -183,12 +183,14 @@ export const getYouTubeVideoDetails = async (videoId) => {
 };
 
 // ✅ 100% AI AUDIO ANALYSIS - Enhanced with all filter improvements!
-// Database removed - AI detection is now 100% accurate after enhancements
-export const analyzeSong = async (songData) => {
+// NEW: Client-side audio extraction to bypass YouTube IP blocking
+import { extractAndAnalyze } from './audioExtractor';
+
+export const analyzeSong = async (songData, onProgress = null) => {
     try {
         console.log('🔍 analyzeSong called with:', songData?.title);
-        console.log('✅ Using ENHANCED AI Audio Analysis (100% accurate with all filters fixed)');
-        console.log('📡 Making API call to Flask backend for chord analysis...');
+        console.log('✅ Using CLIENT-SIDE Audio Extraction + AI Analysis');
+        console.log('� This bypasses YouTube IP blocking!');
         
         // Extract videoId from song data
         const videoId = songData.videoId || songData.id?.videoId || songData.id;
@@ -196,26 +198,22 @@ export const analyzeSong = async (songData) => {
         // Construct YouTube URL if not provided
         const youtubeUrl = songData.url || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : null);
         
+        if (!youtubeUrl) {
+            throw new Error('No YouTube URL available for this song');
+        }
+        
         console.log('📺 Video URL:', youtubeUrl);
         console.log('🎵 Song Name:', songData.title);
         
-        const response = await fetch(`${API_BASE_URL}/analyze-song`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                url: youtubeUrl,
-                song_name: songData.title
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('✅ Enhanced AI analysis complete:', {
+        // Use client-side extraction and analysis
+        console.log('🎬 Starting client-side audio extraction...');
+        const data = await extractAndAnalyze(
+            youtubeUrl,
+            songData.title,
+            onProgress
+        );
+        
+        console.log('✅ Client-side analysis complete:', {
             chordsCount: data.chords?.length || 0,
             duration: data.duration,
             key: data.key,
@@ -226,14 +224,17 @@ export const analyzeSong = async (songData) => {
             status: data.status,
             analysis: {
                 chords: data.chords || [],
-                duration: data.duration || 240,
+                duration: data.duration || data.originalDuration || 240,
                 key: data.key || 'C',
                 bpm: data.bpm,
                 time_signature: data.time_signature,
-                analysis_type: 'ai_audio_enhanced',
+                analysis_type: data.analysis_type || 'client_side_extraction',
+                source: data.source,
+                accuracy: data.accuracy,
                 analysis_metadata: {
                     ...data.analysis_metadata,
-                    note: 'Enhanced AI with all filters optimized for accuracy'
+                    note: 'Client-side extraction bypasses IP blocking!',
+                    extraction_method: 'browser'
                 }
             },
             song: songData
