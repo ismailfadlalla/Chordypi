@@ -25,6 +25,22 @@ def convert_audio_format(input_file, output_format='wav'):
 def download_youtube_audio(url):
     """Download audio from YouTube URL and return audio path, duration, and title."""
     try:
+        # Import proxy configuration
+        try:
+            from config.proxy_config import ProxyConfig
+            proxy_url = ProxyConfig.get_ytdl_proxy()
+            proxy_status = ProxyConfig.get_status()
+            
+            if proxy_status['enabled']:
+                print(f"🌐 Proxy ENABLED: {proxy_status['service']}")
+                print(f"🔗 Proxy URL: {proxy_status['url']}")
+            else:
+                print(f"⚠️ Proxy DISABLED - Using direct connection")
+                print(f"💡 Recommendation: {proxy_status.get('recommendation', 'Consider using proxy')}")
+        except ImportError:
+            print(f"⚠️ Proxy config not found - using direct connection")
+            proxy_url = None
+        
         # Create temporary directory for download
         temp_dir = tempfile.mkdtemp()
         print(f"🔧 Created temp dir: {temp_dir}")
@@ -70,6 +86,11 @@ def download_youtube_audio(url):
                 }
             }
         }
+        
+        # Add proxy if configured
+        if proxy_url:
+            ydl_opts['proxy'] = proxy_url
+            print(f"✅ Using proxy for download")
         
         print(f"🎵 Attempting to download: {url}")
         

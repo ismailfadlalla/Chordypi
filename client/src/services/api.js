@@ -244,6 +244,55 @@ export const analyzeSong = async (songData) => {
     }
 };
 
+// 🎵 ANALYZE UPLOADED AUDIO FILE (100% reliable, FREE)
+export const analyzeUploadedAudio = async (formData, fileName) => {
+    try {
+        console.log('📁 Analyzing uploaded file:', fileName);
+        
+        const response = await fetch(`${API_BASE_URL}/analyze-audio-upload`, {
+            method: 'POST',
+            body: formData // Don't set Content-Type, let browser set it with boundary
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('✅ File analysis complete:', {
+            chordsCount: data.chords?.length || 0,
+            duration: data.duration,
+            key: data.key
+        });
+        
+        return {
+            status: data.status,
+            analysis: {
+                chords: data.chords || [],
+                duration: data.duration || 240,
+                key: data.key || 'C',
+                bpm: data.bpm,
+                time_signature: data.time_signature,
+                analysis_type: 'uploaded_file',
+                analysis_metadata: {
+                    ...data.analysis_metadata,
+                    source: 'user_upload',
+                    filename: fileName
+                }
+            },
+            song: {
+                title: fileName.replace(/\.(mp3|wav|m4a)$/i, ''),
+                videoId: null,
+                source: 'upload'
+            }
+        };
+    } catch (error) {
+        console.error('Failed to analyze uploaded file:', error);
+        throw new Error('Failed to analyze file: ' + error.message);
+    }
+};
+
 // Get featured songs from backend
 export const getFeaturedSongs = async () => {
     try {

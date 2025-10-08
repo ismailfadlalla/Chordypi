@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { searchYouTubeVideos, addToFavorites, removeFromFavorites, getFavorites, addToHistory } from '../services/api';
+import { searchYouTubeVideos, addToFavorites, removeFromFavorites, getFavorites, addToHistory, analyzeUploadedAudio } from '../services/api';
 import SongCard from '../components/common/SongCard';
+import FileUploader from '../components/FileUploader';
 import '../styles/components/cards.css';
 import '../styles/components/search-results.css';
 
@@ -327,6 +328,26 @@ const SearchResultsPage = ({ searchQuery, onSongSelect, onBack, analyzingChords,
         setFavorites(currentFavorites);
     }, []);
 
+    // Handle file upload for chord analysis
+    const handleFileUpload = async (formData, fileName) => {
+        try {
+            console.log('📁 Starting file analysis:', fileName);
+            
+            // Navigate to analysis with file data
+            const result = await analyzeUploadedAudio(formData, fileName);
+            
+            // Add to history
+            addToHistory(result.song);
+            
+            // Navigate to analyzing page
+            onSongSelect(result.song, result.analysis);
+            
+        } catch (error) {
+            console.error('File upload error:', error);
+            setError('Failed to analyze file: ' + error.message);
+        }
+    };
+
     // Reset search state when query changes
     useEffect(() => {
         setHasSearched(false);
@@ -462,6 +483,12 @@ const SearchResultsPage = ({ searchQuery, onSongSelect, onBack, analyzingChords,
                     </div>
                 </div>
             </div>
+
+            {/* FILE UPLOAD SECTION */}
+            <FileUploader 
+                onUpload={handleFileUpload}
+                onError={(error) => setError(error)}
+            />
 
             {error && (
                 <div className="error-container">
