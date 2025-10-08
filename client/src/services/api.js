@@ -1,6 +1,6 @@
 // Use Flask backend for real chord analysis instead of external APIs
 // API Configuration - Use HTTPS for Pi Network compatibility
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://localhost:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://chordypi.onrender.com/api';
 const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY || 'your-youtube-api-key-here';
 
 // Client-side favorites and history management

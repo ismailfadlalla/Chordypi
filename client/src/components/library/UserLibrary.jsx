@@ -13,7 +13,7 @@ const UserLibrary = () => {
     const [favorites, setFavorites] = useState(getFavorites());
     const history = useHistory();
 
-    const apiUrl = process.env.REACT_APP_API_URL || 'https://localhost:5000/api';
+    const apiUrl = process.env.REACT_APP_API_URL || 'https://chordypi.onrender.com/api';
 
     useEffect(() => {
         fetchLibraryData();
