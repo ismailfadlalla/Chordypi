@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Browser Test - ChordsLegend</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+        }
+        .status-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #00ff88;
+        }
+        .error-box {
+            background: rgba(255, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ff0040;
+        }
+        .success {
+            color: #00ff88;
+            font-weight: bold;
+        }
+        .error {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        button {
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.6);
+        }
+        .info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+        }
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 ChordsLegend Pi Browser Test</h1>
+        
+        <div class="status-box">
+            <h3>Pi SDK Status</h3>
+            <p><strong>Status:</strong> <span id="piStatus">Checking...</span></p>
+            <p><strong>User Agent:</strong></p>
+            <div class="info" id="userAgent"></div>
+        </div>
+
+        <div id="errorDisplay" class="error-box" style="display: none;">
+            <h3>Error Details</h3>
+            <div id="errorMessage"></div>
+        </div>
+
+        <div class="center">
+            <button onclick="testPiAuthentication()">🔐 Test Pi Authentication</button>
+            <button onclick="testPiPayment()">💰 Test Pi Payment (1π)</button>
+            <button onclick="clearResults()">🔄 Clear Results</button>
+        </div>
+
+        <div id="results" class="status-box" style="display: none;">
+            <h3>Test Results</h3>
+            <div id="resultContent"></div>
+        </div>
+
+        <div class="status-box">
+            <h3>Next Steps</h3>
+            <p>If Pi SDK is working, you can:</p>
+            <p>🔗 <a href="/" style="color: #a29bfe;">Go to Full ChordsLegend App</a></p>
+            <p>🧪 <a href="/test" style="color: #a29bfe;">Try React Test Page</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Log everything to console for debugging
+        console.log('Pi Browser Test Page Loaded');
+        console.log('window.Pi:', typeof window.Pi);
+        console.log('navigator.userAgent:', navigator.userAgent);
+
+        // Display user agent
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+
+        // Check Pi SDK status
+        function checkPiStatus() {
+            const statusElement = document.getElementById('piStatus');
+            
+            if (typeof window.Pi !== 'undefined') {
+                statusElement.innerHTML = '<span class="success">✅ Pi SDK Available</span>';
+                console.log('Pi SDK detected successfully');
+                return true;
+            } else {
+                statusElement.innerHTML = '<span class="error">❌ Pi SDK Not Available</span>';
+                console.log('Pi SDK not found');
+                return false;
+            }
+        }
+
+        // Test Pi Authentication
+        async function testPiAuthentication() {
+            console.log('Testing Pi Authentication...');
+            
+            if (!checkPiStatus()) {
+                showError('Pi SDK is not available. Make sure you are using Pi Browser.');
+                return;
+            }
+
+            try {
+                const scopes = ['username', 'payments'];
+                console.log('Requesting Pi authentication with scopes:', scopes);
+                console.log('App ID: chords-legend');
+                
+                const user = await window.Pi.authenticate(scopes, onIncompletePaymentFound);
+                console.log('Authentication successful:', user);
+                
+                showResult(`
+                    <h4 class="success">✅ Authentication Successful!</h4>
+                    <p><strong>Username:</strong> ${user.username}</p>
+                    <p><strong>UID:</strong> ${user.uid}</p>
+                    <p><strong>Access Token:</strong> ${user.accessToken ? 'Provided' : 'Not provided'}</p>
+                    <p><strong>App ID:</strong> chords-legend</p>
+                `);
+                
+            } catch (error) {
+                console.error('Authentication failed:', error);
+                showError(`Authentication failed: ${error.message}`);
+            }
+        }
+
+        // Test Pi Payment
+        async function testPiPayment() {
+            console.log('Testing Pi Payment...');
+            
+            if (!checkPiStatus()) {
+                showError('Pi SDK is not available. Make sure you are using Pi Browser.');
+                return;
+            }
+
+            try {
+                // First authenticate if needed
+                const scopes = ['username', 'payments'];
+                const user = await window.Pi.authenticate(scopes, onIncompletePaymentFound);
+                console.log('Authenticated user for payment:', user);
+
+                // Create payment
+                const paymentData = {
+                    amount: 1,
+                    memo: "ChordsLegend Annual Subscription - Premium Features",
+                    metadata: {
+                        subscription_type: "annual",
+                        features: ["unlimited_songs", "premium_chords", "advanced_analysis", "chord_progression_generator", "offline_mode", "priority_support"]
+                    }
+                };
+
+                console.log('Creating payment:', paymentData);
+                const payment = await window.Pi.createPayment(paymentData, {
+                    onReadyForServerApproval: function(paymentId) {
+                        console.log('Payment ready for server approval:', paymentId);
+                        showResult(`
+                            <h4 class="success">✅ Payment Created Successfully!</h4>
+                            <p><strong>Payment ID:</strong> ${paymentId}</p>
+                            <p><strong>Amount:</strong> 1π</p>
+                            <p><strong>Status:</strong> Ready for server approval</p>
+                            <p><em>In a real app, this would be sent to your server for verification.</em></p>
+                        `);
+                    },
+                    onReadyForServerCompletion: function(paymentId, txid) {
+                        console.log('Payment ready for completion:', paymentId, txid);
+                        showResult(`
+                            <h4 class="success">✅ Payment Completed!</h4>
+                            <p><strong>Payment ID:</strong> ${paymentId}</p>
+                            <p><strong>Transaction ID:</strong> ${txid}</p>
+                            <p><strong>Amount:</strong> 1π</p>
+                            <p><em>Premium features would now be unlocked!</em></p>
+                        `);
+                    },
+                    onCancel: function(paymentId) {
+                        console.log('Payment cancelled:', paymentId);
+                        showError(`Payment cancelled by user. Payment ID: ${paymentId}`);
+                    },
+                    onError: function(error, payment) {
+                        console.error('Payment error:', error, payment);
+                        showError(`Payment error: ${error.message}`);
+                    }
+                });
+
+                console.log('Payment object:', payment);
+
+            } catch (error) {
+                console.error('Payment failed:', error);
+                showError(`Payment failed: ${error.message}`);
+            }
+        }
+
+        // Handle incomplete payments
+        function onIncompletePaymentFound(payment) {
+            console.log('Incomplete payment found:', payment);
+            showResult(`
+                <h4 style="color: orange;">⚠️ Incomplete Payment Found</h4>
+                <p><strong>Payment ID:</strong> ${payment.identifier}</p>
+                <p><strong>Amount:</strong> ${payment.amount}π</p>
+                <p><em>This payment needs to be completed or cancelled.</em></p>
+            `);
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDisplay = document.getElementById('errorDisplay');
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.innerHTML = message;
+            errorDisplay.style.display = 'block';
+            
+            // Hide results
+            document.getElementById('results').style.display = 'none';
+        }
+
+        // Show result message
+        function showResult(message) {
+            const results = document.getElementById('results');
+            const resultContent = document.getElementById('resultContent');
+            resultContent.innerHTML = message;
+            results.style.display = 'block';
+            
+            // Hide errors
+            document.getElementById('errorDisplay').style.display = 'none';
+        }
+
+        // Clear all results
+        function clearResults() {
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('errorDisplay').style.display = 'none';
+            console.clear();
+            console.log('Results cleared - ready for new tests');
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            console.log('Page fully loaded, checking Pi status...');
+            checkPiStatus();
+        });
+
+        // Check status when page loads
+        checkPiStatus();
+    </script>
+</body>
+</html>

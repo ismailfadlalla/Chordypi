@@ -1,0 +1,18 @@
+Flask
+Flask-CORS
+yt-dlp
+librosa
+numpy
+python-dotenv
+Flask-SQLAlchemy
+Flask-Migrate
+bcrypt
+Flask-JWT-Extended
+requests
+beautifulsoup4
+lxml
+
+# AI Chord Detection Enhancement
+basic-pitch>=0.2.5
+tensorflow>=2.12.0
+tensorflow-io>=0.31.0

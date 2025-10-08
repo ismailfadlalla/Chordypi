@@ -1,0 +1,16 @@
+# Render deployment configuration for Python Flask backend
+web:
+  - type: web
+    name: chordypi-api
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: FLASK_ENV
+        value: production
+      - key: PORT
+        value: 5000

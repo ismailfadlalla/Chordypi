@@ -1,0 +1,442 @@
+/* Enhanced graphics component styles */
+
+/* Analyzing screen enhancements */
+.analyzing-graphics-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.main-guitar-animation {
+    margin-bottom: 30px;
+    filter: drop-shadow(0 10px 30px rgba(255, 215, 0, 0.3));
+}
+
+.analyzing-content-enhanced {
+    max-width: 800px;
+    width: 100%;
+}
+
+.analyzing-title {
+    font-size: 2.5rem;
+    color: #FFD700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+}
+
+.song-title {
+    font-size: 1.6rem;
+    color: #ffffff;
+    margin-bottom: 30px;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.progress-graphics {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin: 30px 0;
+    padding: 20px;
+    background: rgba(168, 106, 212, 0.2);
+    border-radius: 15px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.analysis-steps-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.step-visual {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    transition: all 0.3s ease;
+    opacity: 0.5;
+}
+
+.step-visual.active {
+    background: rgba(255, 215, 0, 0.1);
+    border-color: rgba(255, 215, 0, 0.3);
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.step-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    text-align: center;
+}
+
+.step-text {
+    flex: 1;
+    font-size: 1.1rem;
+    color: #ffffff;
+    text-align: left;
+}
+
+/* Home hero enhancements */
+.home-hero-enhanced {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.hero-graphics-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    opacity: 0.1;
+    z-index: 2;
+}
+
+.hero-guitar {
+    filter: blur(2px);
+    opacity: 0.3;
+}
+
+.hero-staff {
+    filter: blur(1px);
+    opacity: 0.2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: white;
+    max-width: 800px;
+    padding: 40px 20px;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.app-title {
+    font-size: 4rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 0;
+}
+
+.hero-subtitle {
+    font-size: 1.4rem;
+    margin-bottom: 40px;
+    opacity: 0.9;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.search-interface-enhanced {
+    margin-top: 30px;
+}
+
+.search-decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    font-size: 1.2rem;
+    color: #FFD700;
+    margin-bottom: 20px;
+}
+
+/* Player background enhancements */
+.player-background-enhanced {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.player-bg {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.floating-graphics {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.floating-note {
+    position: absolute;
+    animation: floatAround 20s linear infinite;
+    opacity: 0.1;
+}
+
+.floating-note.note-1 {
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+    animation-duration: 25s;
+}
+
+.floating-note.note-2 {
+    top: 60%;
+    right: 15%;
+    animation-delay: 8s;
+    animation-duration: 30s;
+}
+
+.floating-note.note-3 {
+    bottom: 20%;
+    left: 20%;
+    animation-delay: 15s;
+    animation-duration: 35s;
+}
+
+@keyframes floatAround {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(100px, -50px) rotate(90deg); }
+    50% { transform: translate(50px, -100px) rotate(180deg); }
+    75% { transform: translate(-50px, -50px) rotate(270deg); }
+    100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+.chord-progression-bg {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.05;
+}
+
+.background-fretboard {
+    position: absolute;
+    top: 20%;
+    right: 10%;
+    opacity: 0.03;
+    transform: rotate(15deg);
+}
+
+/* Loading graphics */
+.loading-graphics-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 40px;
+}
+
+.loading-message {
+    font-size: 1.2rem;
+    color: #FFD700;
+    text-align: center;
+    margin: 0;
+}
+
+/* Chord display enhancements */
+.chord-display-enhanced {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.chord-display-enhanced:hover {
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+.chord-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.chord-name-display {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.chord-animation {
+    opacity: 0.6;
+}
+
+/* Enhanced search interface */
+.search-enhanced-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.search-graphics-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    gap: 20px;
+}
+
+.search-title-section h1 {
+    font-size: 2.5rem;
+    color: #FFD700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.search-title-section p {
+    font-size: 1.2rem;
+    color: #ffffff;
+    opacity: 0.8;
+    margin: 0;
+}
+
+.search-input-enhanced {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    border: 2px solid rgba(255, 215, 0, 0.2);
+}
+
+.input-decoration {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.enhanced-search-input {
+    flex: 1;
+    padding: 15px 20px;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 1.1rem;
+    outline: none;
+}
+
+.enhanced-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.search-features-visual {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    border-color: rgba(255, 215, 0, 0.3);
+    transform: translateY(-5px);
+}
+
+.feature-item span {
+    color: #FFD700;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .app-title {
+        font-size: 2.5rem;
+    }
+    
+    .logo-section {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .search-graphics-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .search-input-enhanced {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .search-features-visual {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .analysis-steps-visual {
+        gap: 10px;
+    }
+    
+    .step-visual {
+        padding: 10px 15px;
+    }
+    
+    .hero-graphics-container {
+        display: none; /* Hide background graphics on mobile */
+    }
+}

@@ -1,0 +1,100 @@
+/* Hero Featured Preview - Uses shared .hero-box styles */
+.hero-featured-preview {
+    /* All base styles come from .hero-box in homepage.css */
+}
+
+.preview-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.preview-songs {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.preview-song-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.preview-song-card:hover {
+    background: rgba(139, 92, 246, 0.3);
+    border-color: rgba(139, 92, 246, 0.6);
+    transform: translateX(-5px);
+    box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
+}
+
+.preview-thumbnail {
+    position: relative;
+    width: 60px;
+    height: 45px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.preview-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.preview-song-card:hover .play-overlay {
+    opacity: 1;
+}
+
+.preview-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.preview-song-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.preview-artist {
+    font-size: 0.85rem;
+    color: #b8b8ff;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

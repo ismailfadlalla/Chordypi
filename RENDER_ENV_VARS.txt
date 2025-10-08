@@ -1,0 +1,108 @@
+# 🔐 Production Environment Variables for Render.com
+
+## ⚠️ IMPORTANT: Keep this file LOCAL ONLY - Never commit to Git!
+
+Generated: October 8, 2025
+
+---
+
+## Required Environment Variables
+
+Copy these to Render.com Dashboard → Environment Variables:
+
+### Basic Configuration
+```
+FLASK_ENV=production
+FLASK_APP=app.py
+PORT=10000
+PYTHON_VERSION=3.10.0
+```
+
+### CORS Settings
+```
+CORS_ORIGINS=https://chordypi.vercel.app,http://localhost:3000
+```
+
+### 🔐 Security Keys (SECURE - Generated)
+```
+SECRET_KEY=BqxdpEIyDLoU5SwQrzlWM46Ku8k2mPcZ90Y1H3jnThRaOFvVGAJNfC7itXgebs
+
+JWT_SECRET_KEY=50tG23YKHrLvghlsRJdWPijqEyDOoMCnx9cSQT4e67BpN1zUbZumF8fVAwkXaI
+```
+
+---
+
+## Optional Environment Variables
+
+### Database (if you add PostgreSQL later)
+```
+DATABASE_URL=<auto-populated by Render when you add database>
+```
+
+### API Keys (if needed for external services)
+```
+YOUTUBE_API_KEY=<your-youtube-api-key-if-needed>
+SPOTIFY_CLIENT_ID=<if-using-spotify>
+SPOTIFY_CLIENT_SECRET=<if-using-spotify>
+```
+
+---
+
+## How to Add to Render:
+
+1. Go to https://render.com/dashboard
+2. Click on your web service (chordypi-api)
+3. Click "Environment" in the left sidebar
+4. Click "Add Environment Variable"
+5. For each variable above:
+   - Key: Variable name (e.g., SECRET_KEY)
+   - Value: Variable value (copy from above)
+6. Click "Save Changes"
+7. Service will auto-redeploy with new variables
+
+---
+
+## 🔒 Security Notes:
+
+- ✅ These keys are randomly generated (64 characters)
+- ✅ Never commit this file to Git (.gitignore protects it)
+- ✅ Never share these keys publicly
+- ✅ Render encrypts environment variables
+- ✅ Keys are only accessible within your service
+
+## 🔄 Rotating Keys:
+
+If you need to rotate keys:
+1. Generate new keys: Run in PowerShell:
+   ```powershell
+   -join ((65..90) + (97..122) + (48..57) | Get-Random -Count 64 | % {[char]$_})
+   ```
+2. Update in Render dashboard
+3. Service auto-restarts with new keys
+
+---
+
+## ✅ Verification:
+
+After adding variables:
+- [ ] All variables show in Render Environment tab
+- [ ] No typos in variable names
+- [ ] CORS_ORIGINS includes your Vercel URL
+- [ ] Keys are 64 characters long
+- [ ] Service redeployed successfully
+
+---
+
+## 📋 Quick Copy-Paste Format:
+
+For Render's "Bulk Add" feature (if available):
+
+```
+FLASK_ENV=production
+FLASK_APP=app.py
+PORT=10000
+PYTHON_VERSION=3.10.0
+CORS_ORIGINS=https://chordypi.vercel.app,http://localhost:3000
+SECRET_KEY=BqxdpEIyDLoU5SwQrzlWM46Ku8k2mPcZ90Y1H3jnThRaOFvVGAJNfC7itXgebs
+JWT_SECRET_KEY=50tG23YKHrLvghlsRJdWPijqEyDOoMCnx9cSQT4e67BpN1zUbZumF8fVAwkXaI
+```
