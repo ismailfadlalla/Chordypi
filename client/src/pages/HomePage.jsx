@@ -13,6 +13,7 @@ import FileUploader from '../components/FileUploader';
 import SearchResultsPage from './SearchResultsPage';
 import UserLibrary from '../components/library/UserLibrary';
 import SongCard from '../components/common/SongCard';
+import ChordyPiLogo from '../components/common/ChordyPiLogo';
 import { useAuth } from '../hooks/useAuth';
 import { analyzeSong, addToHistory, getFavorites, getHistory, addToFavorites, removeFromFavorites, analyzeUploadedAudio } from '../services/api';
 import '../styles/global.css';
@@ -321,14 +322,19 @@ const HomePage = () => {
             {/* Hero Section */}
             <div className="hero-section">
                 <div className="hero-content">
-                    {/* Top: Title Section - Full Width */}
+                    {/* Top: Logo Section - Full Width */}
                     <div className="hero-text">
-                        <h1 className="hero-title">
-                            <span className="chord-symbol">🎸</span>
-                            ChordyPi
-                            <span className="pi-badge">π</span>
-                        </h1>
-                        <p className="hero-subtitle">Learn Music • Pay with Pi • Master Any Song</p>
+                        <div style={{ 
+                            display: 'flex', 
+                            justifyContent: 'center', 
+                            marginBottom: '20px' 
+                        }}>
+                            <ChordyPiLogo 
+                                size="large" 
+                                showTagline={true}
+                                lightText={true}
+                            />
+                        </div>
                     </div>
                     
                     {/* Bottom: Two-column layout for user boxes */}
