@@ -16,12 +16,6 @@ def analyze_song():
     Handles both JSON (YouTube URL) and file uploads
     """
     try:
-        # Debug: Log request details
-        print(f"📥 Request Content-Type: {request.content_type}")
-        print(f"📥 Request has files: {bool(request.files)}")
-        if request.files:
-            print(f"📥 File fields: {list(request.files.keys())}")
-        
         # Check if this is a file upload (frontend sends 'audio' as field name)
         if request.files and ('audio' in request.files or 'file' in request.files):
             return analyze_uploaded_file()
