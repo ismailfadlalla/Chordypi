@@ -9,6 +9,7 @@ import { useHistory, useLocation, Link } from 'react-router-dom';
 import BackgroundVideo from '../components/home/BackgroundVideo';
 import SearchInterface from '../components/home/SearchInterface';
 import FeaturedSongs from '../components/home/FeaturedSongs';
+import FileUploader from '../components/FileUploader';
 import EnhancedPiNetworkIntegration from '../components/pi/EnhancedPiNetworkIntegration';
 import SearchResultsPage from './SearchResultsPage';
 import UserLibrary from '../components/library/UserLibrary';
@@ -119,6 +120,22 @@ const HomePage = () => {
         console.log('🎵 handleSongSelect called with song:', song);
         
         // Navigate to analyzing page which will show overlay and perform analysis
+        history.push('/analyzing', { song });
+    };
+
+    const handleFileUpload = async (formData, fileName) => {
+        console.log('📁 handleFileUpload called with fileName:', fileName);
+        
+        // Create song object with file data (same pattern as YouTube songs)
+        const song = {
+            title: fileName.replace(/\.(mp3|wav|m4a)$/i, ''),
+            artist: 'Uploaded File',
+            source: 'upload',
+            fileData: formData,
+            fileName: fileName
+        };
+        
+        // Navigate to analyzing page (same as featured songs and YouTube search)
         history.push('/analyzing', { song });
     };
 
@@ -416,6 +433,12 @@ const HomePage = () => {
             {/* Search Interface */}
             <div className="search-section">
                 <SearchInterface onSearch={handleSearch} />
+                
+                {/* File Upload - Right below search, same pattern as featured songs */}
+                <FileUploader 
+                    onUpload={handleFileUpload}
+                    onError={(msg) => setError(msg)}
+                />
             </div>
             
             {/* Testimonials Section */}

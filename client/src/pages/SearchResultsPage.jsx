@@ -341,17 +341,34 @@ const SearchResultsPage = ({ searchQuery, onSongSelect, onBack, analyzingChords,
                 return;
             }
             
-            // Create song object with file (File objects CAN be passed through navigation)
-            const song = {
-                title: fileName.replace(/\.(mp3|wav|m4a|ogg|flac)$/i, ''),
-                artist: 'Uploaded File',
-                source: 'upload',
-                uploadedFile: file,  // Pass the File object directly, not FormData
-                fileName: fileName
+            // Convert File to base64 and store in sessionStorage (File objects can't be passed through navigation)
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64 = reader.result;
+                
+                // Store file data in sessionStorage temporarily
+                sessionStorage.setItem('uploadedFileData', base64);
+                sessionStorage.setItem('uploadedFileName', fileName);
+                sessionStorage.setItem('uploadedFileType', file.type);
+                
+                // Create song object WITHOUT the file data
+                const song = {
+                    title: fileName.replace(/\.(mp3|wav|m4a|ogg|flac)$/i, ''),
+                    artist: 'Uploaded File',
+                    source: 'upload',
+                    fileName: fileName
+                };
+                
+                // Use onSongSelect callback to navigate
+                onSongSelect(song);
             };
             
-            // Use onSongSelect callback to navigate (like YouTube songs do)
-            onSongSelect(song);
+            reader.onerror = () => {
+                setError('Failed to read file');
+            };
+            
+            // Read file as base64
+            reader.readAsDataURL(file);
             
         } catch (error) {
             console.error('File upload error:', error);
