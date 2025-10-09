@@ -331,20 +331,22 @@ const SearchResultsPage = ({ searchQuery, onSongSelect, onBack, analyzingChords,
     // Handle file upload for chord analysis
     const handleFileUpload = async (formData, fileName) => {
         try {
-            console.log('📁 Starting file analysis:', fileName);
+            console.log('📁 Starting file upload:', fileName);
             
-            // Navigate to analysis with file data
-            const result = await analyzeUploadedAudio(formData, fileName);
-            
-            // Add to history
-            addToHistory(result.song);
-            
-            // Navigate to analyzing page
-            onSongSelect(result.song, result.analysis);
+            // Navigate to AnalyzingPage with file data (like YouTube songs do)
+            history.push('/analyzing', {
+                song: {
+                    title: fileName.replace(/\.(mp3|wav|m4a|ogg|flac)$/i, ''),
+                    artist: 'Uploaded File',
+                    source: 'upload',
+                    fileData: formData,
+                    fileName: fileName
+                }
+            });
             
         } catch (error) {
             console.error('File upload error:', error);
-            setError('Failed to analyze file: ' + error.message);
+            setError('Failed to upload file: ' + error.message);
         }
     };
 
