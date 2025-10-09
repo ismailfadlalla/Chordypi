@@ -1,7 +1,8 @@
 // Use Flask backend for real chord analysis instead of external APIs
 // API Configuration - Use HTTPS for Pi Network compatibility
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://chordypi.onrender.com/api';
-const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY || 'your-youtube-api-key-here';
+// Support both VITE_ and REACT_APP_ prefixes for environment variables
+const API_BASE_URL = process.env.VITE_API_URL || process.env.REACT_APP_API_URL || 'https://chordypi-production.up.railway.app';
+const YOUTUBE_API_KEY = process.env.VITE_YOUTUBE_API_KEY || process.env.REACT_APP_YOUTUBE_API_KEY || 'your-youtube-api-key-here';
 
 // Client-side favorites and history management
 export const addToFavorites = (song) => {
@@ -72,7 +73,7 @@ export const searchYouTubeVideos = async (query, maxResults = 10) => {
     try {
         console.log('🔍 Searching via Flask backend:', query);
         
-        const response = await fetch(`${API_BASE_URL}/search-songs`, {
+        const response = await fetch(`${API_BASE_URL}/api/search-songs`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -199,7 +200,7 @@ export const analyzeSong = async (songData) => {
         console.log('📺 Video URL:', youtubeUrl);
         console.log('🎵 Song Name:', songData.title);
         
-        const response = await fetch(`${API_BASE_URL}/analyze-song`, {
+        const response = await fetch(`${API_BASE_URL}/api/analyze-song`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -249,7 +250,7 @@ export const analyzeUploadedAudio = async (formData, fileName) => {
     try {
         console.log('📁 Analyzing uploaded file:', fileName);
         
-        const response = await fetch(`${API_BASE_URL}/analyze-audio-upload`, {
+        const response = await fetch(`${API_BASE_URL}/api/analyze-song`, {
             method: 'POST',
             body: formData // Don't set Content-Type, let browser set it with boundary
         });
@@ -296,7 +297,7 @@ export const analyzeUploadedAudio = async (formData, fileName) => {
 // Get featured songs from backend
 export const getFeaturedSongs = async () => {
     try {
-        const response = await fetch(`${API_BASE_URL}/featured-songs`);
+        const response = await fetch(`${API_BASE_URL}/api/featured-songs`);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
