@@ -46,6 +46,10 @@ const AnalyzingPage = () => {
     useEffect(() => {
         console.log('🚨 ANALYZING PAGE MOUNTED!');
         console.log('Song:', song?.title);
+        console.log('Song source:', song?.source);
+        console.log('Song uploadedFile:', song?.uploadedFile);
+        console.log('Has uploadedFile?', !!song?.uploadedFile);
+        console.log('Full song object:', song);
     }, []);
 
     useEffect(() => {
