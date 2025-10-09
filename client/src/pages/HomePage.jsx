@@ -130,6 +130,17 @@ const HomePage = () => {
         console.log('📁 handleFileUpload called with fileName:', fileName);
         
         try {
+            // Get the File object from FormData to create a blob URL
+            const audioFile = formData.get('audio');
+            if (!audioFile) {
+                setError('No audio file found');
+                return;
+            }
+            
+            // Create a blob URL for audio playback
+            const audioBlobUrl = URL.createObjectURL(audioFile);
+            console.log('🎵 Created blob URL for audio:', audioBlobUrl);
+            
             // Analyze the file immediately in HomePage
             console.log('🎵 Starting file upload analysis...');
             const data = await analyzeUploadedAudio(formData, fileName);
@@ -143,6 +154,7 @@ const HomePage = () => {
                     artist: 'Uploaded File',
                     source: 'upload',
                     fileName: fileName,
+                    audioUrl: audioBlobUrl, // Blob URL for audio playback
                     chords: data.analysis.chords,
                     duration: data.analysis.duration,
                     analysis_type: data.analysis.analysis_type || 'ai_analysis',
@@ -162,6 +174,8 @@ const HomePage = () => {
             } else {
                 console.error('❌ No chord analysis available from uploaded file');
                 setError('Could not analyze the uploaded file. Please try a different file.');
+                // Clean up blob URL if analysis failed
+                URL.revokeObjectURL(audioBlobUrl);
                 setAnalyzingChords(false);
             }
             
