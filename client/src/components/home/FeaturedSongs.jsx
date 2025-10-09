@@ -91,7 +91,7 @@ const FeaturedSongs = ({ onSongSelect, analyzing, analyzingChords }) => {
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
                 gap: '25px',
-                padding: '10px'
+                padding: '10px 20px'
             }}>
                 {songs.map((song) => {
                     const durationInSeconds = parseDuration(song.duration);
