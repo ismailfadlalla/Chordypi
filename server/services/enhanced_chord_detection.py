@@ -116,12 +116,6 @@ class EnhancedChordDetector:
             
             return chords
             
-        except (AttributeError, RuntimeError, OSError) as e:
-            logger.error(f"❌ AI chord detection failed (model loading issue): {e}")
-            logger.info("📊 Falling back to librosa method")
-            # Disable Basic Pitch for future calls to avoid repeated errors
-            self.available = False
-            return self._fallback_detection(audio_path, duration)
         except Exception as e:
             logger.error(f"❌ AI chord detection failed: {e}")
             logger.info("📊 Falling back to librosa method")
