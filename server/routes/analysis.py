@@ -277,6 +277,12 @@ def analyze_uploaded_file():
     """
     Analyze an uploaded audio file (MP3, WAV, M4A)
     """
+    print("=" * 80)
+    print("🎵 ANALYZE_UPLOADED_FILE CALLED")
+    print(f"📥 Request Content-Type: {request.content_type}")
+    print(f"📥 Request.files keys: {list(request.files.keys())}")
+    print("=" * 80)
+    
     try:
         # Frontend sends 'audio', but also check 'file' for compatibility
         file = request.files.get('audio') or request.files.get('file')
