@@ -3,6 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import AuthForm from '../components/auth/AuthForm';
 import PiNetworkIntegration from '../components/pi/PiNetworkIntegration';
+import ChordyPiLogo from '../components/common/ChordyPiLogo';
 import '../styles/components/auth.css';
 
 const AuthPage = () => {
@@ -175,8 +176,7 @@ const AuthPage = () => {
             <div className="auth-container">
                 <div className="auth-header">
                     <div className="logo-section">
-                        <h1 className="app-title">🎸 ChordyPi</h1>
-                        <p className="app-subtitle">Learn Guitar with AI-Powered Chord Analysis</p>
+                        <ChordyPiLogo size="medium" showTagline={true} />
                     </div>
                 </div>
 
