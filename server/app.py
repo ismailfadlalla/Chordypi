@@ -266,6 +266,7 @@ def health_check():
     return jsonify({
         "status": "healthy",
         "service": "ChordyPi - AI Chord Detection API with Pi Network",
+        "version": "v3.0.1-logger-debug",  # VERSION MARKER TO VERIFY DEPLOYMENT
         "timestamp": time.time(),
         "web_build_exists": os.path.exists(WEB_BUILD_PATH),
         "real_analysis": "enabled",
