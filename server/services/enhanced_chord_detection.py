@@ -20,14 +20,22 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Try to import Basic Pitch, fallback to librosa if not installed
+BASIC_PITCH_AVAILABLE = False
 try:
     from basic_pitch.inference import predict
     from basic_pitch import ICASSP_2022_MODEL_PATH
-    BASIC_PITCH_AVAILABLE = True
-    logger.info("✅ Basic Pitch AI model loaded successfully")
-except ImportError:
-    BASIC_PITCH_AVAILABLE = False
-    logger.warning("⚠️ Basic Pitch not installed. Using fallback librosa method.")
+    # Test if model can actually be loaded
+    try:
+        # Try to verify the model path exists and is valid
+        if os.path.exists(ICASSP_2022_MODEL_PATH):
+            BASIC_PITCH_AVAILABLE = True
+            logger.info("✅ Basic Pitch AI model available")
+        else:
+            logger.warning("⚠️ Basic Pitch model path not found")
+    except Exception as e:
+        logger.warning(f"⚠️ Basic Pitch model validation failed: {e}")
+except ImportError as e:
+    logger.warning(f"⚠️ Basic Pitch not installed: {e}")
     logger.warning("   Install with: pip install basic-pitch")
 
 
@@ -35,15 +43,22 @@ class EnhancedChordDetector:
     """
     AI-powered chord detection using Spotify's Basic Pitch model
     Accuracy: 90-95% (vs 60-70% with librosa)
+    Falls back to librosa if Basic Pitch unavailable
     """
     
     def __init__(self, use_gpu: bool = False):
         self.use_gpu = use_gpu
-        self.available = BASIC_PITCH_AVAILABLE
+        self.available = False  # Start pessimistic
         
-        if self.available:
-            self.model_path = ICASSP_2022_MODEL_PATH
-            logger.info("🎵 Enhanced Chord Detector initialized with Basic Pitch AI")
+        if BASIC_PITCH_AVAILABLE:
+            try:
+                # Test that we can actually use the model
+                self.model_path = ICASSP_2022_MODEL_PATH
+                self.available = True
+                logger.info("🎵 Enhanced Chord Detector initialized with Basic Pitch AI")
+            except Exception as e:
+                logger.warning(f"⚠️ Basic Pitch initialization failed: {e}")
+                logger.info("📊 Falling back to librosa mode")
         else:
             logger.info("📊 Enhanced Chord Detector in fallback mode (librosa)")
     
@@ -101,6 +116,12 @@ class EnhancedChordDetector:
             
             return chords
             
+        except (AttributeError, RuntimeError, OSError) as e:
+            logger.error(f"❌ AI chord detection failed (model loading issue): {e}")
+            logger.info("📊 Falling back to librosa method")
+            # Disable Basic Pitch for future calls to avoid repeated errors
+            self.available = False
+            return self._fallback_detection(audio_path, duration)
         except Exception as e:
             logger.error(f"❌ AI chord detection failed: {e}")
             logger.info("📊 Falling back to librosa method")

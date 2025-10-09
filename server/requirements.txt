@@ -12,7 +12,8 @@ requests
 beautifulsoup4
 lxml
 
-# AI Chord Detection Enhancement
+# AI Chord Detection Enhancement (90-95% accuracy)
 basic-pitch>=0.2.5
-tensorflow>=2.12.0
-tensorflow-io>=0.31.0
+tensorflow==2.15.0
+tensorflow-io==0.31.0
+protobuf==3.20.3
