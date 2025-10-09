@@ -47,7 +47,30 @@ const AnalyzingPage = () => {
             try {
                 let data;
                 
-                // Check if this is a file upload or YouTube song
+                // Check if song already has analyzed chords (from file upload in HomePage)
+                if (song.chords && song.chords.length > 0) {
+                    console.log('✅ Song already analyzed, showing overlay then navigating...');
+                    
+                    // Add to history if user is logged in
+                    if (user) {
+                        addToHistory(song);
+                    }
+                    
+                    // Wait for minimum display time to show overlay
+                    const elapsedTime = Date.now() - startTime;
+                    const remainingTime = Math.max(0, minimumDisplayTime - elapsedTime);
+                    
+                    if (remainingTime > 0) {
+                        await new Promise(resolve => setTimeout(resolve, remainingTime));
+                    }
+                    
+                    // Navigate to player with existing data
+                    console.log('🚀 Navigating to player page with pre-analyzed data');
+                    history.replace('/player', song);
+                    return;
+                }
+                
+                // Otherwise, analyze the song now
                 if (song.source === 'upload' && song.fileData) {
                     console.log('📁 File upload detected, analyzing uploaded file...');
                     console.log('📁 File name:', song.fileName);

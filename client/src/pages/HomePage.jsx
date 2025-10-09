@@ -1,5 +1,8 @@
 /**
- * HomePage Component - ChordyPi Main Landing Page
+ * HomePage import SongCard from '../components/common/SongCard';
+import { useAuth } from '../hooks/useAuth';
+import { PiNetworkProvider } from '../context/PiNetworkContext';
+import { analyzeSong, analyzeUploadedAudio, addToHistory, getFavorites, getHistory, addToFavorites, removeFromFavorites } from '../services/api';onent - ChordyPi Main Landing Page
  * Last updated: October 2, 2025 - 06:35 AM
  * Features: SongCard components for all sections (Recently Played, Favorites, Featured)
  */
@@ -17,7 +20,7 @@ import UserLibrary from '../components/library/UserLibrary';
 import SongCard from '../components/common/SongCard';
 import { useAuth } from '../hooks/useAuth';
 import { PiNetworkProvider } from '../context/PiNetworkContext';
-import { analyzeSong, addToHistory, getFavorites, getHistory, addToFavorites, removeFromFavorites } from '../services/api';
+import { analyzeSong, addToHistory, getFavorites, getHistory, addToFavorites, removeFromFavorites, analyzeUploadedAudio } from '../services/api';
 import '../styles/global.css';
 import '../styles/animations.css';
 import '../styles/components/user-features.css';
@@ -123,20 +126,50 @@ const HomePage = () => {
         history.push('/analyzing', { song });
     };
 
-    const handleFileUpload = async (formData, fileName) => {
+        const handleFileUpload = async (formData, fileName) => {
         console.log('📁 handleFileUpload called with fileName:', fileName);
         
-        // Create song object with file data (same pattern as YouTube songs)
-        const song = {
-            title: fileName.replace(/\.(mp3|wav|m4a)$/i, ''),
-            artist: 'Uploaded File',
-            source: 'upload',
-            fileData: formData,
-            fileName: fileName
-        };
-        
-        // Navigate to analyzing page (same as featured songs and YouTube search)
-        history.push('/analyzing', { song });
+        try {
+            // Analyze the file immediately in HomePage
+            console.log('🎵 Starting file upload analysis...');
+            const data = await analyzeUploadedAudio(formData, fileName);
+            
+            console.log('📦 File upload analysis complete:', data);
+            
+            if (data.status === 'success' && data.analysis?.chords?.length > 0) {
+                // Prepare song object with analyzed chords (same pattern as YouTube songs)
+                const song = {
+                    title: fileName.replace(/\.(mp3|wav|m4a)$/i, ''),
+                    artist: 'Uploaded File',
+                    source: 'upload',
+                    fileName: fileName,
+                    chords: data.analysis.chords,
+                    duration: data.analysis.duration,
+                    analysis_type: data.analysis.analysis_type || 'ai_analysis',
+                    key: data.analysis.key,
+                    bpm: data.analysis.bpm,
+                    time_signature: data.analysis.time_signature,
+                    accuracy: data.analysis.accuracy,
+                    analysis_metadata: data.analysis.analysis_metadata,
+                    thumbnail: null, // No thumbnail for uploaded files
+                    youtubeUrl: null // No YouTube URL for uploaded files
+                };
+                
+                // Navigate to AnalyzingPage which will show unified overlay then go to PlayerPage
+                // Same navigation pattern as featured songs and YouTube search
+                history.push('/analyzing', { song });
+                
+            } else {
+                console.error('❌ No chord analysis available from uploaded file');
+                setError('Could not analyze the uploaded file. Please try a different file.');
+                setAnalyzingChords(false);
+            }
+            
+        } catch (err) {
+            console.error('💥 File upload analysis failed:', err);
+            setError(err.message || 'Failed to analyze file. Please try again.');
+            setAnalyzingChords(false);
+        }
     };
 
     const handleBackToSearch = () => {
