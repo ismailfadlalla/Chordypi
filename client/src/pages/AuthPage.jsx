@@ -172,16 +172,6 @@ const AuthPage = () => {
 
     return (
         <div className="auth-page enhanced">
-            {/* Top Right Home Button */}
-            <button 
-                className="home-button-top-right"
-                onClick={() => history.push('/')}
-                aria-label="Go to Home"
-            >
-                <span className="home-icon">🏠</span>
-                <span className="home-text">Go to Home</span>
-            </button>
-
             <div className="auth-container">
                 <div className="auth-header">
                     <div className="logo-section">
@@ -327,6 +317,46 @@ const AuthPage = () => {
                         </div>
                     </div>
 
+                    {/* Home Button - Bottom Right */}
+                    <div style={{ 
+                        display: 'flex', 
+                        justifyContent: 'flex-end', 
+                        marginTop: '20px',
+                        paddingTop: '20px',
+                        borderTop: '1px solid rgba(108, 92, 231, 0.2)'
+                    }}>
+                        <button 
+                            className="home-button-bottom"
+                            onClick={() => history.push('/')}
+                            aria-label="Go to Home"
+                            style={{
+                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                color: 'white',
+                                border: 'none',
+                                padding: '12px 24px',
+                                borderRadius: '8px',
+                                fontSize: '16px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                transition: 'all 0.3s ease',
+                                boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = '0 6px 16px rgba(102, 126, 234, 0.4)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+                            }}
+                        >
+                            <span style={{ fontSize: '20px' }}>🏠</span>
+                            <span>Go to Home</span>
+                        </button>
+                    </div>
 
                 </div>
             </div>
