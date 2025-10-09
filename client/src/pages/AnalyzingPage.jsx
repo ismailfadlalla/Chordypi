@@ -9,9 +9,14 @@
                 let data;
                 
                 // Check if this is a file upload or YouTube song
-                if (song.source === 'upload' && song.fileData) {
+                if (song.source === 'upload' && song.uploadedFile) {
                     console.log('📁 File upload detected, analyzing uploaded file...');
-                    data = await analyzeUploadedAudio(song.fileData, song.fileName);
+                    
+                    // Reconstruct FormData from the File object
+                    const formData = new FormData();
+                    formData.append('audio', song.uploadedFile);
+                    
+                    data = await analyzeUploadedAudio(formData, song.fileName);
                 } else {
                     console.log('🎬 YouTube song detected, analyzing from URL...');
                     data = await analyzeSong(song);
