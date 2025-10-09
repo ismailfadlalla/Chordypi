@@ -307,6 +307,27 @@ def get_featured_songs():
         "songs": featured_songs
     })
 
+# Global error handler to catch all exceptions
+@app.errorhandler(Exception)
+def handle_error(e):
+    import traceback
+    import sys
+    error_trace = traceback.format_exc()
+    print("=" * 80, flush=True)
+    print("🚨 GLOBAL ERROR HANDLER CAUGHT EXCEPTION", flush=True)
+    print(f"Error Type: {type(e).__name__}", flush=True)
+    print(f"Error Message: {str(e)}", flush=True)
+    print("Full Traceback:", flush=True)
+    print(error_trace, flush=True)
+    print("=" * 80, flush=True)
+    sys.stdout.flush()
+    
+    return jsonify({
+        "status": "error",
+        "error": str(e),
+        "type": type(e).__name__
+    }), 500
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     

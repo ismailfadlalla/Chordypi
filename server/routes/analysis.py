@@ -16,17 +16,19 @@ def analyze_song():
     Handles both JSON (YouTube URL) and file uploads
     """
     try:
-        # DEBUG: Log all request details
-        print("=" * 80)
-        print("📨 ANALYZE_SONG ENDPOINT CALLED")
-        print(f"Content-Type: {request.content_type}")
-        print(f"request.files: {request.files}")
-        print(f"request.files bool: {bool(request.files)}")
+        # DEBUG: Log all request details with FORCED FLUSH
+        import sys
+        print("=" * 80, flush=True)
+        print("📨 ANALYZE_SONG ENDPOINT CALLED", flush=True)
+        print(f"Content-Type: {request.content_type}", flush=True)
+        print(f"request.files: {request.files}", flush=True)
+        print(f"request.files bool: {bool(request.files)}", flush=True)
         if request.files:
-            print(f"Files keys: {list(request.files.keys())}")
+            print(f"Files keys: {list(request.files.keys())}", flush=True)
             for key in request.files.keys():
-                print(f"  - File '{key}': {request.files[key]}")
-        print("=" * 80)
+                print(f"  - File '{key}': {request.files[key]}", flush=True)
+        print("=" * 80, flush=True)
+        sys.stdout.flush()
         
         # Check if this is a file upload (frontend sends 'audio' as field name)
         if request.files and ('audio' in request.files or 'file' in request.files):
