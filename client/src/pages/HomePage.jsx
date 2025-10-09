@@ -1,9 +1,6 @@
 /**
- * HomePage import SongCard from '../components/common/SongCard';
-import { useAuth } from '../hooks/useAuth';
-import { PiNetworkProvider } from '../context/PiNetworkContext';
-import { analyzeSong, analyzeUploadedAudio, addToHistory, getFavorites, getHistory, addToFavorites, removeFromFavorites } from '../services/api';onent - ChordyPi Main Landing Page
- * Last updated: October 2, 2025 - 06:35 AM
+ * HomePage Component - ChordyPi Main Landing Page
+ * Last updated: October 9, 2025
  * Features: SongCard components for all sections (Recently Played, Favorites, Featured)
  */
 
@@ -13,13 +10,10 @@ import BackgroundVideo from '../components/home/BackgroundVideo';
 import SearchInterface from '../components/home/SearchInterface';
 import FeaturedSongs from '../components/home/FeaturedSongs';
 import FileUploader from '../components/FileUploader';
-import EnhancedPiNetworkIntegration from '../components/pi/EnhancedPiNetworkIntegration';
 import SearchResultsPage from './SearchResultsPage';
 import UserLibrary from '../components/library/UserLibrary';
-
 import SongCard from '../components/common/SongCard';
 import { useAuth } from '../hooks/useAuth';
-import { PiNetworkProvider } from '../context/PiNetworkContext';
 import { analyzeSong, addToHistory, getFavorites, getHistory, addToFavorites, removeFromFavorites, analyzeUploadedAudio } from '../services/api';
 import '../styles/global.css';
 import '../styles/animations.css';
@@ -703,17 +697,6 @@ const HomePage = () => {
                     <p>Popular songs to practice your skills</p>
                 </div>
                 <FeaturedSongs onSongSelect={handleSongSelect} analyzing={analyzingSongId} analyzingChords={analyzingChords} />
-            </div>
-            
-            {/* Pi Network Integration Section */}
-            <div className="pi-network-section">
-                <div className="section-header">
-                    <h2>🌟 Pi Network Premium</h2>
-                    <p>Unlock advanced features with secure blockchain payments</p>
-                </div>
-                <PiNetworkProvider>
-                    <EnhancedPiNetworkIntegration />
-                </PiNetworkProvider>
             </div>
             
             {/* Premium Modal */}
