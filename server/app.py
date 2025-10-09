@@ -225,6 +225,23 @@ app.register_blueprint(analysis_bp)
 app.register_blueprint(search_bp)
 app.register_blueprint(library_bp)
 
+# Add request logging middleware - runs BEFORE any route
+@app.before_request
+def log_request_info():
+    import sys
+    print("=" * 80, flush=True)
+    print(f"📥 INCOMING REQUEST: {request.method} {request.path}", flush=True)
+    print(f"Content-Type: {request.content_type}", flush=True)
+    print(f"Content-Length: {request.content_length}", flush=True)
+    print(f"Has files: {bool(request.files)}", flush=True)
+    if request.files:
+        print(f"Files: {list(request.files.keys())}", flush=True)
+    print("=" * 80, flush=True)
+    sys.stdout.flush()
+
+# Set max content length (50 MB for audio files)
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
+
 def check_ffmpeg():
     """Check if FFmpeg is available"""
     try:
@@ -259,6 +276,41 @@ def health_check():
             "numpy": True
         }
     })
+
+# Test file upload endpoint - for debugging
+@app.route('/api/test-upload', methods=['POST'])
+def test_upload():
+    import sys
+    try:
+        print("=" * 80, flush=True)
+        print("🧪 TEST UPLOAD ENDPOINT HIT", flush=True)
+        print(f"Content-Type: {request.content_type}", flush=True)
+        print(f"Content-Length: {request.content_length}", flush=True)
+        print(f"request.files: {request.files}", flush=True)
+        print(f"request.files keys: {list(request.files.keys())}", flush=True)
+        print("=" * 80, flush=True)
+        sys.stdout.flush()
+        
+        if 'audio' in request.files:
+            file = request.files['audio']
+            return jsonify({
+                "status": "success",
+                "message": "File received!",
+                "filename": file.filename,
+                "content_type": file.content_type
+            })
+        else:
+            return jsonify({
+                "status": "error",
+                "message": "No 'audio' field found",
+                "available_fields": list(request.files.keys())
+            }), 400
+    except Exception as e:
+        import traceback
+        print("ERROR IN TEST UPLOAD:", str(e), flush=True)
+        print(traceback.format_exc(), flush=True)
+        sys.stdout.flush()
+        return jsonify({"status": "error", "error": str(e)}), 500
 
 # Featured songs endpoint
 @app.route('/api/featured-songs', methods=['GET'])
