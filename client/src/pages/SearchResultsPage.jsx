@@ -1,7 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { searchYouTubeVideos, addToFavorites, removeFromFavorites, getFavorites, addToHistory, analyzeUploadedAudio } from '../services/api';
+import { searchYouTubeVideos, addToFavorites, removeFromFavorites, getFavorites, addToHistory } from '../services/api';
 import SongCard from '../components/common/SongCard';
-import FileUploader from '../components/FileUploader';
 import '../styles/components/cards.css';
 import '../styles/components/search-results.css';
 
@@ -328,54 +327,6 @@ const SearchResultsPage = ({ searchQuery, onSongSelect, onBack, analyzingChords,
         setFavorites(currentFavorites);
     }, []);
 
-    // Handle file upload for chord analysis
-    const handleFileUpload = async (formData, fileName) => {
-        try {
-            console.log('📁 Starting file upload:', fileName);
-            
-            // Get the actual File object from FormData
-            const file = formData.get('audio');
-            
-            if (!file) {
-                setError('No file found in upload');
-                return;
-            }
-            
-            // Convert File to base64 and store in sessionStorage (File objects can't be passed through navigation)
-            const reader = new FileReader();
-            reader.onload = () => {
-                const base64 = reader.result;
-                
-                // Store file data in sessionStorage temporarily
-                sessionStorage.setItem('uploadedFileData', base64);
-                sessionStorage.setItem('uploadedFileName', fileName);
-                sessionStorage.setItem('uploadedFileType', file.type);
-                
-                // Create song object WITHOUT the file data
-                const song = {
-                    title: fileName.replace(/\.(mp3|wav|m4a|ogg|flac)$/i, ''),
-                    artist: 'Uploaded File',
-                    source: 'upload',
-                    fileName: fileName
-                };
-                
-                // Use onSongSelect callback to navigate
-                onSongSelect(song);
-            };
-            
-            reader.onerror = () => {
-                setError('Failed to read file');
-            };
-            
-            // Read file as base64
-            reader.readAsDataURL(file);
-            
-        } catch (error) {
-            console.error('File upload error:', error);
-            setError('Failed to upload file: ' + error.message);
-        }
-    };
-
     // Reset search state when query changes
     useEffect(() => {
         setHasSearched(false);
@@ -511,12 +462,6 @@ const SearchResultsPage = ({ searchQuery, onSongSelect, onBack, analyzingChords,
                     </div>
                 </div>
             </div>
-
-            {/* FILE UPLOAD SECTION */}
-            <FileUploader 
-                onUpload={handleFileUpload}
-                onError={(error) => setError(error)}
-            />
 
             {error && (
                 <div className="error-container">
