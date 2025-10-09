@@ -333,16 +333,17 @@ const SearchResultsPage = ({ searchQuery, onSongSelect, onBack, analyzingChords,
         try {
             console.log('📁 Starting file upload:', fileName);
             
-            // Navigate to AnalyzingPage with file data (like YouTube songs do)
-            history.push('/analyzing', {
-                song: {
-                    title: fileName.replace(/\.(mp3|wav|m4a|ogg|flac)$/i, ''),
-                    artist: 'Uploaded File',
-                    source: 'upload',
-                    fileData: formData,
-                    fileName: fileName
-                }
-            });
+            // Create song object with file data
+            const song = {
+                title: fileName.replace(/\.(mp3|wav|m4a|ogg|flac)$/i, ''),
+                artist: 'Uploaded File',
+                source: 'upload',
+                fileData: formData,
+                fileName: fileName
+            };
+            
+            // Use onSongSelect callback to navigate (like YouTube songs do)
+            onSongSelect(song);
             
         } catch (error) {
             console.error('File upload error:', error);
