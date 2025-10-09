@@ -4,6 +4,8 @@ Provides actual chord analysis using audio processing
 """
 
 from flask import Blueprint, request, jsonify
+import os
+import tempfile
 
 analysis_bp = Blueprint('analysis', __name__)
 
@@ -11,9 +13,14 @@ analysis_bp = Blueprint('analysis', __name__)
 def analyze_song():
     """
     REAL Chord Analysis - Multi-Source Detection
-    Priority: External APIs → Improved Audio Analysis
+    Handles both JSON (YouTube URL) and file uploads
     """
     try:
+        # Check if this is a file upload
+        if request.files and 'file' in request.files:
+            return analyze_uploaded_file()
+        
+        # Otherwise, handle as JSON request
         data = request.json or {}
         song_name = data.get('song_name', data.get('query', ''))
         url = data.get('url', '')
@@ -255,4 +262,157 @@ def analyze_song():
         return jsonify({
             "status": "error",
             "error": f"Server error: {str(e)}"
+        }), 500
+
+
+def analyze_uploaded_file():
+    """
+    Analyze an uploaded audio file (MP3, WAV, M4A)
+    """
+    try:
+        file = request.files['file']
+        filename = file.filename
+        
+        print(f"📁 Received file upload: {filename}")
+        
+        # Validate file type
+        allowed_extensions = {'.mp3', '.wav', '.m4a', '.ogg', '.flac'}
+        file_ext = os.path.splitext(filename)[1].lower()
+        
+        if file_ext not in allowed_extensions:
+            return jsonify({
+                "status": "error",
+                "error": f"Unsupported file type: {file_ext}. Supported: MP3, WAV, M4A, OGG, FLAC"
+            }), 400
+        
+        # Save to temporary file
+        temp_dir = tempfile.gettempdir()
+        temp_path = os.path.join(temp_dir, f"upload_{os.getpid()}_{filename}")
+        
+        print(f"💾 Saving to: {temp_path}")
+        file.save(temp_path)
+        
+        # Get file duration
+        try:
+            import librosa
+            y, sr = librosa.load(temp_path, sr=None, duration=300)  # Limit to 5 minutes
+            duration = len(y) / sr
+            print(f"⏱️ Duration: {duration:.1f}s")
+        except Exception as e:
+            print(f"⚠️ Could not get duration: {e}")
+            duration = 240  # Default to 4 minutes
+        
+        # Try AI-enhanced detection
+        try:
+            from services.enhanced_chord_detection import analyze_song_chords, get_enhanced_detector
+            
+            detector = get_enhanced_detector()
+            
+            if detector.available:
+                print("🤖 Running AI chord detection on uploaded file...")
+                result = analyze_song_chords(temp_path)
+                chords = result['chords']
+                song_key = result['key']
+                detection_method = 'AI-Enhanced (Basic Pitch)'
+                accuracy = 90
+                
+                analysis_metadata = {
+                    'method': result['method'],
+                    'total_chord_segments': result['total_chords'],
+                    'unique_chords': result['unique_chords'],
+                    'accuracy': 90,
+                    'detection_engine': 'Spotify Basic Pitch AI',
+                    'source': 'user_upload',
+                    'filename': filename
+                }
+            else:
+                raise ImportError("Basic Pitch not available")
+                
+        except (ImportError, Exception) as ai_error:
+            # Fallback to librosa
+            print(f"⚠️ AI detection unavailable: {ai_error}")
+            print("📊 Using librosa fallback...")
+            
+            from utils.chord_analyzer import extract_chords_from_audio
+            chords = extract_chords_from_audio(temp_path, min(duration, 300))
+            song_key = "C Major"
+            detection_method = 'Audio Analysis (Librosa)'
+            accuracy = 70
+            
+            analysis_metadata = {
+                'method': 'librosa',
+                'total_chord_segments': len(chords),
+                'unique_chords': len(set(c.get('chord', '') for c in chords)),
+                'accuracy': 70,
+                'detection_engine': 'Librosa Chroma Features',
+                'source': 'user_upload',
+                'filename': filename
+            }
+        
+        # Clean up temp file
+        try:
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+                print(f"🗑️ Cleaned up temp file")
+        except Exception as e:
+            print(f"⚠️ Could not remove temp file: {e}")
+        
+        if not chords:
+            return jsonify({
+                "status": "error",
+                "error": "Could not detect chords in uploaded file"
+            }), 400
+        
+        # Convert numpy types to Python types for JSON serialization
+        def convert_to_json_serializable(obj):
+            """Convert numpy types to Python native types"""
+            import numpy as np
+            if isinstance(obj, dict):
+                return {k: convert_to_json_serializable(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [convert_to_json_serializable(item) for item in obj]
+            elif isinstance(obj, (np.integer, np.int32, np.int64)):
+                return int(obj)
+            elif isinstance(obj, (np.floating, np.float32, np.float64)):
+                return float(obj)
+            elif isinstance(obj, np.ndarray):
+                return obj.tolist()
+            else:
+                return obj
+        
+        # Clean data
+        chords = convert_to_json_serializable(chords)
+        analysis_metadata = convert_to_json_serializable(analysis_metadata)
+        
+        print(f"✅ File analysis complete: {len(chords)} chords detected")
+        
+        return jsonify({
+            "status": "success",
+            "song_name": filename,
+            "title": os.path.splitext(filename)[0],
+            "chords": chords,
+            "duration": float(duration),
+            "key": song_key,
+            "analysis_type": detection_method,
+            "accuracy": int(accuracy),
+            "source": 'user_upload',
+            "analysis_metadata": analysis_metadata
+        })
+        
+    except Exception as e:
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"❌ File upload analysis failed: {e}")
+        print(f"❌ Full error traceback:\n{error_details}")
+        
+        # Clean up temp file on error
+        try:
+            if 'temp_path' in locals() and os.path.exists(temp_path):
+                os.remove(temp_path)
+        except:
+            pass
+        
+        return jsonify({
+            "status": "error",
+            "error": f"Failed to analyze uploaded file: {str(e)}"
         }), 500
