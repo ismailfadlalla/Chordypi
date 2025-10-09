@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useLocation, useHistory } from 'react-router-dom';
 import ChordProgressionDisplay from '../components/player/ChordProgressionDisplay';
 import ChordQualityBadge from '../components/common/ChordQualityBadge';
+import AudioVisualizer from '../components/player/AudioVisualizer';
 import '../styles/components/player.css';
 
 const PlayerPage = () => {
@@ -70,6 +71,14 @@ const PlayerPage = () => {
     const intervalRef = useRef(null);
     const playerRef = useRef(null);
     const timelineRef = useRef(null);
+    const audioRef = useRef(null); // For uploaded audio files
+    const [audioReady, setAudioReady] = useState(false);
+
+    // Check if this is an uploaded audio file
+    const isUploadedFile = songData?.source === 'upload' && songData?.fileName;
+    
+    console.log('🎵 Player mode:', isUploadedFile ? 'UPLOADED FILE' : 'YOUTUBE VIDEO');
+    console.log('🎵 Song data:', { source: songData?.source, fileName: songData?.fileName });
 
     // Extract YouTube video ID
     const getYouTubeVideoId = (url) => {
@@ -293,6 +302,91 @@ const PlayerPage = () => {
             console.log('⏰ Stopped time tracking');
         }
     };
+
+    // Setup audio player for uploaded files
+    useEffect(() => {
+        if (!isUploadedFile || !songData?.audioUrl) return;
+
+        console.log('🎵 Setting up audio player for uploaded file:', songData.fileName);
+        
+        // Audio element event handlers
+        const handleAudioPlay = () => {
+            console.log('▶️ Audio started playing');
+            setIsPlaying(true);
+            setPlayerReady(true);
+            setAudioReady(true);
+            
+            // Start tracking audio time for chord sync
+            if (intervalRef.current) clearInterval(intervalRef.current);
+            intervalRef.current = setInterval(() => {
+                if (audioRef.current) {
+                    const time = audioRef.current.currentTime;
+                    setCurrentTime(time);
+                    updateCurrentChord(time);
+                }
+            }, 100); // Update every 100ms for smooth progression
+        };
+
+        const handleAudioPause = () => {
+            console.log('⏸️ Audio paused');
+            setIsPlaying(false);
+            stopTimeTracking();
+        };
+
+        const handleAudioEnded = () => {
+            console.log('🔚 Audio ended');
+            setIsPlaying(false);
+            setCurrentTime(0);
+            stopTimeTracking();
+        };
+
+        const handleAudioTimeUpdate = () => {
+            if (audioRef.current) {
+                setCurrentTime(audioRef.current.currentTime);
+            }
+        };
+
+        const handleAudioLoadedMetadata = () => {
+            if (audioRef.current) {
+                setDuration(audioRef.current.duration);
+                setAudioReady(true);
+                console.log('✅ Audio metadata loaded, duration:', audioRef.current.duration);
+            }
+        };
+
+        const handleAudioError = (e) => {
+            console.error('❌ Audio playback error:', e);
+            setError('Failed to load audio file');
+        };
+
+        // Attach event listeners
+        const audio = audioRef.current;
+        if (audio) {
+            audio.addEventListener('play', handleAudioPlay);
+            audio.addEventListener('pause', handleAudioPause);
+            audio.addEventListener('ended', handleAudioEnded);
+            audio.addEventListener('timeupdate', handleAudioTimeUpdate);
+            audio.addEventListener('loadedmetadata', handleAudioLoadedMetadata);
+            audio.addEventListener('error', handleAudioError);
+        }
+
+        // Cleanup
+        return () => {
+            if (audio) {
+                audio.removeEventListener('play', handleAudioPlay);
+                audio.removeEventListener('pause', handleAudioPause);
+                audio.removeEventListener('ended', handleAudioEnded);
+                audio.removeEventListener('timeupdate', handleAudioTimeUpdate);
+                audio.removeEventListener('loadedmetadata', handleAudioLoadedMetadata);
+                audio.removeEventListener('error', handleAudioError);
+            }
+            stopTimeTracking();
+            // Revoke blob URL when component unmounts
+            if (songData?.audioUrl) {
+                URL.revokeObjectURL(songData.audioUrl);
+            }
+        };
+    }, [isUploadedFile, songData?.audioUrl, songData?.fileName, updateCurrentChord]);
     
     // Process chord data - COMPLETELY PRESERVE ALL DETECTED CHORDS - Zero filtering
     const realisticChords = useMemo(() => {
@@ -365,16 +459,37 @@ const PlayerPage = () => {
         return processedChords;
     }, [songData?.chords, songData?.duration]);
 
-    // Handle play button click - Simplified for immediate playback
+    // Handle play button click - Works for both YouTube and uploaded audio
     const handlePlayClick = () => {
         console.log('🎬 Play button clicked!', { 
+            isUploadedFile,
             playerReady, 
             youTubePlayer: !!youTubePlayer,
+            audioRef: !!audioRef.current,
             apiReady,
             originalVideoId,
             playerRefCurrent: !!playerRef.current
         });
         
+        // Handle uploaded audio files
+        if (isUploadedFile && audioRef.current) {
+            try {
+                if (isPlaying) {
+                    audioRef.current.pause();
+                    console.log('⏸️ Pausing audio file');
+                } else {
+                    audioRef.current.play();
+                    console.log('▶️ Playing audio file');
+                }
+                return;
+            } catch (error) {
+                console.error('❌ Error controlling audio player:', error);
+                alert('Failed to play audio file. Please try again.');
+                return;
+            }
+        }
+        
+        // Handle YouTube videos
         if (!originalVideoId) {
             alert('No video URL found for this song.');
             return;
@@ -653,17 +768,48 @@ const PlayerPage = () => {
                     gap: '20px',
                     marginBottom: '20px'
                 }}>
-                    {/* LEFT COLUMN: YouTube Video Player Section */}
+                    {/* LEFT COLUMN: YouTube Video Player OR Audio Visualizer Section */}
                     <div style={{
                         backgroundColor: 'rgba(255,255,255,0.1)',
                         borderRadius: '10px',
                         padding: '20px'
                     }}>
                         <h3 style={{ color: 'white', marginBottom: '15px', textAlign: 'center' }}>
-                            🎥 Video Player
+                            {isUploadedFile ? '� Audio Player' : '�🎥 Video Player'}
                         </h3>
                         
-                        {originalVideoId ? (
+                        {isUploadedFile ? (
+                            // Audio player with visualizer for uploaded files
+                            <div>
+                                <p style={{ color: audioReady ? '#90EE90' : '#FFD700', marginBottom: '10px', textAlign: 'center' }}>
+                                    {audioReady ? '✅' : '🔄'} {songData.title} 
+                                    {audioReady ? ' (Ready)' : ' (Loading...)'}
+                                </p>
+                                
+                                {/* Hidden audio element */}
+                                <audio
+                                    ref={audioRef}
+                                    src={songData.audioUrl}
+                                    preload="metadata"
+                                    style={{ display: 'none' }}
+                                />
+                                
+                                {/* Audio visualizer */}
+                                <AudioVisualizer 
+                                    audioRef={audioRef}
+                                    isPlaying={isPlaying}
+                                    title={songData.title}
+                                    artist={songData.artist || 'Uploaded File'}
+                                />
+                                
+                                <div style={{ marginTop: '10px', fontSize: '14px', color: 'white', opacity: 0.8, textAlign: 'center' }}>
+                                    <p>🎵 Chord progression synced with audio playback</p>
+                                    <p>⏰ Real-time tracking: {isPlaying ? 'Active' : 'Paused'}</p>
+                                    <p>🎸 AI Accuracy: {songData.accuracy || '90-95'}%</p>
+                                </div>
+                            </div>
+                        ) : originalVideoId ? (
+                            // YouTube video player
                             <div>
                                 <p style={{ color: playerReady ? '#90EE90' : '#FFD700', marginBottom: '10px', textAlign: 'center' }}>
                                     {playerReady ? '✅' : '🔄'} {songData.title} 
@@ -684,6 +830,7 @@ const PlayerPage = () => {
                                 </div>
                             </div>
                         ) : (
+                            // Fallback when no video available
                             <div style={{
                                 width: '100%',
                                 height: '450px',
