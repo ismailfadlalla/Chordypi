@@ -192,16 +192,37 @@ def analyze_song():
                     "error": "Could not analyze chord progression for this song"
                 }), 400
 
+            # Convert numpy types to Python types for JSON serialization
+            def convert_to_json_serializable(obj):
+                """Convert numpy types to Python native types"""
+                import numpy as np
+                if isinstance(obj, dict):
+                    return {k: convert_to_json_serializable(v) for k, v in obj.items()}
+                elif isinstance(obj, list):
+                    return [convert_to_json_serializable(item) for item in obj]
+                elif isinstance(obj, (np.integer, np.int32, np.int64)):
+                    return int(obj)
+                elif isinstance(obj, (np.floating, np.float32, np.float64)):
+                    return float(obj)
+                elif isinstance(obj, np.ndarray):
+                    return obj.tolist()
+                else:
+                    return obj
+            
+            # Clean chords data
+            chords = convert_to_json_serializable(chords)
+            analysis_metadata = convert_to_json_serializable(analysis_metadata)
+
             return jsonify({
                 "status": "success",
                 "song_name": song_name or "URL provided",
                 "url": url or analysis_url,
                 "chords": chords,
-                "duration": duration,
+                "duration": float(duration) if duration else 240,
                 "title": title,
                 "key": song_key,
                 "analysis_type": detection_method,
-                "accuracy": accuracy,
+                "accuracy": int(accuracy) if accuracy else 70,
                 "source": detection_method,
                 "analysis_metadata": analysis_metadata
             })
