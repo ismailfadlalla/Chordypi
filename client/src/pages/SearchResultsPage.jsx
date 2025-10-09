@@ -333,12 +333,20 @@ const SearchResultsPage = ({ searchQuery, onSongSelect, onBack, analyzingChords,
         try {
             console.log('📁 Starting file upload:', fileName);
             
-            // Create song object with file data
+            // Get the actual File object from FormData
+            const file = formData.get('audio');
+            
+            if (!file) {
+                setError('No file found in upload');
+                return;
+            }
+            
+            // Create song object with file (File objects CAN be passed through navigation)
             const song = {
                 title: fileName.replace(/\.(mp3|wav|m4a|ogg|flac)$/i, ''),
                 artist: 'Uploaded File',
                 source: 'upload',
-                fileData: formData,
+                uploadedFile: file,  // Pass the File object directly, not FormData
                 fileName: fileName
             };
             
