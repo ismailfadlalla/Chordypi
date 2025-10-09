@@ -23,8 +23,11 @@ for root, dirs, files in os.walk('.'):
 # Disable bytecode writing for this session
 sys.dont_write_bytecode = True
 
+# DEPLOYMENT MARKER - DO NOT REMOVE
+DEPLOYMENT_VERSION = "v3.0.1-FORCE-REBUILD-20251009"
+
 print("=" * 80)
-print("🚀 APP.PY STARTING - ChordyPi v3.0 with RapidAPI")
+print(f"🚀 APP.PY STARTING - ChordyPi {DEPLOYMENT_VERSION} with RapidAPI")
 print("=" * 80)
 import tempfile
 import requests
