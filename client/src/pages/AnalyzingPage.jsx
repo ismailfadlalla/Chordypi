@@ -1,11 +1,29 @@
 /**
- * 🎵 AnalyzingPage - Full-screen progress page for song analysis
+ * 🎵 AnalyzingPage - Full-scr        const analyzeSongAndNavigate = async () => {
+            console.log('🎵 AnalyzingPage: Starting analysis for:', song.title);
+            
+            const startTime = Date.now();
+            const minimumDisplayTime = 5000; // Show overlay for at least 5 seconds
+
+            try {
+                let data;
+                
+                // Check if this is a file upload or YouTube song
+                if (song.source === 'upload' && song.fileData) {
+                    console.log('📁 File upload detected, analyzing uploaded file...');
+                    data = await analyzeUploadedAudio(song.fileData, song.fileName);
+                } else {
+                    console.log('🎬 YouTube song detected, analyzing from URL...');
+                    data = await analyzeSong(song);
+                }
+                
+                console.log('📦 AnalyzingPage: API response received:', data);ss page for song analysis
  * Shows beautiful overlay while analyzing, then navigates to player
  */
 
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { analyzeSong, addToHistory } from '../services/api';
+import { analyzeSong, analyzeUploadedAudio, addToHistory } from '../services/api';
 import { useAuth } from '../hooks/useAuth';
 import '../styles/components/analyzing-page.css';
 
