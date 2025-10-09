@@ -1,28 +1,5 @@
 /**
- * 🎵 AnalyzingPage - Full-scr        const analyzeSongAndNavigate = async () => {
-            console.log('🎵 AnalyzingPage: Starting analysis for:', song.title);
-            
-            const startTime = Date.now();
-            const minimumDisplayTime = 5000; // Show overlay for at least 5 seconds
-
-            try {
-                let data;
-                
-                // Check if this is a file upload or YouTube song
-                if (song.source === 'upload' && song.uploadedFile) {
-                    console.log('📁 File upload detected, analyzing uploaded file...');
-                    
-                    // Reconstruct FormData from the File object
-                    const formData = new FormData();
-                    formData.append('audio', song.uploadedFile);
-                    
-                    data = await analyzeUploadedAudio(formData, song.fileName);
-                } else {
-                    console.log('🎬 YouTube song detected, analyzing from URL...');
-                    data = await analyzeSong(song);
-                }
-                
-                console.log('📦 AnalyzingPage: API response received:', data);ss page for song analysis
+ * 🎵 AnalyzingPage - Full-screen page for song analysis
  * Shows beautiful overlay while analyzing, then navigates to player
  */
 
@@ -47,8 +24,9 @@ const AnalyzingPage = () => {
         console.log('🚨 ANALYZING PAGE MOUNTED!');
         console.log('Song:', song?.title);
         console.log('Song source:', song?.source);
-        console.log('Song uploadedFile:', song?.uploadedFile);
-        console.log('Has uploadedFile?', !!song?.uploadedFile);
+        console.log('Song fileData:', song?.fileData);
+        console.log('Song fileName:', song?.fileName);
+        console.log('Has fileData?', !!song?.fileData);
         console.log('Full song object:', song);
     }, []);
 
@@ -67,8 +45,20 @@ const AnalyzingPage = () => {
             const minimumDisplayTime = 5000; // Show overlay for at least 5 seconds
 
             try {
-                // Analyze the song
-                const data = await analyzeSong(song);
+                let data;
+                
+                // Check if this is a file upload or YouTube song
+                if (song.source === 'upload' && song.fileData) {
+                    console.log('📁 File upload detected, analyzing uploaded file...');
+                    console.log('📁 File name:', song.fileName);
+                    
+                    // Use the FormData directly from HomePage
+                    data = await analyzeUploadedAudio(song.fileData, song.fileName);
+                } else {
+                    console.log('🎬 YouTube song detected, analyzing from URL...');
+                    data = await analyzeSong(song);
+                }
+                
                 console.log('📦 AnalyzingPage: API response received:', data);
 
                 if (data.status === 'success' && data.analysis?.chords?.length > 0) {
