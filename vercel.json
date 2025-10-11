@@ -42,7 +42,11 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "frame-ancestors 'self' https://*.minepi.com https://sandbox.minepi.com https://api.minepi.com"
+          "value": "frame-ancestors 'self' https://*.minepi.com https://sandbox.minepi.com https://api.minepi.com https://app-cdn.minepi.com"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
         },
         {
           "key": "X-XSS-Protection",
