@@ -131,19 +131,24 @@ const ChordyPiLogo = ({
   clickable = false,
   onClick 
 }) => {
+  const [imageError, setImageError] = React.useState(false);
+
   const logoContent = (
     <LogoContainer size={size} clickable={clickable} onClick={onClick}>
       <ChordText size={size}>CHORD</ChordText>
       <FlyingVContainer size={size}>
-        <FlyingVImage 
-          src="/images/flying-v.png" 
-          alt="Flying V Guitar"
-          onError={(e) => {
-            // Fallback to emoji if image fails to load
-            e.target.style.display = 'none';
-            e.target.parentElement.innerHTML = '<span style="font-size: 3rem;">🎸</span>';
-          }}
-        />
+        {!imageError ? (
+          <FlyingVImage 
+            src="/images/flying-v.png" 
+            alt="Flying V Guitar"
+            onError={() => {
+              console.error('Failed to load Flying V image');
+              setImageError(true);
+            }}
+          />
+        ) : (
+          <span style={{ fontSize: size === 'small' ? '2.5rem' : size === 'large' ? '5rem' : '3.5rem' }}>🎸</span>
+        )}
       </FlyingVContainer>
       <PiText size={size}>
         <PiSymbol size={size}>π</PiSymbol>
