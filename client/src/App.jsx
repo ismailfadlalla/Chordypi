@@ -80,6 +80,7 @@ const AppContent = () => {
     const isSearchPage = location.pathname === '/search' || location.pathname === '/search-results';
     const isAnalyzingPage = location.pathname === '/analyzing';
     const isLibraryPage = location.pathname === '/library';
+    const isLegalPage = location.pathname === '/privacy-policy' || location.pathname === '/terms-of-service';
 
     // Debug: Log when sign out button should show
     console.log('🔍 Location:', location.pathname, '| Show Sign Out:', isHomePage && !isSearchPage && !isLibraryPage);
@@ -94,7 +95,7 @@ const AppContent = () => {
             {/* Top-right Sign Out Button - Only show on home page, not on search or library */}
             {isHomePage && !isSearchPage && !isLibraryPage && <TopSignOutButton />}
             
-            {/* Hide header on player, home, auth, demo, search, and analyzing pages for clean, focused experience */}
+            {/* Hide header on player, home, auth, demo, search, and analyzing pages - SHOW on legal pages */}
             {!isPlayerPage && !isHomePage && !isAuthPage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Header />}
             
             <main className="main-content" style={{
@@ -131,7 +132,7 @@ const AppContent = () => {
                 </Switch>
             </main>
             
-            {/* Hide footer on player, home, auth, demo, search, and analyzing pages for clean, focused experience */}
+            {/* Hide footer on player, home, auth, demo, search, and analyzing pages - SHOW on legal pages */}
             {!isPlayerPage && !isHomePage && !isAuthPage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Footer />}
         </div>
     );

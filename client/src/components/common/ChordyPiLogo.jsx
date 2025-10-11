@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import flyingVImage from '../../assets/flying-v.png';
 
 // Subtle guitar rotation animation
 const floatAnimation = keyframes`
@@ -139,10 +140,10 @@ const ChordyPiLogo = ({
       <FlyingVContainer size={size}>
         {!imageError ? (
           <FlyingVImage 
-            src="/images/flying-v.png"
+            src={flyingVImage}
             alt="Flying V Guitar"
             onError={(e) => {
-              console.error('Failed to load Flying V image from /images/flying-v.png');
+              console.error('Failed to load Flying V image:', flyingVImage);
               setImageError(true);
             }}
             onLoad={() => {
