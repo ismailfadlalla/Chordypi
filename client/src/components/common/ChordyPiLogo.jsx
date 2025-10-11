@@ -60,7 +60,7 @@ const FlyingVContainer = styled.div`
   height: ${props => props.size === 'small' ? '50px' : props.size === 'large' ? '130px' : '80px'};
   animation: ${floatAnimation} 3.5s ease-in-out infinite;
   transform-origin: center center;
-  margin: 0 -5px; /* Tighten spacing to fit as Y replacement */
+  margin: 0 -8px 8px -5px; /* Shift left (-5px), down (8px bottom margin), tighter horizontal (-8px) */
 `;
 
 const FlyingVImage = styled.img`
@@ -69,25 +69,22 @@ const FlyingVImage = styled.img`
   object-fit: contain;
   animation: ${glowAnimation} 2.5s ease-in-out infinite;
   transition: transform 0.3s ease;
-  transform: rotate(-15deg); /* Rotate to match Y angle */
+  transform: rotate(12deg); /* Rotate to the right 12 degrees */
   
   ${LogoContainer}:hover & {
-    transform: scale(1.1) rotate(-10deg);
+    transform: scale(1.1) rotate(15deg);
   }
 `;
 
 const PiText = styled.span`
   font-size: ${props => props.size === 'small' ? '1.5rem' : props.size === 'large' ? '3.5rem' : '2.5rem'};
   font-weight: 800;
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
-  background-size: 200% auto;
+  background: linear-gradient(135deg, #6C5CE7 0%, #A855F7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: 2px;
-  text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  animation: ${shimmerAnimation} 3s linear infinite;
   position: relative;
 `;
 
@@ -159,7 +156,9 @@ const ChordyPiLogo = ({
           <span style={{ fontSize: size === 'small' ? '2.5rem' : size === 'large' ? '5rem' : '3.5rem' }}>🎸</span>
         )}
       </FlyingVContainer>
-      <PiText size={size}>PI</PiText>
+      <PiText size={size}>
+        <PiSymbol size={size}>π</PiSymbol>
+      </PiText>
     </LogoContainer>
   );
 
