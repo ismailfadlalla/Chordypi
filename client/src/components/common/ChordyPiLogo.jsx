@@ -3,13 +3,24 @@ import styled, { keyframes } from 'styled-components';
 
 // Subtle guitar rotation animation
 const floatAnimation = keyframes`
-  0%, 100% { transform: translateY(0) rotate(-5deg); }
-  50% { transform: translateY(-5px) rotate(-3deg); }
+  0%, 100% { transform: translateY(0) rotate(-8deg); }
+  50% { transform: translateY(-8px) rotate(-5deg); }
 `;
 
 const glowAnimation = keyframes`
-  0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6)); }
-  50% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.9)); }
+  0%, 100% { 
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.7)) 
+            drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)); 
+  }
+  50% { 
+    filter: drop-shadow(0 0 25px rgba(255, 215, 0, 1)) 
+            drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4)); 
+  }
+`;
+
+const shimmerAnimation = keyframes`
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
 `;
 
 const LogoContainer = styled.div`
@@ -28,13 +39,15 @@ const LogoContainer = styled.div`
 const ChordText = styled.span`
   font-size: ${props => props.size === 'small' ? '1.5rem' : props.size === 'large' ? '3.5rem' : '2.5rem'};
   font-weight: 800;
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: 2px;
   text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
   font-family: 'Helvetica Neue', Arial, sans-serif;
+  animation: ${shimmerAnimation} 3s linear infinite;
 `;
 
 const FlyingVContainer = styled.div`
@@ -42,18 +55,22 @@ const FlyingVContainer = styled.div`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: ${props => props.size === 'small' ? '40px' : props.size === 'large' ? '100px' : '60px'};
-  height: ${props => props.size === 'small' ? '60px' : props.size === 'large' ? '150px' : '90px'};
-  animation: ${floatAnimation} 3s ease-in-out infinite;
-  transform-origin: center;
+  width: ${props => props.size === 'small' ? '45px' : props.size === 'large' ? '110px' : '70px'};
+  height: ${props => props.size === 'small' ? '65px' : props.size === 'large' ? '165px' : '105px'};
+  animation: ${floatAnimation} 3.5s ease-in-out infinite;
+  transform-origin: center center;
 `;
 
 const FlyingVImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
-  animation: ${glowAnimation} 2s ease-in-out infinite;
+  animation: ${glowAnimation} 2.5s ease-in-out infinite;
+  transition: transform 0.3s ease;
+  
+  ${LogoContainer}:hover & {
+    transform: scale(1.1) rotate(5deg);
+  }
 `;
 
 const PiText = styled.span`
