@@ -51,13 +51,20 @@ def analyze_song():
         song_name = data.get('song_name', data.get('query', ''))
         url = data.get('url', '')
 
+        # More lenient validation - accept None/empty as long as ONE field has value
+        song_name = song_name if song_name else ''
+        url = url if url else ''
+        
         if not song_name and not url:
+            logger.error(f"❌ Missing both song_name and url. Received data: {data}")
             return jsonify({
                 "status": "error", 
                 "error": "Song name or URL is required for analysis"
             }), 400
-
-        print(f"🎯 REAL CHORD DETECTION for: {song_name or url}")
+        
+        logger.info(f"🎯 REAL CHORD DETECTION for: {song_name or url}")
+        logger.info(f"   Song name: {song_name}")
+        logger.info(f"   URL: {url}")
         
         # STEP 1: Try multi-source real chord detection (APIs, scraping)
         try:
