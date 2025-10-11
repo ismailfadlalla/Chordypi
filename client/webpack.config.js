@@ -55,6 +55,10 @@ module.exports = (env, argv) => {
           {
             from: path.resolve(__dirname, 'public', 'favicon.ico'),
             to: path.resolve(__dirname, 'dist', 'favicon.ico'),
+          },
+          {
+            from: path.resolve(__dirname, 'public', 'validation-key.txt'),
+            to: path.resolve(__dirname, 'dist', 'validation-key.txt'),
           }
         ],
       }),
