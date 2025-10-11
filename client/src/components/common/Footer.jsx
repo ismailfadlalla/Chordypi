@@ -139,7 +139,7 @@ const Footer = () => {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     flexWrap: 'wrap',
-                    gap: '10px'
+                    gap: '15px'
                 }}>
                     <p style={{ 
                         margin: '0',
@@ -148,6 +148,42 @@ const Footer = () => {
                     }}>
                         &copy; {new Date().getFullYear()} ChordyPi. All rights reserved.
                     </p>
+                    
+                    {/* Legal Links */}
+                    <div style={{
+                        display: 'flex',
+                        gap: '15px',
+                        alignItems: 'center'
+                    }}>
+                        <a 
+                            href="/privacy-policy" 
+                            style={{
+                                color: '#61dafb',
+                                textDecoration: 'none',
+                                fontSize: '14px',
+                                transition: 'color 0.3s'
+                            }}
+                            onMouseEnter={(e) => e.target.style.color = '#FFD700'}
+                            onMouseLeave={(e) => e.target.style.color = '#61dafb'}
+                        >
+                            Privacy Policy
+                        </a>
+                        <span style={{ color: '#444' }}>•</span>
+                        <a 
+                            href="/terms-of-service" 
+                            style={{
+                                color: '#61dafb',
+                                textDecoration: 'none',
+                                fontSize: '14px',
+                                transition: 'color 0.3s'
+                            }}
+                            onMouseEnter={(e) => e.target.style.color = '#FFD700'}
+                            onMouseLeave={(e) => e.target.style.color = '#61dafb'}
+                        >
+                            Terms of Service
+                        </a>
+                    </div>
+                    
                     <p style={{ 
                         margin: '0',
                         color: '#888',
