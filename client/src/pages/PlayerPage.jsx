@@ -824,10 +824,6 @@ const PlayerPage = () => {
                                         backgroundColor: '#000'
                                     }}
                                 ></div>
-                                <div style={{ marginTop: '10px', fontSize: '14px', color: 'white', opacity: 0.8, textAlign: 'center' }}>
-                                    <p>🎵 Chord progression synced with video playback</p>
-                                    <p>⏰ Real-time tracking: {isPlaying ? 'Active' : 'Paused'}</p>
-                                </div>
                             </div>
                         ) : (
                             // Fallback when no video available
