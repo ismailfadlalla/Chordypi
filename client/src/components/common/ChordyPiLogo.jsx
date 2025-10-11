@@ -56,10 +56,11 @@ const FlyingVContainer = styled.div`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: ${props => props.size === 'small' ? '45px' : props.size === 'large' ? '110px' : '70px'};
-  height: ${props => props.size === 'small' ? '65px' : props.size === 'large' ? '165px' : '105px'};
+  width: ${props => props.size === 'small' ? '35px' : props.size === 'large' ? '90px' : '55px'};
+  height: ${props => props.size === 'small' ? '50px' : props.size === 'large' ? '130px' : '80px'};
   animation: ${floatAnimation} 3.5s ease-in-out infinite;
   transform-origin: center center;
+  margin: 0 -5px; /* Tighten spacing to fit as Y replacement */
 `;
 
 const FlyingVImage = styled.img`
@@ -68,21 +69,25 @@ const FlyingVImage = styled.img`
   object-fit: contain;
   animation: ${glowAnimation} 2.5s ease-in-out infinite;
   transition: transform 0.3s ease;
+  transform: rotate(-15deg); /* Rotate to match Y angle */
   
   ${LogoContainer}:hover & {
-    transform: scale(1.1) rotate(5deg);
+    transform: scale(1.1) rotate(-10deg);
   }
 `;
 
 const PiText = styled.span`
   font-size: ${props => props.size === 'small' ? '1.5rem' : props.size === 'large' ? '3.5rem' : '2.5rem'};
   font-weight: 800;
-  background: linear-gradient(135deg, #6C5CE7 0%, #A855F7 100%);
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: 2px;
+  text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
   font-family: 'Helvetica Neue', Arial, sans-serif;
+  animation: ${shimmerAnimation} 3s linear infinite;
   position: relative;
 `;
 
@@ -141,7 +146,7 @@ const ChordyPiLogo = ({
         {!imageError ? (
           <FlyingVImage 
             src={flyingVImage}
-            alt="Flying V Guitar"
+            alt="Flying V Guitar as Y"
             onError={(e) => {
               console.error('Failed to load Flying V image:', flyingVImage);
               setImageError(true);
@@ -154,9 +159,7 @@ const ChordyPiLogo = ({
           <span style={{ fontSize: size === 'small' ? '2.5rem' : size === 'large' ? '5rem' : '3.5rem' }}>🎸</span>
         )}
       </FlyingVContainer>
-      <PiText size={size}>
-        <PiSymbol size={size}>π</PiSymbol>
-      </PiText>
+      <PiText size={size}>PI</PiText>
     </LogoContainer>
   );
 
