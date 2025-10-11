@@ -1,4 +1,5 @@
 import React from 'react';
+import ChordyPiLogo from './ChordyPiLogo';
 import '../../styles/global.css';
 
 const Footer = () => {
@@ -30,13 +31,9 @@ const Footer = () => {
                 }}>
                     {/* Brand Section */}
                     <div style={{ flex: '1', minWidth: '200px' }}>
-                        <h3 style={{ 
-                            color: '#61dafb', 
-                            fontSize: '20px',
-                            marginBottom: '10px' 
-                        }}>
-                            🎸 ChordyPi
-                        </h3>
+                        <div style={{ marginBottom: '10px' }}>
+                            <ChordyPiLogo size="small" />
+                        </div>
                         <p style={{ 
                             color: '#888', 
                             fontSize: '14px',
@@ -140,25 +137,59 @@ const Footer = () => {
                     borderTop: '1px solid #444',
                     paddingTop: '20px',
                     display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexWrap: 'wrap',
+                    flexDirection: 'column',
                     gap: '15px'
                 }}>
+                    {/* Copyright */}
                     <p style={{ 
                         margin: '0',
                         color: '#888',
-                        fontSize: '14px'
+                        fontSize: '14px',
+                        textAlign: 'center'
                     }}>
                         &copy; {new Date().getFullYear()} ChordyPi. All rights reserved.
                     </p>
                     
-                    {/* Legal Links */}
+                    {/* Social Media & Legal Links */}
                     <div style={{
                         display: 'flex',
-                        gap: '15px',
-                        alignItems: 'center'
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '20px',
+                        flexWrap: 'wrap',
+                        fontSize: '14px'
                     }}>
+                        {/* Social Media */}
+                        <a 
+                            href="https://github.com/ismailfadlalla/Chordypi" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            style={{
+                                color: '#61dafb',
+                                textDecoration: 'none',
+                                transition: 'color 0.3s'
+                            }}
+                            onMouseEnter={(e) => e.target.style.color = '#FFD700'}
+                            onMouseLeave={(e) => e.target.style.color = '#61dafb'}
+                        >
+                            GitHub
+                        </a>
+                        <span style={{ color: '#444' }}>•</span>
+                        <a 
+                            href="https://x.com/chordypi" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            style={{
+                                color: '#61dafb',
+                                textDecoration: 'none',
+                                transition: 'color 0.3s'
+                            }}
+                            onMouseEnter={(e) => e.target.style.color = '#FFD700'}
+                            onMouseLeave={(e) => e.target.style.color = '#61dafb'}
+                        >
+                            X (Twitter)
+                        </a>
+                        <span style={{ color: '#444' }}>•</span>
                         <a 
                             href="/legal/privacy-policy.html" 
                             target="_blank"
@@ -166,7 +197,6 @@ const Footer = () => {
                             style={{
                                 color: '#61dafb',
                                 textDecoration: 'none',
-                                fontSize: '14px',
                                 transition: 'color 0.3s'
                             }}
                             onMouseEnter={(e) => e.target.style.color = '#FFD700'}
@@ -182,7 +212,6 @@ const Footer = () => {
                             style={{
                                 color: '#61dafb',
                                 textDecoration: 'none',
-                                fontSize: '14px',
                                 transition: 'color 0.3s'
                             }}
                             onMouseEnter={(e) => e.target.style.color = '#FFD700'}
@@ -191,14 +220,6 @@ const Footer = () => {
                             Terms of Service
                         </a>
                     </div>
-                    
-                    <p style={{ 
-                        margin: '0',
-                        color: '#888',
-                        fontSize: '14px'
-                    }}>
-                        🥧 Pi Network Hackathon 2025
-                    </p>
                 </div>
             </div>
         </footer>
