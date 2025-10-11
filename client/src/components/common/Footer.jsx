@@ -150,74 +150,119 @@ const Footer = () => {
                         &copy; {new Date().getFullYear()} ChordyPi. All rights reserved.
                     </p>
                     
-                    {/* Social Media & Legal Links */}
+                    {/* Social Media Icons */}
                     <div style={{
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        gap: '20px',
-                        flexWrap: 'wrap',
-                        fontSize: '14px'
+                        gap: '15px',
+                        fontSize: '24px'
                     }}>
-                        {/* Social Media */}
                         <a 
-                            href="https://github.com/ismailfadlalla/Chordypi" 
+                            href="https://linkedin.com/company/chordypi" 
                             target="_blank" 
                             rel="noopener noreferrer"
                             style={{
-                                color: '#61dafb',
-                                textDecoration: 'none',
-                                transition: 'color 0.3s'
+                                color: '#888',
+                                transition: 'color 0.3s',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '40px',
+                                height: '40px',
+                                border: '1px solid #555',
+                                borderRadius: '5px'
                             }}
-                            onMouseEnter={(e) => e.target.style.color = '#FFD700'}
-                            onMouseLeave={(e) => e.target.style.color = '#61dafb'}
+                            onMouseEnter={(e) => e.currentTarget.style.color = '#0077B5'}
+                            onMouseLeave={(e) => e.currentTarget.style.color = '#888'}
+                            title="LinkedIn"
                         >
-                            GitHub
+                            in
                         </a>
-                        <span style={{ color: '#444' }}>•</span>
                         <a 
-                            href="https://x.com/chordypi" 
+                            href="https://facebook.com/chordypi" 
                             target="_blank" 
                             rel="noopener noreferrer"
                             style={{
-                                color: '#61dafb',
-                                textDecoration: 'none',
-                                transition: 'color 0.3s'
+                                color: '#888',
+                                transition: 'color 0.3s',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '40px',
+                                height: '40px',
+                                border: '1px solid #555',
+                                borderRadius: '5px'
                             }}
-                            onMouseEnter={(e) => e.target.style.color = '#FFD700'}
-                            onMouseLeave={(e) => e.target.style.color = '#61dafb'}
+                            onMouseEnter={(e) => e.currentTarget.style.color = '#1877F2'}
+                            onMouseLeave={(e) => e.currentTarget.style.color = '#888'}
+                            title="Facebook"
                         >
-                            X (Twitter)
+                            f
                         </a>
-                        <span style={{ color: '#444' }}>•</span>
                         <a 
-                            href="/legal/privacy-policy.html" 
-                            target="_blank"
+                            href="https://youtube.com/@chordypi" 
+                            target="_blank" 
                             rel="noopener noreferrer"
                             style={{
-                                color: '#61dafb',
-                                textDecoration: 'none',
-                                transition: 'color 0.3s'
+                                color: '#888',
+                                transition: 'color 0.3s',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '40px',
+                                height: '40px',
+                                border: '1px solid #555',
+                                borderRadius: '5px'
                             }}
-                            onMouseEnter={(e) => e.target.style.color = '#FFD700'}
-                            onMouseLeave={(e) => e.target.style.color = '#61dafb'}
+                            onMouseEnter={(e) => e.currentTarget.style.color = '#FF0000'}
+                            onMouseLeave={(e) => e.currentTarget.style.color = '#888'}
+                            title="YouTube"
                         >
-                            Privacy Policy
+                            ▶
                         </a>
-                        <span style={{ color: '#444' }}>•</span>
                         <a 
-                            href="/legal/terms-of-service.html" 
-                            target="_blank"
+                            href="https://twitter.com/chordypi" 
+                            target="_blank" 
                             rel="noopener noreferrer"
                             style={{
-                                color: '#61dafb',
-                                textDecoration: 'none',
-                                transition: 'color 0.3s'
+                                color: '#888',
+                                transition: 'color 0.3s',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '40px',
+                                height: '40px',
+                                border: '1px solid #555',
+                                borderRadius: '5px',
+                                fontWeight: 'bold'
                             }}
-                            onMouseEnter={(e) => e.target.style.color = '#FFD700'}
-                            onMouseLeave={(e) => e.target.style.color = '#61dafb'}
+                            onMouseEnter={(e) => e.currentTarget.style.color = '#1DA1F2'}
+                            onMouseLeave={(e) => e.currentTarget.style.color = '#888'}
+                            title="X (Twitter)"
                         >
-                            Terms of Service
+                            𝕏
+                        </a>
+                        <a 
+                            href="https://instagram.com/chordypi" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            style={{
+                                color: '#888',
+                                transition: 'color 0.3s',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '40px',
+                                height: '40px',
+                                border: '1px solid #555',
+                                borderRadius: '5px'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.color = '#E4405F'}
+                            onMouseLeave={(e) => e.currentTarget.style.color = '#888'}
+                            title="Instagram"
+                        >
+                            ⓘ
                         </a>
                     </div>
                 </div>
