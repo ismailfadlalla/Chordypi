@@ -1066,14 +1066,14 @@ const PlayerPage = () => {
                 <div style={{
                     backgroundColor: 'rgba(255,255,255,0.05)',
                     borderRadius: '15px',
-                    padding: '25px',
-                    marginTop: '20px'
+                    padding: '15px',
+                    marginTop: '10px'
                 }}>
                     <h3 style={{ 
                         color: 'white', 
-                        marginBottom: '20px', 
+                        marginBottom: '15px', 
                         textAlign: 'center',
-                        fontSize: '20px',
+                        fontSize: '18px',
                         textTransform: 'uppercase',
                         letterSpacing: '2px'
                     }}>
@@ -1084,20 +1084,20 @@ const PlayerPage = () => {
                     <div style={{
                         display: 'grid',
                         gridTemplateColumns: window.innerWidth > 768 ? '1fr 1fr' : '1fr',
-                        gap: '30px'
+                        gap: '20px'
                     }}>
                         {/* LEFT: NOW PLAYING Fretboard */}
                         <div style={{
                             background: 'linear-gradient(135deg, rgba(255, 243, 176, 0.1), rgba(255, 224, 130, 0.05))',
                             border: '2px solid rgba(255, 215, 0, 0.3)',
                             borderRadius: '12px',
-                            padding: '20px'
+                            padding: '15px'
                         }}>
                             <div style={{
                                 color: '#FFD700',
-                                fontSize: '14px',
+                                fontSize: '13px',
                                 fontWeight: 'bold',
-                                marginBottom: '15px',
+                                marginBottom: '10px',
                                 textAlign: 'center'
                             }}>● NOW PLAYING</div>
                             <ChordProgressionDisplay
@@ -1115,13 +1115,13 @@ const PlayerPage = () => {
                             background: 'linear-gradient(135deg, rgba(108, 92, 231, 0.15), rgba(137, 155, 232, 0.1))',
                             border: '2px solid rgba(108, 92, 231, 0.3)',
                             borderRadius: '12px',
-                            padding: '20px'
+                            padding: '15px'
                         }}>
                             <div style={{
                                 color: '#6c5ce7',
-                                fontSize: '14px',
+                                fontSize: '13px',
                                 fontWeight: 'bold',
-                                marginBottom: '15px',
+                                marginBottom: '10px',
                                 textAlign: 'center'
                             }}>○ UP NEXT</div>
                             <ChordProgressionDisplay
