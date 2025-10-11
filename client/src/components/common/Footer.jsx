@@ -122,9 +122,7 @@ const Footer = () => {
                                 💻 GitHub
                             </a>
                             <a 
-                                href="https://github.com/ismailfadlalla/Chordypi/issues" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
+                                href="mailto:support@chordypi.com"
                                 style={{
                                     color: '#61dafb',
                                     textDecoration: 'none',
