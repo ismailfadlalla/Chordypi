@@ -132,6 +132,9 @@ const ChordyPiLogo = ({
   onClick 
 }) => {
   const [imageError, setImageError] = React.useState(false);
+  
+  // Try multiple image paths
+  const imagePath = `${process.env.PUBLIC_URL || ''}/images/flying-v.png`;
 
   const logoContent = (
     <LogoContainer size={size} clickable={clickable} onClick={onClick}>
@@ -139,11 +142,15 @@ const ChordyPiLogo = ({
       <FlyingVContainer size={size}>
         {!imageError ? (
           <FlyingVImage 
-            src="/images/flying-v.png" 
+            src={imagePath}
             alt="Flying V Guitar"
-            onError={() => {
-              console.error('Failed to load Flying V image');
+            onError={(e) => {
+              console.error('Failed to load Flying V image from:', imagePath);
+              console.error('Image element:', e.target);
               setImageError(true);
+            }}
+            onLoad={() => {
+              console.log('✅ Flying V image loaded successfully from:', imagePath);
             }}
           />
         ) : (

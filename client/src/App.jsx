@@ -9,6 +9,8 @@ import LibraryPage from './pages/LibraryPage';
 import JudgeDemoPage from './pages/JudgeDemoPage';
 import SearchResultsPage from './pages/SearchResultsPage';
 import AnalyzingPage from './pages/AnalyzingPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import './styles/mobile-responsive.css';
@@ -122,6 +124,10 @@ const AppContent = () => {
                     <Route path="/library" component={LibraryPage} />
                     <Route path="/search-results" component={SearchResultsPage} />
                     <Route path="/search" component={SearchResultsPage} />
+                    
+                    {/* Legal Pages */}
+                    <Route path="/privacy-policy" component={PrivacyPolicyPage} />
+                    <Route path="/terms-of-service" component={TermsOfServicePage} />
                 </Switch>
             </main>
             
