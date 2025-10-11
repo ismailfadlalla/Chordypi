@@ -2,43 +2,33 @@
   "version": 2,
   "buildCommand": "cd client && npm install && npm run build",
   "outputDirectory": "client/dist",
-  "routes": [
-    {
-      "src": "/legal/privacy-policy.html",
-      "dest": "/legal/privacy-policy.html"
-    },
-    {
-      "src": "/legal/terms-of-service.html",
-      "dest": "/legal/terms-of-service.html"
-    }
-  ],
   "rewrites": [
     {
       "source": "/api/analyze-song",
-      "destination": "https://chordypi.onrender.com/api/analyze-song"
+      "destination": "https://chordypi-production.up.railway.app/api/analyze-song"
     },
     {
       "source": "/api/analyze-audio-upload",
-      "destination": "https://chordypi.onrender.com/api/analyze-audio-upload"
+      "destination": "https://chordypi-production.up.railway.app/api/analyze-audio-upload"
     },
     {
       "source": "/api/search-songs",
-      "destination": "https://chordypi.onrender.com/api/search-songs"
+      "destination": "https://chordypi-production.up.railway.app/api/search-songs"
     },
     {
       "source": "/api/featured-songs",
-      "destination": "https://chordypi.onrender.com/api/featured-songs"
+      "destination": "https://chordypi-production.up.railway.app/api/featured-songs"
     },
     {
       "source": "/api/songs/:path*",
-      "destination": "https://chordypi.onrender.com/api/songs/:path*"
+      "destination": "https://chordypi-production.up.railway.app/api/songs/:path*"
     },
     {
       "source": "/api/library/:path*",
-      "destination": "https://chordypi.onrender.com/api/library/:path*"
+      "destination": "https://chordypi-production.up.railway.app/api/library/:path*"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!legal/).*)",
       "destination": "/index.html"
     }
   ],
