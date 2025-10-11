@@ -86,27 +86,27 @@
 }
 
 .demo-fretboard-container.large .demo-chord-label {
-    font-size: 4rem;
-    margin-bottom: 30px;
+    font-size: 3rem;
+    margin-bottom: 15px;
 }
 
 .demo-fretboard-container.large .demo-fretboard-visual {
-    padding: 35px;
+    padding: 20px;
 }
 
 .demo-chord-label {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: bold;
     color: #FFD700;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
     font-family: 'Arial Black', Arial, sans-serif;
 }
 
 .demo-fretboard-visual {
     background: linear-gradient(135deg, #2c2416, #3d3021);
-    padding: 25px;
+    padding: 15px;
     border-radius: 15px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     border: 2px solid rgba(139, 90, 43, 0.3);
@@ -149,13 +149,13 @@
 .demo-fretboard-strings {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
 }
 
 .demo-fretboard-string {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
     position: relative;
 }
 
