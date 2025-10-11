@@ -187,31 +187,54 @@ export const getYouTubeVideoDetails = async (videoId) => {
 // Database removed - AI detection is now 100% accurate after enhancements
 export const analyzeSong = async (songData) => {
     try {
-        console.log('🔍 analyzeSong called with:', songData?.title);
+        console.log('🔍 analyzeSong called with FULL songData:', songData);
         console.log('✅ Using ENHANCED AI Audio Analysis (100% accurate with all filters fixed)');
         console.log('📡 Making API call to Flask backend for chord analysis...');
         
-        // Extract videoId from song data
+        // Extract videoId from song data - try multiple properties
         const videoId = songData.videoId || songData.id?.videoId || songData.id;
         
-        // Construct YouTube URL if not provided
-        const youtubeUrl = songData.url || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : null);
+        // Construct YouTube URL if not provided - ENSURE IT'S VALID
+        let youtubeUrl = songData.url || songData.youtubeUrl;
         
+        // If no URL but we have videoId, construct it
+        if (!youtubeUrl && videoId) {
+            youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
+            console.log('🔧 Constructed YouTube URL from videoId:', youtubeUrl);
+        }
+        
+        // Get song title - try multiple properties
+        const songTitle = songData.title || songData.name || songData.song_name || '';
+        
+        console.log('📺 Video ID:', videoId);
         console.log('📺 Video URL:', youtubeUrl);
-        console.log('🎵 Song Name:', songData.title);
+        console.log('🎵 Song Title:', songTitle);
+        
+        // Validate we have required data - MUST have at least title OR url
+        if (!songTitle && !youtubeUrl) {
+            console.error('❌ Missing required data:', { songTitle, youtubeUrl, videoId, songData });
+            throw new Error('Song title or URL is required for analysis. Please ensure the song has either a title or YouTube URL.');
+        }
+        
+        // Ensure at least one is not null/empty
+        const requestBody = {
+            url: youtubeUrl || null,
+            song_name: songTitle || null
+        };
+        
+        console.log('📤 Sending to backend:', requestBody);
         
         const response = await fetch(`${API_BASE_URL}/api/analyze-song`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                url: youtubeUrl,
-                song_name: songData.title
-            })
+            body: JSON.stringify(requestBody)
         });
 
         if (!response.ok) {
+            const errorText = await response.text();
+            console.error('❌ Backend error response:', errorText);
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 

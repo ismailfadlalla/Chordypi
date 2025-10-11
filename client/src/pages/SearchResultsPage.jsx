@@ -383,8 +383,27 @@ const SearchResultsPage = ({ searchQuery, onSongSelect, onBack, analyzingChords,
     };
 
     const handleAnalyzeSong = (song) => {
-        addToHistory(song);
-        onSongSelect(song);
+        console.log('🎵 Analyzing song from search results:', song);
+        
+        // Ensure we have a proper YouTube URL
+        const videoId = song.videoId || song.id?.videoId || song.id;
+        const youtubeUrl = song.url || song.youtubeUrl || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : null);
+        
+        // Create a complete song object with all required fields
+        const completeSong = {
+            ...song,
+            videoId: videoId,
+            url: youtubeUrl,
+            youtubeUrl: youtubeUrl,
+            title: song.title || 'Unknown Title',
+            artist: song.channel || song.artist || 'Unknown Artist',
+            thumbnail: song.thumbnail || song.thumbnails?.default?.url || ''
+        };
+        
+        console.log('📤 Complete song object:', completeSong);
+        
+        addToHistory(completeSong);
+        onSongSelect(completeSong);
     };
 
     const handleRetry = () => {

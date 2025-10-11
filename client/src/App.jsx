@@ -11,6 +11,7 @@ import SearchResultsPage from './pages/SearchResultsPage';
 import AnalyzingPage from './pages/AnalyzingPage';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
+import './styles/mobile-responsive.css';
 
 // Top-right Sign Out Button Component
 const TopSignOutButton = () => {
