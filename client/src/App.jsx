@@ -132,8 +132,8 @@ const AppContent = () => {
                 </Switch>
             </main>
             
-            {/* Hide footer on player, home, auth, demo, search, and analyzing pages - SHOW on legal pages */}
-            {!isPlayerPage && !isHomePage && !isAuthPage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Footer />}
+            {/* Show footer on all pages except player, auth, demo, search, and analyzing pages */}
+            {!isPlayerPage && !isAuthPage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Footer />}
         </div>
     );
 };
