@@ -2,6 +2,16 @@
   "version": 2,
   "buildCommand": "cd client && npm install && npm run build",
   "outputDirectory": "client/dist",
+  "routes": [
+    {
+      "src": "/legal/privacy-policy.html",
+      "dest": "/legal/privacy-policy.html"
+    },
+    {
+      "src": "/legal/terms-of-service.html",
+      "dest": "/legal/terms-of-service.html"
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/analyze-song",
