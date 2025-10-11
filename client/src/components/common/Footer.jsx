@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../../styles/global.css';
 
 const Footer = () => {
@@ -60,32 +61,32 @@ const Footer = () => {
                             flexDirection: 'column',
                             gap: '8px'
                         }}>
-                            <a 
-                                href="/legal/terms-of-service.html" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
+                            <Link 
+                                to="/terms-of-service"
                                 style={{
                                     color: '#61dafb',
                                     textDecoration: 'none',
                                     fontSize: '14px',
                                     transition: 'color 0.3s'
                                 }}
+                                onMouseEnter={(e) => e.target.style.color = '#FFD700'}
+                                onMouseLeave={(e) => e.target.style.color = '#61dafb'}
                             >
                                 📄 Terms of Service
-                            </a>
-                            <a 
-                                href="/legal/privacy-policy.html" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
+                            </Link>
+                            <Link 
+                                to="/privacy-policy"
                                 style={{
                                     color: '#61dafb',
                                     textDecoration: 'none',
                                     fontSize: '14px',
                                     transition: 'color 0.3s'
                                 }}
+                                onMouseEnter={(e) => e.target.style.color = '#FFD700'}
+                                onMouseLeave={(e) => e.target.style.color = '#61dafb'}
                             >
                                 🔒 Privacy Policy
-                            </a>
+                            </Link>
                         </div>
                     </div>
 
@@ -155,8 +156,8 @@ const Footer = () => {
                         gap: '15px',
                         alignItems: 'center'
                     }}>
-                        <a 
-                            href="/privacy-policy" 
+                        <Link 
+                            to="/privacy-policy" 
                             style={{
                                 color: '#61dafb',
                                 textDecoration: 'none',
@@ -167,10 +168,10 @@ const Footer = () => {
                             onMouseLeave={(e) => e.target.style.color = '#61dafb'}
                         >
                             Privacy Policy
-                        </a>
+                        </Link>
                         <span style={{ color: '#444' }}>•</span>
-                        <a 
-                            href="/terms-of-service" 
+                        <Link 
+                            to="/terms-of-service" 
                             style={{
                                 color: '#61dafb',
                                 textDecoration: 'none',
@@ -181,7 +182,7 @@ const Footer = () => {
                             onMouseLeave={(e) => e.target.style.color = '#61dafb'}
                         >
                             Terms of Service
-                        </a>
+                        </Link>
                     </div>
                     
                     <p style={{ 
