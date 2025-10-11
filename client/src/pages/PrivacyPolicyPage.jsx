@@ -1,9 +1,9 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Footer from '../components/common/Footer';
 
 const PrivacyPolicyPage = () => {
-    const navigate = useNavigate();
+    const history = useHistory();
 
     return (
         <div style={{
@@ -19,7 +19,7 @@ const PrivacyPolicyPage = () => {
                 padding: '40px 20px'
             }}>
                 <button
-                    onClick={() => navigate('/')}
+                    onClick={() => history.push('/')}
                     style={{
                         background: 'rgba(255, 255, 255, 0.1)',
                         border: '1px solid rgba(255, 255, 255, 0.2)',
