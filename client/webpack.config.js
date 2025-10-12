@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 
@@ -37,30 +36,6 @@ module.exports = (env, argv) => {
     plugins: [
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, 'public', 'index.html'),
-      }),
-      new CopyWebpackPlugin({
-        patterns: [
-          {
-            from: path.resolve(__dirname, 'public', 'legal'),
-            to: path.resolve(__dirname, 'dist', 'legal'),
-          },
-          {
-            from: path.resolve(__dirname, 'public', 'images'),
-            to: path.resolve(__dirname, 'dist', 'images'),
-          },
-          {
-            from: path.resolve(__dirname, 'public', 'manifest.json'),
-            to: path.resolve(__dirname, 'dist', 'manifest.json'),
-          },
-          {
-            from: path.resolve(__dirname, 'public', 'favicon.ico'),
-            to: path.resolve(__dirname, 'dist', 'favicon.ico'),
-          },
-          {
-            from: path.resolve(__dirname, 'public', 'validation-key.txt'),
-            to: path.resolve(__dirname, 'dist', 'validation-key.txt'),
-          }
-        ],
       }),
       new Dotenv({
         path: path.resolve(__dirname, '.env'),

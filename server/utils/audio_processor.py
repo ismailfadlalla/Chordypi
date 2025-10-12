@@ -64,30 +64,17 @@ def download_youtube_audio(url):
             print("   ✅ 100% reliable, no IP blocking")
             print("   ✅ 500 free downloads/month")
             
-            try:
-                audio_path, duration, title = download_youtube_audio_rapidapi(url)
-                
-                if audio_path and os.path.exists(audio_path):
-                    print(f"✅ SUCCESS with RapidAPI!")
-                    print(f"   📁 Audio path: {audio_path}")
-                    print(f"   ⏱️ Duration: {duration}s")
-                    print(f"   📋 Title: {title}")
-                    return audio_path, duration, title
-                else:
-                    print(f"⚠️ RapidAPI returned None or invalid path")
-                    print(f"   audio_path: {audio_path}")
-                    print(f"   Trying fallback methods...")
-            except Exception as rapidapi_error:
-                print(f"❌ RapidAPI download failed with exception:")
-                print(f"   Error type: {type(rapidapi_error).__name__}")
-                print(f"   Error message: {str(rapidapi_error)}")
-                import traceback
-                traceback.print_exc()
-                print(f"   Trying fallback methods...")
+            audio_path, duration, title = download_youtube_audio_rapidapi(url)
+            
+            if audio_path and os.path.exists(audio_path):
+                print(f"✅ SUCCESS with RapidAPI!")
+                return audio_path, duration, title
+            else:
+                print(f"⚠️ RapidAPI failed, trying fallback methods...")
         else:
             print("   ❌ RAPIDAPI_KEY not found in environment variables")
             print("⚠️ RAPIDAPI_KEY not set - skipping RapidAPI method")
-            print("💡 Add RAPIDAPI_KEY to Railway environment variables for 500 free downloads/month")
+            print("💡 Add RAPIDAPI_KEY to Render for 500 free downloads/month")
             
     except ImportError as e:
         print(f"❌ RapidAPI downloader IMPORT FAILED: {e}")

@@ -14,6 +14,7 @@ import SearchResultsPage from './SearchResultsPage';
 import UserLibrary from '../components/library/UserLibrary';
 import SongCard from '../components/common/SongCard';
 import ChordyPiLogo from '../components/common/ChordyPiLogo';
+import Header from '../components/common/Header';
 import { useAuth } from '../hooks/useAuth';
 import { analyzeSong, addToHistory, getFavorites, getHistory, addToFavorites, removeFromFavorites, analyzeUploadedAudio } from '../services/api';
 import '../styles/global.css';
@@ -275,6 +276,8 @@ const HomePage = () => {
     // Show main HomePage
     return (
         <div className="home-page">
+            {/* Header with Sign In/Sign Up */}
+            {!user && <Header />}
             
             {/* 🏆 HACKATHON JUDGE BANNER */}
             <div className="hackathon-banner" style={{
@@ -282,9 +285,8 @@ const HomePage = () => {
                 padding: '20px',
                 textAlign: 'center',
                 boxShadow: '0 4px 20px rgba(255, 215, 0, 0.3)',
-                position: 'sticky',
-                top: 0,
-                zIndex: 1000
+                position: 'relative',
+                zIndex: 100
             }}>
                 <h3 style={{ margin: '0 0 10px 0', fontSize: '1.5rem', color: '#1a1a1a' }}>
                     🏆 Pi Network Hackathon 2025 - ChordyPi

@@ -824,6 +824,10 @@ const PlayerPage = () => {
                                         backgroundColor: '#000'
                                     }}
                                 ></div>
+                                <div style={{ marginTop: '10px', fontSize: '14px', color: 'white', opacity: 0.8, textAlign: 'center' }}>
+                                    <p>🎵 Chord progression synced with video playback</p>
+                                    <p>⏰ Real-time tracking: {isPlaying ? 'Active' : 'Paused'}</p>
+                                </div>
                             </div>
                         ) : (
                             // Fallback when no video available
@@ -1048,52 +1052,54 @@ const PlayerPage = () => {
                     </div>
                 </div>
 
-                {/* Professional Guitar Learning Interface with Chord Progression */}
-                <ChordProgressionDisplay
-                    realisticChords={realisticChords}
-                    currentTime={currentTime}
-                    onSeek={handleSeek}
-                    currentChord={currentChord}
-                    currentChordIndex={currentChordIndex}
-                    seekTo={seekTo}
-                />
 
-                {/* FRETBOARD SECTION - Bottom of Layout */}
+                {/* FRETBOARD SECTION - More Compact Layout */}
                 <div style={{
                     backgroundColor: 'rgba(255,255,255,0.05)',
                     borderRadius: '15px',
-                    padding: '15px',
-                    marginTop: '10px'
+                    padding: '10px',
+                    marginTop: '10px',
+                    maxWidth: '900px',
+                    marginLeft: 'auto',
+                    marginRight: 'auto'
                 }}>
                     <h3 style={{ 
                         color: 'white', 
-                        marginBottom: '15px', 
+                        marginBottom: '10px', 
                         textAlign: 'center',
-                        fontSize: '18px',
+                        fontSize: '16px',
                         textTransform: 'uppercase',
-                        letterSpacing: '2px'
+                        letterSpacing: '1px'
                     }}>
                         🎸 Guitar Fretboard
                     </h3>
-                    
-                    {/* Split Layout: NOW PLAYING (Left) + UP NEXT (Right) */}
                     <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: window.innerWidth > 768 ? '1fr 1fr' : '1fr',
-                        gap: '20px'
+                        display: 'flex',
+                        flexDirection: window.innerWidth > 768 ? 'row' : 'column',
+                        gap: '16px',
+                        justifyContent: 'center',
+                        alignItems: 'flex-start'
                     }}>
-                        {/* LEFT: NOW PLAYING Fretboard */}
+                        {/* NOW PLAYING Fretboard */}
                         <div style={{
-                            background: 'linear-gradient(135deg, rgba(255, 243, 176, 0.1), rgba(255, 224, 130, 0.05))',
-                            border: '2px solid rgba(255, 215, 0, 0.3)',
-                            borderRadius: '12px',
-                            padding: '15px'
+                            flex: 1,
+                            minWidth: '0',
+                            background: 'linear-gradient(135deg, rgba(255, 243, 176, 0.08), rgba(255, 224, 130, 0.03))',
+                            border: '1px solid rgba(255, 215, 0, 0.2)',
+                            borderRadius: '10px',
+                            padding: '10px',
+                            maxHeight: '180px',
+                            overflow: 'hidden',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center'
                         }}>
                             <div style={{
                                 color: '#FFD700',
-                                fontSize: '13px',
+                                fontSize: '12px',
                                 fontWeight: 'bold',
-                                marginBottom: '10px',
+                                marginBottom: '8px',
                                 textAlign: 'center'
                             }}>● NOW PLAYING</div>
                             <ChordProgressionDisplay
@@ -1103,21 +1109,29 @@ const PlayerPage = () => {
                                 currentChord={currentChord || realisticChords[0]?.chord}
                                 currentChordIndex={currentChordIndex}
                                 displayMode="current-only"
+                                fretboardHeight={90}
                             />
                         </div>
-
-                        {/* RIGHT: UP NEXT Fretboard */}
+                        {/* UP NEXT Fretboard */}
                         <div style={{
-                            background: 'linear-gradient(135deg, rgba(108, 92, 231, 0.15), rgba(137, 155, 232, 0.1))',
-                            border: '2px solid rgba(108, 92, 231, 0.3)',
-                            borderRadius: '12px',
-                            padding: '15px'
+                            flex: 1,
+                            minWidth: '0',
+                            background: 'linear-gradient(135deg, rgba(108, 92, 231, 0.10), rgba(137, 155, 232, 0.06))',
+                            border: '1px solid rgba(108, 92, 231, 0.18)',
+                            borderRadius: '10px',
+                            padding: '10px',
+                            maxHeight: '180px',
+                            overflow: 'hidden',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center'
                         }}>
                             <div style={{
                                 color: '#6c5ce7',
-                                fontSize: '13px',
+                                fontSize: '12px',
                                 fontWeight: 'bold',
-                                marginBottom: '10px',
+                                marginBottom: '8px',
                                 textAlign: 'center'
                             }}>○ UP NEXT</div>
                             <ChordProgressionDisplay
@@ -1127,6 +1141,7 @@ const PlayerPage = () => {
                                 currentChord={nextChord || realisticChords[1]?.chord}
                                 currentChordIndex={currentChordIndex + 1}
                                 displayMode="next-only"
+                                fretboardHeight={90}
                             />
                         </div>
                     </div>

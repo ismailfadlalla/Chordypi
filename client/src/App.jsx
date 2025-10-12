@@ -9,8 +9,6 @@ import LibraryPage from './pages/LibraryPage';
 import JudgeDemoPage from './pages/JudgeDemoPage';
 import SearchResultsPage from './pages/SearchResultsPage';
 import AnalyzingPage from './pages/AnalyzingPage';
-import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
-import TermsOfServicePage from './pages/TermsOfServicePage';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import './styles/mobile-responsive.css';
@@ -80,7 +78,6 @@ const AppContent = () => {
     const isSearchPage = location.pathname === '/search' || location.pathname === '/search-results';
     const isAnalyzingPage = location.pathname === '/analyzing';
     const isLibraryPage = location.pathname === '/library';
-    const isLegalPage = location.pathname === '/privacy-policy' || location.pathname === '/terms-of-service';
 
     // Debug: Log when sign out button should show
     console.log('🔍 Location:', location.pathname, '| Show Sign Out:', isHomePage && !isSearchPage && !isLibraryPage);
@@ -95,7 +92,7 @@ const AppContent = () => {
             {/* Top-right Sign Out Button - Only show on home page, not on search or library */}
             {isHomePage && !isSearchPage && !isLibraryPage && <TopSignOutButton />}
             
-            {/* Hide header on player, home, auth, demo, search, and analyzing pages - SHOW on legal pages */}
+            {/* Hide header on player, home, auth, demo, search, and analyzing pages for clean, focused experience */}
             {!isPlayerPage && !isHomePage && !isAuthPage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Header />}
             
             <main className="main-content" style={{
@@ -125,15 +122,11 @@ const AppContent = () => {
                     <Route path="/library" component={LibraryPage} />
                     <Route path="/search-results" component={SearchResultsPage} />
                     <Route path="/search" component={SearchResultsPage} />
-                    
-                    {/* Legal Pages */}
-                    <Route path="/privacy-policy" component={PrivacyPolicyPage} />
-                    <Route path="/terms-of-service" component={TermsOfServicePage} />
                 </Switch>
             </main>
             
-            {/* Show footer on all pages except player, auth, demo, search, and analyzing pages */}
-            {!isPlayerPage && !isAuthPage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Footer />}
+            {/* Hide footer on player, home, auth, demo, search, and analyzing pages for clean, focused experience */}
+            {!isPlayerPage && !isHomePage && !isAuthPage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Footer />}
         </div>
     );
 };
