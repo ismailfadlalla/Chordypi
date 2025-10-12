@@ -26,6 +26,15 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
 
         try {
             console.log('🥧 Initializing Pi Network SDK...');
+            console.log('🔍 window.Pi object:', window.Pi);
+            console.log('🔍 window.Pi.init type:', typeof window.Pi.init);
+            
+            // Check if init method exists
+            if (!window.Pi.init) {
+                console.error('❌ window.Pi.init is not a function!');
+                setError('Pi SDK init method not available. SDK may not be loaded correctly.');
+                return false;
+            }
             
             // Get environment variables safely (Vite uses import.meta.env)
             let environment = 'sandbox'; // Default to sandbox
@@ -48,18 +57,23 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             });
             
             // Initialize Pi SDK - Try simplified initialization first
+            console.log('🔄 Calling window.Pi.init({ version: "2.0" })...');
+            
             try {
                 // Method 1: Simple initialization (recommended for Pi Browser)
-                await window.Pi.init({ version: "2.0" });
-                console.log(`✅ Pi Network SDK initialized (simple mode)`);
+                const initResult = await window.Pi.init({ version: "2.0" });
+                console.log('✅ Pi Network SDK initialized (simple mode):', initResult);
             } catch (simpleError) {
-                console.warn('⚠️ Simple init failed, trying with sandbox flag:', simpleError.message);
+                console.warn('⚠️ Simple init failed, trying with sandbox flag:', simpleError);
+                console.warn('⚠️ Error message:', simpleError.message);
+                console.warn('⚠️ Error stack:', simpleError.stack);
+                
                 // Method 2: With sandbox flag
-                await window.Pi.init({
+                const initResult = await window.Pi.init({
                     version: "2.0",
                     sandbox: true // Always use sandbox for testing
                 });
-                console.log(`✅ Pi Network SDK initialized (sandbox mode)`);
+                console.log('✅ Pi Network SDK initialized (sandbox mode):', initResult);
             }
             
             console.log('✅ SDK initialization complete');
@@ -90,13 +104,18 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         setError(null);
 
         try {
-            // Initialize SDK first if needed
+            // Try to initialize SDK first if needed
             if (!sdkInitialized) {
-                console.log('⚙️ Initializing Pi SDK...');
-                const initialized = await initializePi();
-                if (!initialized) {
-                    setIsLoading(false);
-                    return;
+                console.log('⚙️ Attempting Pi SDK initialization...');
+                try {
+                    const initialized = await initializePi();
+                    if (!initialized) {
+                        console.warn('⚠️ SDK initialization failed, trying authentication anyway...');
+                        // Don't return - try authentication even if init failed
+                    }
+                } catch (initError) {
+                    console.warn('⚠️ SDK init threw error, trying authentication anyway:', initError.message);
+                    // Continue to authentication
                 }
             }
 
