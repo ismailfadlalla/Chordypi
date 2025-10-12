@@ -324,6 +324,8 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                 Authenticated: {isAuthenticated ? '✅ Yes' : '❌ No'}<br/>
                 Loading: {isLoading ? '✅ Yes' : '❌ No'}<br/>
                 Error: {error || 'None'}
+            </div>
+
             {error && (
                 <div className="error-message">
                     <span>⚠️ {
