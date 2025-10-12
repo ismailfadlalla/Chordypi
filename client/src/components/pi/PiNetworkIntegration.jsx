@@ -27,9 +27,19 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         try {
             console.log('🥧 Initializing Pi Network SDK...');
             
-            // Get environment variables
-            const piApiKey = process.env.REACT_APP_PI_API_KEY || process.env.REACT_APP_PI_NETWORK_API_KEY;
-            const environment = process.env.REACT_APP_PI_ENVIRONMENT || 'sandbox';
+            // Get environment variables (Vite uses import.meta.env)
+            const piApiKey = import.meta.env.VITE_PI_API_KEY || 
+                            import.meta.env.VITE_PI_NETWORK_API_KEY || 
+                            process.env.REACT_APP_PI_API_KEY;
+            const environment = import.meta.env.VITE_PI_ENVIRONMENT || 
+                               process.env.REACT_APP_PI_ENVIRONMENT || 
+                               'sandbox';
+            
+            console.log('🔧 Pi SDK Config:', {
+                environment,
+                hasApiKey: !!piApiKey,
+                version: "2.0"
+            });
             
             // Initialize Pi SDK - fast, non-blocking
             await window.Pi.init({
@@ -70,6 +80,11 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             }
 
             console.log('🔐 Requesting Pi Network authentication...');
+            console.log('📋 Authentication params:', {
+                scopes: ['username', 'payments'],
+                sdkVersion: '2.0',
+                timestamp: new Date().toISOString()
+            });
             
             // Add timeout to prevent infinite loading
             const authPromise = window.Pi.authenticate(
@@ -79,6 +94,8 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                     setPiPayment(payment);
                 }
             );
+            
+            console.log('⏳ Waiting for user to accept permission dialog...');
             
             const timeoutPromise = new Promise((_, reject) => 
                 setTimeout(() => reject(new Error('Authentication timed out after 30 seconds. Please try again.')), 30000)
