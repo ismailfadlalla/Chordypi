@@ -71,18 +71,20 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
 
             console.log('🔐 Requesting Pi Network authentication...');
             
-            // This triggers the native Pi Browser permission dialog
-            // User will see: "Share information with ChordyPi?"
-            // - Auth: Authenticate you on this app with your Pi account
-            // - Username: Your Pi username
-            // - Roles: Your Pi Community roles
-            const auth = await window.Pi.authenticate(
+            // Add timeout to prevent infinite loading
+            const authPromise = window.Pi.authenticate(
                 ['username', 'payments'],
                 (payment) => {
                     console.log('💰 Incomplete payment found:', payment);
                     setPiPayment(payment);
                 }
             );
+            
+            const timeoutPromise = new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Authentication timed out after 30 seconds. Please try again.')), 30000)
+            );
+            
+            const auth = await Promise.race([authPromise, timeoutPromise]);
 
             console.log('✅ Pi Authentication successful:', auth);
             setPiUser(auth.user);
@@ -224,6 +226,19 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                     >
                         {isLoading ? '🔄 Connecting...' : '🥧 Sign in with Pi Network'}
                     </button>
+                    
+                    {isLoading && (
+                        <button 
+                            className="pi-auth-button"
+                            onClick={() => {
+                                setIsLoading(false);
+                                setError('Authentication cancelled. Please try again.');
+                            }}
+                            style={{ marginTop: '10px', background: '#666' }}
+                        >
+                            ✕ Cancel
+                        </button>
+                    )}
                     
                     <div className="pi-auth-benefits">
                         <p><strong>Why Pi Network?</strong></p>

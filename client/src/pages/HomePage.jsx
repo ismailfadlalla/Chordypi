@@ -14,7 +14,6 @@ import SearchResultsPage from './SearchResultsPage';
 import UserLibrary from '../components/library/UserLibrary';
 import SongCard from '../components/common/SongCard';
 import ChordyPiLogo from '../components/common/ChordyPiLogo';
-import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import { useAuth } from '../hooks/useAuth';
 import { analyzeSong, addToHistory, getFavorites, getHistory, addToFavorites, removeFromFavorites, analyzeUploadedAudio } from '../services/api';
@@ -277,9 +276,6 @@ const HomePage = () => {
     // Show main HomePage
     return (
         <div className="home-page">
-            {/* Header with Sign In/Sign Up */}
-            {!user && <Header />}
-            
             {/* 🏆 HACKATHON JUDGE BANNER */}
             <div className="hackathon-banner" style={{
                 background: 'linear-gradient(135deg, #FFD700, #6c5ce7)',
