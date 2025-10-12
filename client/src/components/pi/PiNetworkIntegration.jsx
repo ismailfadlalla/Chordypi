@@ -38,22 +38,37 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             console.log('🔧 Pi SDK Config:', {
                 environment,
                 hasApiKey: !!piApiKey,
-                version: "2.0"
-            });
-            
-            // Initialize Pi SDK - fast, non-blocking
-            await window.Pi.init({
                 version: "2.0",
-                sandbox: environment === 'sandbox' // Use sandbox mode based on environment
+                sandbox: environment === 'sandbox'
             });
             
-            console.log(`✅ Pi Network SDK initialized successfully (${environment} mode)`);
+            // Initialize Pi SDK - Try simplified initialization first
+            try {
+                // Method 1: Simple initialization
+                await window.Pi.init({ version: "2.0" });
+                console.log(`✅ Pi Network SDK initialized (simple mode)`);
+            } catch (simpleError) {
+                console.warn('⚠️ Simple init failed, trying with sandbox flag:', simpleError.message);
+                // Method 2: With sandbox flag
+                await window.Pi.init({
+                    version: "2.0",
+                    sandbox: environment === 'sandbox'
+                });
+                console.log(`✅ Pi Network SDK initialized (${environment} mode)`);
+            }
+            
+            console.log('✅ SDK initialization complete');
             setSdkInitialized(true);
             return true;
             
         } catch (error) {
             console.error('❌ Failed to initialize Pi SDK:', error);
-            setError('Failed to initialize Pi Network. Please try again.');
+            console.error('❌ Error details:', {
+                message: error.message,
+                stack: error.stack,
+                type: error.constructor.name
+            });
+            setError(`Failed to initialize Pi Network: ${error.message || 'Unknown error'}`);
             return false;
         }
     };
@@ -63,6 +78,7 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         // Debug: Confirm button click
         console.log('🔘 Pi Auth button clicked!');
         console.log('🔍 Window.Pi available:', !!window.Pi);
+        console.log('🔍 Window.Pi object:', window.Pi);
         console.log('🔍 SDK initialized:', sdkInitialized);
         
         setIsLoading(true);
