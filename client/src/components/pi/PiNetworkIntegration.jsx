@@ -182,11 +182,11 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             console.log('⏳ Waiting for Pi Browser permission dialog...');
             console.log('💡 If the dialog doesn\'t appear, your domain may not be verified yet.');
             
-            // Increase timeout to 60 seconds to allow for domain verification delays
+            // Increase timeout to 30 seconds - if it doesn't work by then, something is wrong
             const timeoutPromise = new Promise((_, reject) => 
                 setTimeout(() => {
-                    reject(new Error('Authentication timed out. Possible reasons:\n1. Domain not verified in Pi Developer Portal\n2. App not submitted for review\n3. Pi Browser permission dialog blocked'));
-                }, 60000)
+                    reject(new Error('TIMEOUT_NO_DIALOG'));
+                }, 30000)
             );
             
             const auth = await Promise.race([authPromise, timeoutPromise]);
@@ -214,16 +214,29 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             
             // Handle specific error types
             if (error.message && error.message.includes('Error_blocked_by_Response')) {
-                setError('Navigation error detected. Please refresh the page and try again.');
-                // Reset state
+                setError('SDK_CORRUPTED');
                 setSdkInitialized(false);
+                // Force hard reload with cache bust after 2 seconds
+                setTimeout(() => {
+                    console.log('🔄 Force reloading page to clear SDK corruption...');
+                    window.location.href = window.location.href.split('?')[0] + '?t=' + Date.now();
+                }, 2000);
+            } else if (error.message && error.message.includes('TIMEOUT_NO_DIALOG')) {
+                setError('TIMEOUT_NO_DIALOG');
+                setSdkInitialized(false);
+                // Likely SDK corruption or domain not verified - force reload
+                setTimeout(() => {
+                    console.log('🔄 Timeout - forcing page reload...');
+                    window.location.href = window.location.href.split('?')[0] + '?t=' + Date.now();
+                }, 3000);
             } else if (error.message && (error.message.includes('declined') || error.message.includes('denied'))) {
                 setError('Authentication declined. Please allow access to continue.');
-            } else if (error.message && error.message.includes('timeout')) {
-                setError(error.message);
             } else if (error.message && error.message.includes('blocked')) {
-                setError('Request blocked. Please refresh the page and try again.');
+                setError('SDK_CORRUPTED');
                 setSdkInitialized(false);
+                setTimeout(() => {
+                    window.location.href = window.location.href.split('?')[0] + '?t=' + Date.now();
+                }, 2000);
             } else {
                 setError(error.message || 'Failed to authenticate with Pi Network');
             }
@@ -311,29 +324,38 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                 Authenticated: {isAuthenticated ? '✅ Yes' : '❌ No'}<br/>
                 Loading: {isLoading ? '✅ Yes' : '❌ No'}<br/>
                 Error: {error || 'None'}
-            </div>
-            
-            <div className="pi-header">
-                <h3>🥧 Pi Network Integration</h3>
-                <div className="pi-status">
-                    {isAuthenticated ? (
-                        <span className="status-connected">✅ Connected</span>
-                    ) : (
-                        <span className="status-disconnected">⭕ Not Connected</span>
-                    )}
-                </div>
-            </div>
-
             {error && (
                 <div className="error-message">
-                    <span>⚠️ {error}</span>
-                    <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                        <button 
-                            className="error-dismiss"
-                            onClick={() => setError(null)}
-                            aria-label="Dismiss error"
-                        >
-                            ✕ Dismiss
+                    <span>⚠️ {
+                        error === 'SDK_CORRUPTED' 
+                            ? 'SDK state corrupted. Auto-refreshing page in 2 seconds...'
+                            : error === 'TIMEOUT_NO_DIALOG'
+                            ? 'Permission dialog timed out. Auto-refreshing in 3 seconds... Please ensure domain is verified in Pi Developer Portal.'
+                            : error
+                    }</span>
+                    {error !== 'SDK_CORRUPTED' && error !== 'TIMEOUT_NO_DIALOG' && (
+                        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                            <button 
+                                className="error-dismiss"
+                                onClick={() => setError(null)}
+                                aria-label="Dismiss error"
+                            >
+                                ✕ Dismiss
+                            </button>
+                            <button 
+                                className="error-dismiss"
+                                onClick={() => {
+                                    // Hard reload with cache bust
+                                    window.location.href = window.location.href.split('?')[0] + '?t=' + Date.now();
+                                }}
+                                style={{ background: '#4CAF50' }}
+                            >
+                                🔄 Force Reload
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}              ✕ Dismiss
                         </button>
                         {(error.includes('blocked') || error.includes('refresh')) && (
                             <button 
@@ -375,17 +397,24 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                             {isLoading ? '🔄 Connecting...' : '🥧 Sign in with Pi Network'}
                         </button>
                         
-                        {!isLoading && sdkInitialized && (
+                        {!isLoading && (
                             <button 
                                 className="pi-auth-button"
                                 onClick={() => {
-                                    setSdkInitialized(false);
-                                    setError(null);
-                                    console.log('🔄 SDK state reset');
+                                    console.log('🧹 Clearing all browser data and reloading...');
+                                    // Clear all storage
+                                    try {
+                                        localStorage.clear();
+                                        sessionStorage.clear();
+                                    } catch (e) {
+                                        console.warn('Could not clear storage:', e);
+                                    }
+                                    // Hard reload with cache bust
+                                    window.location.href = window.location.href.split('?')[0] + '?clear=' + Date.now();
                                 }}
-                                style={{ background: '#FF9800', fontSize: '14px' }}
+                                style={{ background: '#FF5722', fontSize: '14px' }}
                             >
-                                🔧 Reset SDK
+                                🧹 Clear Cache & Reload
                             </button>
                         )}
                     </div>
