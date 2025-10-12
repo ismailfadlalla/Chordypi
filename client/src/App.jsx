@@ -111,9 +111,9 @@ const AppContent = () => {
                     <Route path="/" exact component={HomePage} />
                     
                     {/* Auth Routes */}
-                    <Route path="/signup" component={AuthPage} />
-                    <Route path="/signin" component={AuthPage} />
-                    <Route path="/auth" component={AuthPage} />
+                    <Route path="/signup" render={(props) => <AuthPage {...props} key={props.location.key} />} />
+                    <Route path="/signin" render={(props) => <AuthPage {...props} key={props.location.key} />} />
+                    <Route path="/auth" render={(props) => <AuthPage {...props} key={props.location.key} />} />
                     
                     {/* App Routes */}
                     <Route path="/analyzing" component={AnalyzingPage} />
