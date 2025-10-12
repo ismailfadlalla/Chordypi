@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import './PiNetworkIntegration.css';
 
 const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
+    const history = useHistory();
     const [piUser, setPiUser] = useState(null);
     const [piPayment, setPiPayment] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -402,10 +404,10 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                             <button 
                                 className="pi-payment-button free"
                                 onClick={() => {
-                                    console.log('User chose free version with ads');
-                                    if (onAuthSuccess) {
-                                        onAuthSuccess(piUser);
-                                    }
+                                    console.log('✅ User chose free version with ads');
+                                    console.log('🔄 Redirecting to home page...');
+                                    // Redirect to home page with free tier
+                                    history.push('/');
                                 }}
                                 style={{
                                     background: '#fff',
