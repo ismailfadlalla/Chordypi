@@ -107,12 +107,15 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         setError(null);
 
         try {
-            // ALWAYS initialize SDK first
+            // ALWAYS initialize SDK first with sandbox flag
             if (!sdkInitialized) {
                 console.log('⚙️ Initializing Pi SDK before authentication...');
                 try {
-                    await window.Pi.init({ version: "2.0" });
-                    console.log('✅ Pi SDK initialized successfully');
+                    await window.Pi.init({ 
+                        version: "2.0",
+                        sandbox: true // REQUIRED for development
+                    });
+                    console.log('✅ Pi SDK initialized successfully with sandbox=true');
                     setSdkInitialized(true);
                 } catch (initError) {
                     console.error('❌ Pi SDK init failed:', initError);
@@ -121,27 +124,38 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             }
             
             console.log('🔐 Calling Pi.authenticate...');
+            console.log('🔍 Pi.authenticate method exists:', typeof window.Pi.authenticate);
+            console.log('🔍 Scopes requested: ["username", "payments"]');
             
-            // Now authenticate
+            // Now authenticate - using array format for scopes
             const authPromise = window.Pi.authenticate(
                 ['username', 'payments'],
                 (payment) => {
-                    console.log('💰 Incomplete payment found:', payment);
+                    console.log('💰 Incomplete payment callback triggered:', payment);
                     setPiPayment(payment);
                 }
             );
             
+            console.log('🔄 authPromise created:', authPromise);
             console.log('⏳ Waiting for Pi Browser permission dialog...');
-            console.log('💡 If the dialog doesn\'t appear, your domain may not be verified yet.');
+            console.log('💡 User should see a Pi permission dialog now...');
+            console.log('💡 If the dialog doesn\'t appear, your domain may not be verified in Pi Developer Portal.');
             
             // Increase timeout to 60 seconds - give user time to review and click "Allow"
             const timeoutPromise = new Promise((_, reject) => 
                 setTimeout(() => {
+                    console.error('❌ TIMEOUT: Authentication dialog did not complete in 60 seconds');
+                    console.error('❌ This usually means:');
+                    console.error('   1. The permission dialog did not appear');
+                    console.error('   2. Your domain is not verified in Pi Developer Portal');
+                    console.error('   3. The Pi Browser is blocking the dialog');
                     reject(new Error('TIMEOUT_NO_DIALOG'));
                 }, 60000) // 60 seconds timeout
             );
             
+            console.log('⏱️ Starting Promise.race with 60-second timeout...');
             const auth = await Promise.race([authPromise, timeoutPromise]);
+            console.log('✅ Promise.race resolved! Authentication response received.');
 
             console.log('✅ Pi Authentication successful!');
             console.log('✅ Auth object:', JSON.stringify(auth, null, 2));
