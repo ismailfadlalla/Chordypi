@@ -237,13 +237,23 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
     };
 
     // Premium feature: Unlock advanced chord analysis
-    const unlockPremiumFeatures = () => {
-        createPiPayment(0.000095493, 'ChordyPi Premium Access - Advanced Features');
+    const unlockPremiumFeatures = async () => {
+        console.log('🎸 User clicked: Unlock Premium Features');
+        const payment = await createPiPayment(0.000095493, 'ChordyPi Premium Access - Advanced Features');
+        if (payment) {
+            console.log('✅ Premium payment successful, redirecting...');
+            setTimeout(() => history.push('/'), 1000);
+        }
     };
 
     // Premium feature: Remove ads
-    const removeAds = () => {
-        createPiPayment(0.0000477466, 'ChordyPi - Remove Advertisements');
+    const removeAds = async () => {
+        console.log('🚫 User clicked: Remove Ads');
+        const payment = await createPiPayment(0.0000477466, 'ChordyPi - Remove Advertisements');
+        if (payment) {
+            console.log('✅ Remove ads payment successful, redirecting...');
+            setTimeout(() => history.push('/'), 1000);
+        }
     };
 
     // Show Pi Browser required message if SDK is not available
