@@ -37,10 +37,13 @@ const AuthPage = () => {
             );
             
             console.log('✅ Pi Network account created/signed in!');
-            console.log('🔄 Redirecting to home page...');
+            console.log('✨ User can now choose pricing option (Free/Premium/Remove Ads)');
             
+            // DON'T redirect immediately - let user choose pricing option
+            // The PiNetworkIntegration component will show pricing options
+            // Only redirect when user clicks "Continue Free" or makes a payment
             setIsAuthenticating(false);
-            history.push('/');
+            // history.push('/'); // REMOVED - Let user see pricing options first
             
         } catch (err) {
             console.error('❌ Pi Network authentication error:', err);
