@@ -97,36 +97,20 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         // Debug: Confirm button click
         console.log('🔘 Pi Auth button clicked!');
         console.log('🔍 Window.Pi available:', !!window.Pi);
-        console.log('🔍 Window.Pi object:', window.Pi);
-        console.log('🔍 SDK initialized:', sdkInitialized);
+        console.log('🔍 Window.Pi methods:', Object.keys(window.Pi || {}));
+        
+        if (!window.Pi) {
+            setError('Pi SDK not available. Please open this app in Pi Browser.');
+            return;
+        }
         
         setIsLoading(true);
         setError(null);
 
         try {
-            // Try to initialize SDK first if needed
-            if (!sdkInitialized) {
-                console.log('⚙️ Attempting Pi SDK initialization...');
-                try {
-                    const initialized = await initializePi();
-                    if (!initialized) {
-                        console.warn('⚠️ SDK initialization failed, trying authentication anyway...');
-                        // Don't return - try authentication even if init failed
-                    }
-                } catch (initError) {
-                    console.warn('⚠️ SDK init threw error, trying authentication anyway:', initError.message);
-                    // Continue to authentication
-                }
-            }
-
-            console.log('🔐 Requesting Pi Network authentication...');
-            console.log('📋 Authentication params:', {
-                scopes: ['username', 'payments'],
-                sdkVersion: '2.0',
-                timestamp: new Date().toISOString()
-            });
+            console.log('🔐 Calling Pi.authenticate directly...');
             
-            // Add timeout to prevent infinite loading
+            // Try direct authentication - some Pi SDK versions don't need init
             const authPromise = window.Pi.authenticate(
                 ['username', 'payments'],
                 (payment) => {
@@ -135,10 +119,14 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                 }
             );
             
-            console.log('⏳ Waiting for user to accept permission dialog...');
+            console.log('⏳ Waiting for Pi Browser permission dialog...');
+            console.log('💡 If the dialog doesn\'t appear, your domain may not be verified yet.');
             
+            // Increase timeout to 60 seconds to allow for domain verification delays
             const timeoutPromise = new Promise((_, reject) => 
-                setTimeout(() => reject(new Error('Authentication timed out after 30 seconds. Please try again.')), 30000)
+                setTimeout(() => {
+                    reject(new Error('Authentication timed out. Possible reasons:\n1. Domain not verified in Pi Developer Portal\n2. App not submitted for review\n3. Pi Browser permission dialog blocked'));
+                }, 60000)
             );
             
             const auth = await Promise.race([authPromise, timeoutPromise]);
@@ -146,6 +134,7 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             console.log('✅ Pi Authentication successful:', auth);
             setPiUser(auth.user);
             setIsAuthenticated(true);
+            setSdkInitialized(true); // Mark as initialized after successful auth
             
             // Call the parent callback if provided
             if (onAuthSuccess) {
@@ -276,6 +265,19 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                     <p>Connect your Pi Network account to sign in securely!</p>
                     <p className="pi-auth-hint">📱 You'll be asked to allow ChordyPi to access your Pi username</p>
                     
+                    {!isPiAvailable && (
+                        <div className="pi-warning" style={{
+                            background: '#fff3cd',
+                            color: '#856404',
+                            padding: '12px',
+                            borderRadius: '8px',
+                            marginBottom: '15px',
+                            fontSize: '14px'
+                        }}>
+                            ⚠️ <strong>Important:</strong> This app must be opened in the official Pi Browser app to use Pi Network authentication.
+                        </div>
+                    )}
+                    
                     <button 
                         className="pi-auth-button"
                         onClick={handlePiAuth}
@@ -285,16 +287,37 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                     </button>
                     
                     {isLoading && (
-                        <button 
-                            className="pi-auth-button"
-                            onClick={() => {
-                                setIsLoading(false);
-                                setError('Authentication cancelled. Please try again.');
-                            }}
-                            style={{ marginTop: '10px', background: '#666' }}
-                        >
-                            ✕ Cancel
-                        </button>
+                        <>
+                            <div style={{
+                                background: '#e3f2fd',
+                                color: '#1976d2',
+                                padding: '12px',
+                                borderRadius: '8px',
+                                marginTop: '10px',
+                                fontSize: '14px',
+                                textAlign: 'left'
+                            }}>
+                                <strong>⏳ Waiting for permission dialog...</strong>
+                                <p style={{ margin: '8px 0 0 0', fontSize: '13px' }}>
+                                    If the Pi Browser permission dialog doesn't appear:
+                                </p>
+                                <ul style={{ margin: '8px 0 0 20px', fontSize: '13px' }}>
+                                    <li>Make sure your app is submitted in Pi Developer Portal</li>
+                                    <li>Verify the domain is approved (may take 5-10 minutes)</li>
+                                    <li>Try refreshing the page</li>
+                                </ul>
+                            </div>
+                            <button 
+                                className="pi-auth-button"
+                                onClick={() => {
+                                    setIsLoading(false);
+                                    setError('Authentication cancelled. Please try again.');
+                                }}
+                                style={{ marginTop: '10px', background: '#666' }}
+                            >
+                                ✕ Cancel
+                            </button>
+                        </>
                     )}
                     
                     <div className="pi-auth-benefits">
