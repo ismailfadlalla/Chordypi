@@ -144,21 +144,32 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             
             const auth = await Promise.race([authPromise, timeoutPromise]);
 
-            console.log('✅ Pi Authentication successful:', auth);
+            console.log('✅ Pi Authentication successful!');
+            console.log('✅ Auth object:', JSON.stringify(auth, null, 2));
+            console.log('✅ User data:', auth.user);
+            
             setPiUser(auth.user);
             setIsAuthenticated(true);
             
             // Call the parent callback if provided
             if (onAuthSuccess) {
+                console.log('📞 Calling onAuthSuccess callback with user:', auth.user);
                 onAuthSuccess(auth.user);
+            } else {
+                console.warn('⚠️ No onAuthSuccess callback provided');
             }
             
         } catch (error) {
             console.error('❌ Pi Authentication failed:', error);
+            console.error('❌ Error type:', error.constructor.name);
+            console.error('❌ Error message:', error.message);
+            console.error('❌ Error stack:', error.stack);
             
             // Handle user decline
-            if (error.message && error.message.includes('declined')) {
+            if (error.message && (error.message.includes('declined') || error.message.includes('denied'))) {
                 setError('Authentication declined. Please allow access to continue.');
+            } else if (error.message && error.message.includes('timeout')) {
+                setError(error.message);
             } else {
                 setError(error.message || 'Failed to authenticate with Pi Network');
             }
