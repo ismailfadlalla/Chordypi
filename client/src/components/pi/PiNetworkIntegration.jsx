@@ -13,51 +13,14 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
     // Check if Pi SDK is available (non-blocking check only)
     const isPiAvailable = typeof window !== 'undefined' && window.Pi;
     
-    // Reset state on mount to handle navigation errors and clear corrupted SDK state
+    // Reset state on mount
     useEffect(() => {
-        console.log('🔄 PiNetworkIntegration component mounted/remounted');
+        console.log('🔄 PiNetworkIntegration component mounted');
         
-        // Clear any corrupted state
+        // Clear any error state
         setError(null);
         setIsLoading(false);
         
-        // CRITICAL: Clear any Pi SDK cached state from browser storage
-        // This fixes the persistent "Error_blocked_by_Response" issue
-        try {
-            // Clear any Pi-related localStorage items
-            const keysToRemove = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key && (key.toLowerCase().includes('pi') || key.toLowerCase().includes('minepi'))) {
-                    keysToRemove.push(key);
-                }
-            }
-            keysToRemove.forEach(key => {
-                console.log('🧹 Clearing localStorage key:', key);
-                localStorage.removeItem(key);
-            });
-            
-            // Clear sessionStorage as well
-            const sessionKeysToRemove = [];
-            for (let i = 0; i < sessionStorage.length; i++) {
-                const key = sessionStorage.key(i);
-                if (key && (key.toLowerCase().includes('pi') || key.toLowerCase().includes('minepi'))) {
-                    sessionKeysToRemove.push(key);
-                }
-            }
-            sessionKeysToRemove.forEach(key => {
-                console.log('🧹 Clearing sessionStorage key:', key);
-                sessionStorage.removeItem(key);
-            });
-            
-            console.log('✅ Browser storage cleanup complete');
-            
-            // Force SDK to reinitialize
-            setSdkInitialized(false);
-            
-        } catch (storageError) {
-            console.warn('⚠️ Could not clear browser storage:', storageError);
-        }
     }, []);
 
     // Initialize Pi SDK (only when user clicks connect)
@@ -214,29 +177,16 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             
             // Handle specific error types
             if (error.message && error.message.includes('Error_blocked_by_Response')) {
-                setError('SDK_CORRUPTED');
+                setError('Pi SDK Error: Please clear your browser cache and reload the page manually.');
                 setSdkInitialized(false);
-                // Force hard reload with cache bust after 2 seconds
-                setTimeout(() => {
-                    console.log('🔄 Force reloading page to clear SDK corruption...');
-                    window.location.href = window.location.href.split('?')[0] + '?t=' + Date.now();
-                }, 2000);
             } else if (error.message && error.message.includes('TIMEOUT_NO_DIALOG')) {
-                setError('TIMEOUT_NO_DIALOG');
+                setError('Pi authentication dialog timeout. Please try again.');
                 setSdkInitialized(false);
-                // Likely SDK corruption or domain not verified - force reload
-                setTimeout(() => {
-                    console.log('🔄 Timeout - forcing page reload...');
-                    window.location.href = window.location.href.split('?')[0] + '?t=' + Date.now();
-                }, 3000);
             } else if (error.message && (error.message.includes('declined') || error.message.includes('denied'))) {
                 setError('Authentication declined. Please allow access to continue.');
             } else if (error.message && error.message.includes('blocked')) {
-                setError('SDK_CORRUPTED');
+                setError('Pi SDK Error: Please clear your browser cache and reload the page manually.');
                 setSdkInitialized(false);
-                setTimeout(() => {
-                    window.location.href = window.location.href.split('?')[0] + '?t=' + Date.now();
-                }, 2000);
             } else {
                 setError(error.message || 'Failed to authenticate with Pi Network');
             }
@@ -344,16 +294,6 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                             >
                                 ✕ Dismiss
                             </button>
-                            <button 
-                                className="error-dismiss"
-                                onClick={() => {
-                                    // Hard reload with cache bust
-                                    window.location.href = window.location.href.split('?')[0] + '?t=' + Date.now();
-                                }}
-                                style={{ background: '#4CAF50' }}
-                            >
-                                🔄 Force Reload
-                            </button>
                         </div>
                     )}
                 </div>
@@ -385,27 +325,6 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                         >
                             {isLoading ? '🔄 Connecting...' : '🥧 Sign in with Pi Network'}
                         </button>
-                        
-                        {!isLoading && (
-                            <button 
-                                className="pi-auth-button"
-                                onClick={() => {
-                                    console.log('🧹 Clearing all browser data and reloading...');
-                                    // Clear all storage
-                                    try {
-                                        localStorage.clear();
-                                        sessionStorage.clear();
-                                    } catch (e) {
-                                        console.warn('Could not clear storage:', e);
-                                    }
-                                    // Hard reload with cache bust
-                                    window.location.href = window.location.href.split('?')[0] + '?clear=' + Date.now();
-                                }}
-                                style={{ background: '#FF5722', fontSize: '14px' }}
-                            >
-                                🧹 Clear Cache & Reload
-                            </button>
-                        )}
                     </div>
                     
                     {isLoading && (
