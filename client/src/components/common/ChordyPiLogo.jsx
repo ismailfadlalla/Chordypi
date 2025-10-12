@@ -1,27 +1,15 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import flyingVImage from '../../assets/flying-v.png';
 
 // Subtle guitar rotation animation
 const floatAnimation = keyframes`
-  0%, 100% { transform: translateY(0) rotate(-8deg); }
-  50% { transform: translateY(-8px) rotate(-5deg); }
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-5px) rotate(-3deg); }
 `;
 
 const glowAnimation = keyframes`
-  0%, 100% { 
-    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.7)) 
-            drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)); 
-  }
-  50% { 
-    filter: drop-shadow(0 0 25px rgba(255, 215, 0, 1)) 
-            drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4)); 
-  }
-`;
-
-const shimmerAnimation = keyframes`
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6)); }
+  50% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.9)); }
 `;
 
 const LogoContainer = styled.div`
@@ -40,15 +28,13 @@ const LogoContainer = styled.div`
 const ChordText = styled.span`
   font-size: ${props => props.size === 'small' ? '1.5rem' : props.size === 'large' ? '3.5rem' : '2.5rem'};
   font-weight: 800;
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
-  background-size: 200% auto;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: 2px;
   text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  animation: ${shimmerAnimation} 3s linear infinite;
 `;
 
 const FlyingVContainer = styled.div`
@@ -56,24 +42,18 @@ const FlyingVContainer = styled.div`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: ${props => props.size === 'small' ? '35px' : props.size === 'large' ? '90px' : '55px'};
-  height: ${props => props.size === 'small' ? '50px' : props.size === 'large' ? '130px' : '80px'};
-  animation: ${floatAnimation} 3.5s ease-in-out infinite;
-  transform-origin: center center;
-  margin: 0 -8px 8px -5px; /* Shift left (-5px), down (8px bottom margin), tighter horizontal (-8px) */
+  width: ${props => props.size === 'small' ? '40px' : props.size === 'large' ? '100px' : '60px'};
+  height: ${props => props.size === 'small' ? '60px' : props.size === 'large' ? '150px' : '90px'};
+  animation: ${floatAnimation} 3s ease-in-out infinite;
+  transform-origin: center;
 `;
 
 const FlyingVImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: contain;
-  animation: ${glowAnimation} 2.5s ease-in-out infinite;
-  transition: transform 0.3s ease;
-  transform: rotate(12deg); /* Rotate to the right 12 degrees */
-  
-  ${LogoContainer}:hover & {
-    transform: scale(1.1) rotate(15deg);
-  }
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+  animation: ${glowAnimation} 2s ease-in-out infinite;
 `;
 
 const PiText = styled.span`
@@ -134,27 +114,19 @@ const ChordyPiLogo = ({
   clickable = false,
   onClick 
 }) => {
-  const [imageError, setImageError] = React.useState(false);
-
   const logoContent = (
     <LogoContainer size={size} clickable={clickable} onClick={onClick}>
       <ChordText size={size}>CHORD</ChordText>
       <FlyingVContainer size={size}>
-        {!imageError ? (
-          <FlyingVImage 
-            src={flyingVImage}
-            alt="Flying V Guitar as Y"
-            onError={(e) => {
-              console.error('Failed to load Flying V image:', flyingVImage);
-              setImageError(true);
-            }}
-            onLoad={() => {
-              console.log('✅ Flying V image loaded successfully');
-            }}
-          />
-        ) : (
-          <span style={{ fontSize: size === 'small' ? '2.5rem' : size === 'large' ? '5rem' : '3.5rem' }}>🎸</span>
-        )}
+        <FlyingVImage 
+          src="/images/flying-v.png" 
+          alt="Flying V Guitar"
+          onError={(e) => {
+            // Fallback to emoji if image fails to load
+            e.target.style.display = 'none';
+            e.target.parentElement.innerHTML = '<span style="font-size: 3rem;">🎸</span>';
+          }}
+        />
       </FlyingVContainer>
       <PiText size={size}>
         <PiSymbol size={size}>π</PiSymbol>

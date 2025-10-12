@@ -7,7 +7,6 @@ const ImageAssets = {
   // Logo and branding - using SVG files that exist
   logo: '/images/logo.svg', // SVG logo we created
   icon: '/images/icon.svg', // SVG icon we created
-  flyingV: '/images/flying-v.png', // Flying V guitar for logo (transparent background)
   
   // Backgrounds - using actual images with CSS gradients as fallback
   heroBackground: '/guitar-fretboards.jpeg', // Main guitar fretboard image

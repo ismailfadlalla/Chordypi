@@ -50,12 +50,18 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
 
     // Authenticate with Pi Network - triggers native Pi permission dialog
     const handlePiAuth = async () => {
+        // Debug: Confirm button click
+        console.log('🔘 Pi Auth button clicked!');
+        console.log('🔍 Window.Pi available:', !!window.Pi);
+        console.log('🔍 SDK initialized:', sdkInitialized);
+        
         setIsLoading(true);
         setError(null);
 
         try {
             // Initialize SDK first if needed
             if (!sdkInitialized) {
+                console.log('⚙️ Initializing Pi SDK...');
                 const initialized = await initializePi();
                 if (!initialized) {
                     setIsLoading(false);
@@ -70,13 +76,13 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             // - Auth: Authenticate you on this app with your Pi account
             // - Username: Your Pi username
             // - Roles: Your Pi Community roles
-            const auth = await window.Pi.authenticate({
-                scopes: ['username', 'payments'],
-                onIncompletePaymentFound: (payment) => {
+            const auth = await window.Pi.authenticate(
+                ['username', 'payments'],
+                (payment) => {
                     console.log('💰 Incomplete payment found:', payment);
                     setPiPayment(payment);
                 }
-            });
+            );
 
             console.log('✅ Pi Authentication successful:', auth);
             setPiUser(auth.user);
@@ -172,6 +178,16 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
 
     return (
         <div className="pi-integration-container">
+            {/* Debug Info - Remove after testing */}
+            <div style={{background: '#ffe0e0', padding: '10px', marginBottom: '10px', fontSize: '12px', borderRadius: '5px'}}>
+                <strong>🔧 Debug Info:</strong><br/>
+                Pi SDK Available: {isPiAvailable ? '✅ Yes' : '❌ No'}<br/>
+                SDK Initialized: {sdkInitialized ? '✅ Yes' : '❌ No'}<br/>
+                Authenticated: {isAuthenticated ? '✅ Yes' : '❌ No'}<br/>
+                Loading: {isLoading ? '✅ Yes' : '❌ No'}<br/>
+                Error: {error || 'None'}
+            </div>
+            
             <div className="pi-header">
                 <h3>🥧 Pi Network Integration</h3>
                 <div className="pi-status">

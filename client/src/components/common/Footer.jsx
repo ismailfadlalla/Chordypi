@@ -1,13 +1,7 @@
 import React from 'react';
-import ChordyPiLogo from './ChordyPiLogo';
 import '../../styles/global.css';
 
 const Footer = () => {
-    const handleSocialClick = (e, platform) => {
-        e.preventDefault();
-        alert(`🚧 ${platform} Coming Soon!\n\nWe're setting up our social media presence. Follow us soon for:\n\n✨ Guitar tutorials\n🎵 Chord tips & tricks\n🎸 New feature announcements\n🎶 Music theory lessons\n\nStay tuned! 🎵`);
-    };
-
     return (
         <footer className="footer" style={{
             width: '100%',
@@ -36,9 +30,13 @@ const Footer = () => {
                 }}>
                     {/* Brand Section */}
                     <div style={{ flex: '1', minWidth: '200px' }}>
-                        <div style={{ marginBottom: '10px' }}>
-                            <ChordyPiLogo size="small" />
-                        </div>
+                        <h3 style={{ 
+                            color: '#61dafb', 
+                            fontSize: '20px',
+                            marginBottom: '10px' 
+                        }}>
+                            🎸 ChordyPi
+                        </h3>
                         <p style={{ 
                             color: '#888', 
                             fontSize: '14px',
@@ -72,8 +70,6 @@ const Footer = () => {
                                     fontSize: '14px',
                                     transition: 'color 0.3s'
                                 }}
-                                onMouseEnter={(e) => e.target.style.color = '#FFD700'}
-                                onMouseLeave={(e) => e.target.style.color = '#61dafb'}
                             >
                                 📄 Terms of Service
                             </a>
@@ -87,8 +83,6 @@ const Footer = () => {
                                     fontSize: '14px',
                                     transition: 'color 0.3s'
                                 }}
-                                onMouseEnter={(e) => e.target.style.color = '#FFD700'}
-                                onMouseLeave={(e) => e.target.style.color = '#61dafb'}
                             >
                                 🔒 Privacy Policy
                             </a>
@@ -122,7 +116,9 @@ const Footer = () => {
                                 💻 GitHub
                             </a>
                             <a 
-                                href="mailto:support@chordypi.com"
+                                href="https://github.com/ismailfadlalla/Chordypi/issues" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
                                 style={{
                                     color: '#61dafb',
                                     textDecoration: 'none',
@@ -140,139 +136,25 @@ const Footer = () => {
                     borderTop: '1px solid #444',
                     paddingTop: '20px',
                     display: 'flex',
-                    flexDirection: 'column',
-                    gap: '15px'
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '10px'
                 }}>
-                    {/* Copyright */}
                     <p style={{ 
                         margin: '0',
                         color: '#888',
-                        fontSize: '14px',
-                        textAlign: 'center'
+                        fontSize: '14px'
                     }}>
                         &copy; {new Date().getFullYear()} ChordyPi. All rights reserved.
                     </p>
-                    
-                    {/* Social Media Icons */}
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: '15px',
-                        fontSize: '24px'
+                    <p style={{ 
+                        margin: '0',
+                        color: '#888',
+                        fontSize: '14px'
                     }}>
-                        <a 
-                            href="#"
-                            onClick={(e) => handleSocialClick(e, 'LinkedIn')}
-                            style={{
-                                color: '#888',
-                                transition: 'color 0.3s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '40px',
-                                height: '40px',
-                                border: '1px solid #555',
-                                borderRadius: '5px',
-                                cursor: 'pointer',
-                                textDecoration: 'none'
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.color = '#0077B5'}
-                            onMouseLeave={(e) => e.currentTarget.style.color = '#888'}
-                            title="LinkedIn - Coming Soon"
-                        >
-                            in
-                        </a>
-                        <a 
-                            href="#"
-                            onClick={(e) => handleSocialClick(e, 'Facebook')}
-                            style={{
-                                color: '#888',
-                                transition: 'color 0.3s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '40px',
-                                height: '40px',
-                                border: '1px solid #555',
-                                borderRadius: '5px',
-                                cursor: 'pointer',
-                                textDecoration: 'none'
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.color = '#1877F2'}
-                            onMouseLeave={(e) => e.currentTarget.style.color = '#888'}
-                            title="Facebook - Coming Soon"
-                        >
-                            f
-                        </a>
-                        <a 
-                            href="#"
-                            onClick={(e) => handleSocialClick(e, 'YouTube')}
-                            style={{
-                                color: '#888',
-                                transition: 'color 0.3s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '40px',
-                                height: '40px',
-                                border: '1px solid #555',
-                                borderRadius: '5px',
-                                cursor: 'pointer',
-                                textDecoration: 'none'
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.color = '#FF0000'}
-                            onMouseLeave={(e) => e.currentTarget.style.color = '#888'}
-                            title="YouTube - Coming Soon"
-                        >
-                            ▶
-                        </a>
-                        <a 
-                            href="#"
-                            onClick={(e) => handleSocialClick(e, 'Twitter/X')}
-                            style={{
-                                color: '#888',
-                                transition: 'color 0.3s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '40px',
-                                height: '40px',
-                                border: '1px solid #555',
-                                borderRadius: '5px',
-                                fontWeight: 'bold',
-                                cursor: 'pointer',
-                                textDecoration: 'none'
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.color = '#1DA1F2'}
-                            onMouseLeave={(e) => e.currentTarget.style.color = '#888'}
-                            title="X (Twitter) - Coming Soon"
-                        >
-                            𝕏
-                        </a>
-                        <a 
-                            href="#"
-                            onClick={(e) => handleSocialClick(e, 'Instagram')}
-                            style={{
-                                color: '#888',
-                                transition: 'color 0.3s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '40px',
-                                height: '40px',
-                                border: '1px solid #555',
-                                borderRadius: '5px',
-                                cursor: 'pointer',
-                                textDecoration: 'none'
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.color = '#E4405F'}
-                            onMouseLeave={(e) => e.currentTarget.style.color = '#888'}
-                            title="Instagram - Coming Soon"
-                        >
-                            ⓘ
-                        </a>
-                    </div>
+                        🥧 Pi Network Hackathon 2025
+                    </p>
                 </div>
             </div>
         </footer>
