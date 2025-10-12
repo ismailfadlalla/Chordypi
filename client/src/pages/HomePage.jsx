@@ -15,6 +15,7 @@ import UserLibrary from '../components/library/UserLibrary';
 import SongCard from '../components/common/SongCard';
 import ChordyPiLogo from '../components/common/ChordyPiLogo';
 import Header from '../components/common/Header';
+import Footer from '../components/common/Footer';
 import { useAuth } from '../hooks/useAuth';
 import { analyzeSong, addToHistory, getFavorites, getHistory, addToFavorites, removeFromFavorites, analyzeUploadedAudio } from '../services/api';
 import '../styles/global.css';
@@ -746,6 +747,9 @@ const HomePage = () => {
                     </div>
                 </div>
             )}
+            
+            {/* Footer */}
+            <Footer />
         </div>
     );
 };

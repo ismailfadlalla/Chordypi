@@ -10,7 +10,9 @@ const Footer = () => {
             padding: '30px 0',
             boxSizing: 'border-box',
             backgroundColor: '#282c34',
-            borderTop: '2px solid #444'
+            borderTop: '2px solid #444',
+            position: 'relative',
+            zIndex: 10
         }}>
             <div className="footer-content" style={{
                 width: '100%',
