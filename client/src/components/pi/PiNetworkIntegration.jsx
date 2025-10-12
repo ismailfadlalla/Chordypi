@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './PiNetworkIntegration.css';
 
 const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
@@ -12,6 +12,14 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
 
     // Check if Pi SDK is available (non-blocking check only)
     const isPiAvailable = typeof window !== 'undefined' && window.Pi;
+    
+    // Reset state on mount to handle navigation errors
+    useEffect(() => {
+        console.log('🔄 PiNetworkIntegration component mounted/remounted');
+        setError(null);
+        setIsLoading(false);
+        // Don't reset sdkInitialized - it can persist
+    }, []);
 
     // Initialize Pi SDK (only when user clicks connect)
     const initializePi = async () => {
@@ -165,11 +173,18 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             console.error('❌ Error message:', error.message);
             console.error('❌ Error stack:', error.stack);
             
-            // Handle user decline
-            if (error.message && (error.message.includes('declined') || error.message.includes('denied'))) {
+            // Handle specific error types
+            if (error.message && error.message.includes('Error_blocked_by_Response')) {
+                setError('Navigation error detected. Please refresh the page and try again.');
+                // Reset state
+                setSdkInitialized(false);
+            } else if (error.message && (error.message.includes('declined') || error.message.includes('denied'))) {
                 setError('Authentication declined. Please allow access to continue.');
             } else if (error.message && error.message.includes('timeout')) {
                 setError(error.message);
+            } else if (error.message && error.message.includes('blocked')) {
+                setError('Request blocked. Please refresh the page and try again.');
+                setSdkInitialized(false);
             } else {
                 setError(error.message || 'Failed to authenticate with Pi Network');
             }
