@@ -402,13 +402,70 @@ const HomePage = () => {
                         </div>
                     )}
                     
+                    {/* Authenticated user welcome */}
+                    {user && (
+                        <div className="auth-invitation" style={{
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            color: 'white'
+                        }}>
+                            <p className="auth-message" style={{ fontSize: '20px', fontWeight: '600' }}>
+                                👋 Welcome back, {user.username}!
+                            </p>
+                            <p style={{ fontSize: '14px', marginTop: '10px', opacity: '0.9' }}>
+                                {isPiUser ? '🥧 Pi Network account connected' : 'Free tier with ads'}
+                            </p>
+                            <div className="auth-links" style={{ marginTop: '15px' }}>
+                                <Link 
+                                    to="/signup" 
+                                    className="auth-link signup-link"
+                                    style={{
+                                        background: 'rgba(255,255,255,0.2)',
+                                        backdropFilter: 'blur(10px)',
+                                        border: '2px solid rgba(255,255,255,0.3)',
+                                        color: 'white',
+                                        padding: '12px 24px',
+                                        borderRadius: '8px',
+                                        fontWeight: '600',
+                                        textDecoration: 'none',
+                                        display: 'inline-block',
+                                        transition: 'all 0.3s ease'
+                                    }}
+                                >
+                                    ✨ Upgrade to Premium
+                                </Link>
+                                <Link 
+                                    to="/signup" 
+                                    className="auth-link"
+                                    style={{
+                                        background: 'rgba(255,255,255,0.1)',
+                                        backdropFilter: 'blur(10px)',
+                                        border: '2px solid rgba(255,255,255,0.2)',
+                                        color: 'white',
+                                        padding: '12px 24px',
+                                        borderRadius: '8px',
+                                        fontWeight: '600',
+                                        textDecoration: 'none',
+                                        display: 'inline-block',
+                                        marginLeft: '10px',
+                                        transition: 'all 0.3s ease'
+                                    }}
+                                >
+                                    🚫 Remove Ads
+                                </Link>
+                            </div>
+                            <p style={{ fontSize: '13px', marginTop: '12px', opacity: '0.8' }}>
+                                💎 Pay with Pi Network cryptocurrency
+                            </p>
+                        </div>
+                    )}
+                    
                     {/* Non-user invitation */}
                     {!user && (
                         <div className="auth-invitation">
                             <p className="auth-message">Join thousands of musicians improving their skills</p>
                             <div className="auth-links">
                                 <Link to="/signup" className="auth-link signup-link">
-                                    � Sign Up / Sign In
+                                    🚀 Sign Up / Sign In
                                 </Link>
                             </div>
                             <p className="pi-invitation">
