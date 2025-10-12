@@ -27,24 +27,29 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         try {
             console.log('🥧 Initializing Pi Network SDK...');
             
-            // Get environment variables (Vite uses import.meta.env)
-            const piApiKey = import.meta.env.VITE_PI_API_KEY || 
-                            import.meta.env.VITE_PI_NETWORK_API_KEY || 
-                            process.env.REACT_APP_PI_API_KEY;
-            const environment = import.meta.env.VITE_PI_ENVIRONMENT || 
-                               process.env.REACT_APP_PI_ENVIRONMENT || 
-                               'sandbox';
+            // Get environment variables safely (Vite uses import.meta.env)
+            let environment = 'sandbox'; // Default to sandbox
+            let hasApiKey = false;
+            
+            try {
+                const piApiKey = import.meta?.env?.VITE_PI_API_KEY || 
+                                import.meta?.env?.VITE_PI_NETWORK_API_KEY;
+                environment = import.meta?.env?.VITE_PI_ENVIRONMENT || 'sandbox';
+                hasApiKey = !!piApiKey;
+            } catch (envError) {
+                console.warn('⚠️ Could not read env variables, using defaults:', envError.message);
+            }
             
             console.log('🔧 Pi SDK Config:', {
                 environment,
-                hasApiKey: !!piApiKey,
+                hasApiKey,
                 version: "2.0",
                 sandbox: environment === 'sandbox'
             });
             
             // Initialize Pi SDK - Try simplified initialization first
             try {
-                // Method 1: Simple initialization
+                // Method 1: Simple initialization (recommended for Pi Browser)
                 await window.Pi.init({ version: "2.0" });
                 console.log(`✅ Pi Network SDK initialized (simple mode)`);
             } catch (simpleError) {
@@ -52,9 +57,9 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                 // Method 2: With sandbox flag
                 await window.Pi.init({
                     version: "2.0",
-                    sandbox: environment === 'sandbox'
+                    sandbox: true // Always use sandbox for testing
                 });
-                console.log(`✅ Pi Network SDK initialized (${environment} mode)`);
+                console.log(`✅ Pi Network SDK initialized (sandbox mode)`);
             }
             
             console.log('✅ SDK initialization complete');
