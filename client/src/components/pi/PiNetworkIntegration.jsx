@@ -288,13 +288,24 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             {error && (
                 <div className="error-message">
                     <span>⚠️ {error}</span>
-                    <button 
-                        className="error-dismiss"
-                        onClick={() => setError(null)}
-                        aria-label="Dismiss error"
-                    >
-                        ✕
-                    </button>
+                    <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                        <button 
+                            className="error-dismiss"
+                            onClick={() => setError(null)}
+                            aria-label="Dismiss error"
+                        >
+                            ✕ Dismiss
+                        </button>
+                        {(error.includes('blocked') || error.includes('refresh')) && (
+                            <button 
+                                className="error-dismiss"
+                                onClick={() => window.location.reload()}
+                                style={{ background: '#4CAF50' }}
+                            >
+                                🔄 Refresh Page
+                            </button>
+                        )}
+                    </div>
                 </div>
             )}
 
@@ -316,13 +327,29 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                         </div>
                     )}
                     
-                    <button 
-                        className="pi-auth-button"
-                        onClick={handlePiAuth}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? '🔄 Connecting...' : '🥧 Sign in with Pi Network'}
-                    </button>
+                    <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+                        <button 
+                            className="pi-auth-button"
+                            onClick={handlePiAuth}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? '🔄 Connecting...' : '🥧 Sign in with Pi Network'}
+                        </button>
+                        
+                        {!isLoading && sdkInitialized && (
+                            <button 
+                                className="pi-auth-button"
+                                onClick={() => {
+                                    setSdkInitialized(false);
+                                    setError(null);
+                                    console.log('🔄 SDK state reset');
+                                }}
+                                style={{ background: '#FF9800', fontSize: '14px' }}
+                            >
+                                🔧 Reset SDK
+                            </button>
+                        )}
+                    </div>
                     
                     {isLoading && (
                         <>
