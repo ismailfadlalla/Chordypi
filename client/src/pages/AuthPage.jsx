@@ -141,12 +141,19 @@ const AuthPage = () => {
 
     const handlePiAuth = async (piUserData) => {
         setPiError('');
+        setIsAuthenticating(true);
         
         try {
-            console.log('🥧 Pi Network authentication:', piUserData);
+            console.log('🥧 Pi Network authentication received:', piUserData);
+            console.log('🥧 Pi user data:', JSON.stringify(piUserData, null, 2));
             setPiUser(piUserData);
             
+            if (!piUserData || !piUserData.username) {
+                throw new Error('Invalid Pi user data received');
+            }
+            
             // Create account using Pi Network data
+            console.log('📝 Creating account for Pi user:', piUserData.username);
             await signUp(
                 piUserData.username + '@pi.network', // Temporary email
                 'pi-network-auth', // Temporary password
@@ -154,11 +161,16 @@ const AuthPage = () => {
             );
             
             console.log('✅ Pi Network account created/signed in!');
+            console.log('🔄 Redirecting to home page...');
+            
+            setIsAuthenticating(false);
             history.push('/');
             
         } catch (err) {
             console.error('❌ Pi Network authentication error:', err);
+            console.error('❌ Error details:', err.message, err.stack);
             setPiError(err.message || 'Pi Network authentication failed.');
+            setIsAuthenticating(false);
         }
     };
 
