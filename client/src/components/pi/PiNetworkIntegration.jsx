@@ -108,9 +108,22 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         setError(null);
 
         try {
-            console.log('🔐 Calling Pi.authenticate directly...');
+            // ALWAYS initialize SDK first
+            if (!sdkInitialized) {
+                console.log('⚙️ Initializing Pi SDK before authentication...');
+                try {
+                    await window.Pi.init({ version: "2.0" });
+                    console.log('✅ Pi SDK initialized successfully');
+                    setSdkInitialized(true);
+                } catch (initError) {
+                    console.error('❌ Pi SDK init failed:', initError);
+                    throw new Error(`Failed to initialize Pi SDK: ${initError.message}`);
+                }
+            }
             
-            // Try direct authentication - some Pi SDK versions don't need init
+            console.log('🔐 Calling Pi.authenticate...');
+            
+            // Now authenticate
             const authPromise = window.Pi.authenticate(
                 ['username', 'payments'],
                 (payment) => {
@@ -134,7 +147,6 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             console.log('✅ Pi Authentication successful:', auth);
             setPiUser(auth.user);
             setIsAuthenticated(true);
-            setSdkInitialized(true); // Mark as initialized after successful auth
             
             // Call the parent callback if provided
             if (onAuthSuccess) {
