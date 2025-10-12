@@ -408,14 +408,11 @@ const HomePage = () => {
                             <p className="auth-message">Join thousands of musicians improving their skills</p>
                             <div className="auth-links">
                                 <Link to="/signup" className="auth-link signup-link">
-                                    🚀 Get Started Free
-                                </Link>
-                                <Link to="/signin" className="auth-link signin-link">
-                                    🔑 Sign In
+                                    � Sign Up / Sign In
                                 </Link>
                             </div>
                             <p className="pi-invitation">
-                                💎 Pi Network users get premium features!{' '}
+                                💎 Pi Network users get exclusive benefits!{' '}
                                 <Link to="/signup?method=pi" className="pi-link">Connect with Pi</Link>
                             </p>
                         </div>
