@@ -13,12 +13,51 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
     // Check if Pi SDK is available (non-blocking check only)
     const isPiAvailable = typeof window !== 'undefined' && window.Pi;
     
-    // Reset state on mount to handle navigation errors
+    // Reset state on mount to handle navigation errors and clear corrupted SDK state
     useEffect(() => {
         console.log('🔄 PiNetworkIntegration component mounted/remounted');
+        
+        // Clear any corrupted state
         setError(null);
         setIsLoading(false);
-        // Don't reset sdkInitialized - it can persist
+        
+        // CRITICAL: Clear any Pi SDK cached state from browser storage
+        // This fixes the persistent "Error_blocked_by_Response" issue
+        try {
+            // Clear any Pi-related localStorage items
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && (key.toLowerCase().includes('pi') || key.toLowerCase().includes('minepi'))) {
+                    keysToRemove.push(key);
+                }
+            }
+            keysToRemove.forEach(key => {
+                console.log('🧹 Clearing localStorage key:', key);
+                localStorage.removeItem(key);
+            });
+            
+            // Clear sessionStorage as well
+            const sessionKeysToRemove = [];
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                if (key && (key.toLowerCase().includes('pi') || key.toLowerCase().includes('minepi'))) {
+                    sessionKeysToRemove.push(key);
+                }
+            }
+            sessionKeysToRemove.forEach(key => {
+                console.log('🧹 Clearing sessionStorage key:', key);
+                sessionStorage.removeItem(key);
+            });
+            
+            console.log('✅ Browser storage cleanup complete');
+            
+            // Force SDK to reinitialize
+            setSdkInitialized(false);
+            
+        } catch (storageError) {
+            console.warn('⚠️ Could not clear browser storage:', storageError);
+        }
     }, []);
 
     // Initialize Pi SDK (only when user clicks connect)
