@@ -355,19 +355,6 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                         </div>
                     )}
                 </div>
-            )}              ✕ Dismiss
-                        </button>
-                        {(error.includes('blocked') || error.includes('refresh')) && (
-                            <button 
-                                className="error-dismiss"
-                                onClick={() => window.location.reload()}
-                                style={{ background: '#4CAF50' }}
-                            >
-                                🔄 Refresh Page
-                            </button>
-                        )}
-                    </div>
-                </div>
             )}
 
             {!isAuthenticated ? (
