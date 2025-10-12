@@ -249,12 +249,24 @@ const AuthPage = () => {
                     )}                    {/* Traditional Authentication */}
                     {authMethod === 'traditional' && (
                         <div className="traditional-auth">
-                            <h2>{isSignUp ? '🚀 Create Account' : '🔑 Welcome Back'}</h2>
+                            <h2>{isSignUp ? '🚀 Create Free Account' : '🔑 Welcome Back'}</h2>
                             <p className="auth-description">
                                 {isSignUp 
-                                    ? 'Join thousands of guitar learners worldwide!' 
+                                    ? '✨ Get full access with ads included - upgrade to Pi Network for premium features!' 
                                     : 'Sign in to access your chord history and favorites.'}
                             </p>
+                            
+                            <div className="free-tier-badge" style={{
+                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                color: 'white',
+                                padding: '12px 20px',
+                                borderRadius: '8px',
+                                marginBottom: '20px',
+                                fontSize: '14px',
+                                fontWeight: '500'
+                            }}>
+                                🎸 Free Tier: Full app access with ads included
+                            </div>
                             
                             <AuthForm 
                                 onSubmit={handleTraditionalAuth}
@@ -288,6 +300,18 @@ const AuthPage = () => {
                             <p className="auth-description">
                                 Connect with your Pi Network account for secure, blockchain-based authentication.
                             </p>
+                            
+                            <div className="free-tier-badge" style={{
+                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                color: 'white',
+                                padding: '12px 20px',
+                                borderRadius: '8px',
+                                marginBottom: '20px',
+                                fontSize: '14px',
+                                fontWeight: '500'
+                            }}>
+                                🎸 Free Tier: Full app access with ads included • Upgrade for premium features
+                            </div>
                             
                             <PiNetworkIntegration 
                                 onAuthSuccess={handlePiAuth}

@@ -216,12 +216,12 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
 
     // Premium feature: Unlock advanced chord analysis
     const unlockPremiumFeatures = () => {
-        createPiPayment(1, 'ChordyPi Premium Access - Advanced Features');
+        createPiPayment(0.000095493, 'ChordyPi Premium Access - Advanced Features');
     };
 
     // Premium feature: Remove ads
     const removeAds = () => {
-        createPiPayment(0.5, 'ChordyPi - Remove Advertisements');
+        createPiPayment(0.0000477466, 'ChordyPi - Remove Advertisements');
     };
 
     // Show Pi Browser required message if SDK is not available
@@ -360,13 +360,41 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                     </div>
 
                     <div className="pi-premium-features">
-                        <h4>🌟 Premium Features</h4>
+                        <h4>🌟 Choose Your Experience</h4>
+                        
+                        {/* Free Option with Ads */}
+                        <div className="premium-option" style={{ 
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            border: '2px solid #667eea'
+                        }}>
+                            <div className="feature-info">
+                                <h5>🆓 Use Free (with ads)</h5>
+                                <p>Access all basic features with advertisement support.</p>
+                                <span className="pi-price" style={{ color: '#fff' }}>FREE</span>
+                            </div>
+                            <button 
+                                className="pi-payment-button free"
+                                onClick={() => {
+                                    console.log('User chose free version with ads');
+                                    if (onAuthSuccess) {
+                                        onAuthSuccess(piUser);
+                                    }
+                                }}
+                                style={{
+                                    background: '#fff',
+                                    color: '#667eea',
+                                    fontWeight: 'bold'
+                                }}
+                            >
+                                ✅ Continue Free
+                            </button>
+                        </div>
                         
                         <div className="premium-option">
                             <div className="feature-info">
                                 <h5>🎸 Advanced Chord Analysis</h5>
                                 <p>Unlock AI-powered chord recognition, key detection, and professional chord progressions.</p>
-                                <span className="pi-price">1 π</span>
+                                <span className="pi-price">0.000095493 π</span>
                             </div>
                             <button 
                                 className="pi-payment-button premium"
@@ -381,7 +409,7 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                             <div className="feature-info">
                                 <h5>🚫 Remove Advertisements</h5>
                                 <p>Enjoy an ad-free experience while learning guitar chords.</p>
-                                <span className="pi-price">0.5 π</span>
+                                <span className="pi-price">0.0000477466 π</span>
                             </div>
                             <button 
                                 className="pi-payment-button ads"
