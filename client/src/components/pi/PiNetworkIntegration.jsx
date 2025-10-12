@@ -134,11 +134,11 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             console.log('⏳ Waiting for Pi Browser permission dialog...');
             console.log('💡 If the dialog doesn\'t appear, your domain may not be verified yet.');
             
-            // Increase timeout to 30 seconds - if it doesn't work by then, something is wrong
+            // Increase timeout to 60 seconds - give user time to review and click "Allow"
             const timeoutPromise = new Promise((_, reject) => 
                 setTimeout(() => {
                     reject(new Error('TIMEOUT_NO_DIALOG'));
-                }, 30000)
+                }, 60000) // 60 seconds timeout
             );
             
             const auth = await Promise.race([authPromise, timeoutPromise]);
@@ -166,15 +166,15 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             
             // Handle specific error types
             if (error.message && error.message.includes('Error_blocked_by_Response')) {
-                setError('Pi SDK Error: Please clear your browser cache and reload the page manually.');
+                setError('⚠️ Pi SDK blocked. Please reload the page and try again.');
                 setSdkInitialized(false);
             } else if (error.message && error.message.includes('TIMEOUT_NO_DIALOG')) {
-                setError('Pi authentication dialog timeout. Please try again.');
-                setSdkInitialized(false);
+                setError('⏱️ Authentication timed out after 60 seconds. The permission dialog may not have appeared. Click "Try Again" below or refresh the page.');
+                setSdkInitialized(false); // Reset so user can try again
             } else if (error.message && (error.message.includes('declined') || error.message.includes('denied'))) {
-                setError('Authentication declined. Please allow access to continue.');
+                setError('❌ Authentication declined. Please click "Allow" in the Pi dialog to continue.');
             } else if (error.message && error.message.includes('blocked')) {
-                setError('Pi SDK Error: Please clear your browser cache and reload the page manually.');
+                setError('⚠️ Pi SDK blocked. Please reload the page and try again.');
                 setSdkInitialized(false);
             } else {
                 setError(error.message || 'Failed to authenticate with Pi Network');
@@ -267,24 +267,30 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
 
             {error && (
                 <div className="error-message">
-                    <span>⚠️ {
-                        error === 'SDK_CORRUPTED' 
-                            ? 'SDK state corrupted. Auto-refreshing page in 2 seconds...'
-                            : error === 'TIMEOUT_NO_DIALOG'
-                            ? 'Permission dialog timed out. Auto-refreshing in 3 seconds... Please ensure domain is verified in Pi Developer Portal.'
-                            : error
-                    }</span>
-                    {error !== 'SDK_CORRUPTED' && error !== 'TIMEOUT_NO_DIALOG' && (
-                        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                    <span>⚠️ {error}</span>
+                    <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                        <button 
+                            className="error-dismiss"
+                            onClick={() => setError(null)}
+                            aria-label="Dismiss error"
+                        >
+                            ✕ Dismiss
+                        </button>
+                        {error.includes('timed out') && (
                             <button 
                                 className="error-dismiss"
-                                onClick={() => setError(null)}
-                                aria-label="Dismiss error"
+                                onClick={() => {
+                                    setError(null);
+                                    setSdkInitialized(false);
+                                    handlePiAuth();
+                                }}
+                                style={{ background: '#4CAF50' }}
+                                aria-label="Try again"
                             >
-                                ✕ Dismiss
+                                🔄 Try Again
                             </button>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             )}
 
