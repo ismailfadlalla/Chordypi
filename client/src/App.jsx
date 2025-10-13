@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, useLocation } from 'react-router-dom';
 import { PlayerProvider } from './context/PlayerContext';
+import PiNetworkAuth from './components/auth/PiNetworkAuth';
 import HomePage from './pages/HomePage';
 import PlayerPage from './pages/PlayerPage';
 import ProfilePage from './pages/ProfilePage';
@@ -125,6 +126,61 @@ const AppContent = () => {
 };
 
 const App = () => {
+    const [piAuthenticated, setPiAuthenticated] = React.useState(false);
+    const [checkingAuth, setCheckingAuth] = React.useState(true);
+
+    React.useEffect(() => {
+        // Check if user is already authenticated
+        const checkExistingAuth = () => {
+            const piAuth = localStorage.getItem('piNetworkAuth');
+            if (piAuth) {
+                try {
+                    const authData = JSON.parse(piAuth);
+                    // Check if auth is still valid (less than 24 hours old)
+                    const isValid = authData.timestamp && (Date.now() - authData.timestamp < 24 * 60 * 60 * 1000);
+                    if (isValid) {
+                        console.log('✅ Existing Pi authentication found');
+                        setPiAuthenticated(true);
+                    }
+                } catch (e) {
+                    console.error('Error parsing Pi auth:', e);
+                }
+            }
+            setCheckingAuth(false);
+        };
+
+        checkExistingAuth();
+    }, []);
+
+    const handleAuthenticated = (user) => {
+        console.log('✅ Pi user authenticated:', user);
+        setPiAuthenticated(true);
+    };
+
+    // Show loading while checking auth
+    if (checkingAuth) {
+        return (
+            <div style={{
+                width: '100vw',
+                height: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+            }}>
+                <div style={{ color: 'white', fontSize: '20px' }}>
+                    Loading ChordyPi...
+                </div>
+            </div>
+        );
+    }
+
+    // Show Pi authentication screen if not authenticated
+    if (!piAuthenticated) {
+        return <PiNetworkAuth onAuthenticated={handleAuthenticated} />;
+    }
+
+    // Show main app if authenticated
     return (
         <PlayerProvider>
             <Router>
