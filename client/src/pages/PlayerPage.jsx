@@ -1057,17 +1057,17 @@ const PlayerPage = () => {
                 <div style={{
                     backgroundColor: 'rgba(255,255,255,0.05)',
                     borderRadius: '15px',
-                    padding: '10px',
-                    marginTop: '10px',
+                    padding: '15px',
+                    marginTop: '15px',
                     maxWidth: '900px',
                     marginLeft: 'auto',
                     marginRight: 'auto'
                 }}>
                     <h3 style={{ 
                         color: 'white', 
-                        marginBottom: '10px', 
+                        marginBottom: '15px', 
                         textAlign: 'center',
-                        fontSize: '16px',
+                        fontSize: '18px',
                         textTransform: 'uppercase',
                         letterSpacing: '1px'
                     }}>
@@ -1076,30 +1076,28 @@ const PlayerPage = () => {
                     <div style={{
                         display: 'flex',
                         flexDirection: window.innerWidth > 768 ? 'row' : 'column',
-                        gap: '16px',
+                        gap: '20px',
                         justifyContent: 'center',
-                        alignItems: 'flex-start'
+                        alignItems: 'stretch'
                     }}>
                         {/* NOW PLAYING Fretboard */}
                         <div style={{
                             flex: 1,
                             minWidth: '0',
                             background: 'linear-gradient(135deg, rgba(255, 243, 176, 0.08), rgba(255, 224, 130, 0.03))',
-                            border: '1px solid rgba(255, 215, 0, 0.2)',
-                            borderRadius: '10px',
-                            padding: '10px',
-                            maxHeight: '180px',
-                            overflow: 'hidden',
+                            border: '2px solid rgba(255, 215, 0, 0.3)',
+                            borderRadius: '12px',
+                            padding: '15px',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            justifyContent: 'center'
+                            justifyContent: 'flex-start'
                         }}>
                             <div style={{
                                 color: '#FFD700',
-                                fontSize: '12px',
+                                fontSize: '13px',
                                 fontWeight: 'bold',
-                                marginBottom: '8px',
+                                marginBottom: '12px',
                                 textAlign: 'center'
                             }}>● NOW PLAYING</div>
                             <ChordProgressionDisplay
@@ -1109,7 +1107,7 @@ const PlayerPage = () => {
                                 currentChord={currentChord || realisticChords[0]?.chord}
                                 currentChordIndex={currentChordIndex}
                                 displayMode="current-only"
-                                fretboardHeight={90}
+                                fretboardHeight={120}
                             />
                         </div>
                         {/* UP NEXT Fretboard */}
@@ -1117,21 +1115,19 @@ const PlayerPage = () => {
                             flex: 1,
                             minWidth: '0',
                             background: 'linear-gradient(135deg, rgba(108, 92, 231, 0.10), rgba(137, 155, 232, 0.06))',
-                            border: '1px solid rgba(108, 92, 231, 0.18)',
-                            borderRadius: '10px',
-                            padding: '10px',
-                            maxHeight: '180px',
-                            overflow: 'hidden',
+                            border: '2px solid rgba(108, 92, 231, 0.25)',
+                            borderRadius: '12px',
+                            padding: '15px',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            justifyContent: 'center'
+                            justifyContent: 'flex-start'
                         }}>
                             <div style={{
                                 color: '#6c5ce7',
-                                fontSize: '12px',
+                                fontSize: '13px',
                                 fontWeight: 'bold',
-                                marginBottom: '8px',
+                                marginBottom: '12px',
                                 textAlign: 'center'
                             }}>○ UP NEXT</div>
                             <ChordProgressionDisplay
@@ -1141,7 +1137,7 @@ const PlayerPage = () => {
                                 currentChord={nextChord || realisticChords[1]?.chord}
                                 currentChordIndex={currentChordIndex + 1}
                                 displayMode="next-only"
-                                fretboardHeight={90}
+                                fretboardHeight={120}
                             />
                         </div>
                     </div>

@@ -219,13 +219,13 @@ const EnhancedPiNetworkIntegration = () => {
         setError(null);
 
         try {
-            const auth = await window.Pi.authenticate(
-                ['username', 'payments'],
-                (payment) => {
+            const auth = await window.Pi.authenticate({
+                scopes: ['username', 'payments'],
+                onIncompletePaymentFound: (payment) => {
                     console.log('💰 Incomplete payment found:', payment);
                     setPaymentInProgress(payment);
                 }
-            );
+            });
 
             console.log('🔐 Pi Authentication successful:', auth);
             

@@ -282,24 +282,20 @@
   }
 
   .search-input-wrapper {
-    flex-direction: column;
-    align-items: stretch;
-    padding: var(--space-3);
+    flex-wrap: wrap;
   }
 
   .search-input-ai {
     width: 100%;
-    padding: var(--space-3);
-    font-size: var(--text-base);
+    order: 1;
   }
 
   .search-icon-ai {
-    width: 100%;
-    justify-content: flex-start;
-    padding-left: var(--space-2);
+    order: 0;
   }
 
   .search-submit {
+    order: 2;
     width: 100%;
     margin-top: var(--space-2);
   }

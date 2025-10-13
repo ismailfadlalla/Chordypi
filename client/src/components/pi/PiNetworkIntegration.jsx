@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
 import './PiNetworkIntegration.css';
 
 const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
-    const history = useHistory();
     const [piUser, setPiUser] = useState(null);
     const [piPayment, setPiPayment] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -14,16 +12,6 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
 
     // Check if Pi SDK is available (non-blocking check only)
     const isPiAvailable = typeof window !== 'undefined' && window.Pi;
-    
-    // Reset state on mount
-    useEffect(() => {
-        console.log('🔄 PiNetworkIntegration component mounted');
-        
-        // Clear any error state
-        setError(null);
-        setIsLoading(false);
-        
-    }, []);
 
     // Initialize Pi SDK (only when user clicks connect)
     const initializePi = async () => {
@@ -38,160 +26,73 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
 
         try {
             console.log('🥧 Initializing Pi Network SDK...');
-            console.log('🔍 window.Pi object:', window.Pi);
-            console.log('🔍 window.Pi.init type:', typeof window.Pi.init);
             
-            // Check if init method exists
-            if (!window.Pi.init) {
-                console.error('❌ window.Pi.init is not a function!');
-                setError('Pi SDK init method not available. SDK may not be loaded correctly.');
-                return false;
-            }
+            // Get environment variables
+            const piApiKey = process.env.REACT_APP_PI_API_KEY || process.env.REACT_APP_PI_NETWORK_API_KEY;
+            const environment = process.env.REACT_APP_PI_ENVIRONMENT || 'sandbox';
             
-            // Get environment variables safely (Vite uses import.meta.env)
-            let environment = 'sandbox'; // Default to sandbox
-            let hasApiKey = false;
-            
-            try {
-                const piApiKey = import.meta?.env?.VITE_PI_API_KEY || 
-                                import.meta?.env?.VITE_PI_NETWORK_API_KEY;
-                environment = import.meta?.env?.VITE_PI_ENVIRONMENT || 'sandbox';
-                hasApiKey = !!piApiKey;
-            } catch (envError) {
-                console.warn('⚠️ Could not read env variables, using defaults:', envError.message);
-            }
-            
-            console.log('🔧 Pi SDK Config:', {
-                environment,
-                hasApiKey,
+            // Initialize Pi SDK - fast, non-blocking
+            await window.Pi.init({
                 version: "2.0",
-                sandbox: true // REQUIRED for development/testing
+                sandbox: environment === 'sandbox' // Use sandbox mode based on environment
             });
             
-            // Initialize Pi SDK with sandbox flag set to TRUE (required by Pi Developer Portal)
-            console.log('🔄 Calling window.Pi.init({ version: "2.0", sandbox: true })...');
-            
-            const initResult = await window.Pi.init({
-                version: "2.0",
-                sandbox: true // REQUIRED: Set to true as per Pi Developer Portal instructions
-            });
-            
-            console.log('✅ Pi Network SDK initialized with sandbox=true:', initResult);
-            console.log('✅ SDK initialization complete');
+            console.log(`✅ Pi Network SDK initialized successfully (${environment} mode)`);
             setSdkInitialized(true);
             return true;
             
         } catch (error) {
             console.error('❌ Failed to initialize Pi SDK:', error);
-            console.error('❌ Error details:', {
-                message: error.message,
-                stack: error.stack,
-                type: error.constructor.name
-            });
-            setError(`Failed to initialize Pi Network: ${error.message || 'Unknown error'}`);
+            setError('Failed to initialize Pi Network. Please try again.');
             return false;
         }
     };
 
     // Authenticate with Pi Network - triggers native Pi permission dialog
     const handlePiAuth = async () => {
-        // Debug: Confirm button click
-        console.log('🔘 Pi Auth button clicked!');
-        console.log('🔍 Window.Pi available:', !!window.Pi);
-        console.log('🔍 Window.Pi methods:', Object.keys(window.Pi || {}));
-        
-        if (!window.Pi) {
-            setError('Pi SDK not available. Please open this app in Pi Browser.');
-            return;
-        }
-        
         setIsLoading(true);
         setError(null);
 
         try {
-            // ALWAYS initialize SDK first with sandbox flag
+            // Initialize SDK first if needed
             if (!sdkInitialized) {
-                console.log('⚙️ Initializing Pi SDK before authentication...');
-                try {
-                    await window.Pi.init({ 
-                        version: "2.0",
-                        sandbox: true // REQUIRED for development
-                    });
-                    console.log('✅ Pi SDK initialized successfully with sandbox=true');
-                    setSdkInitialized(true);
-                } catch (initError) {
-                    console.error('❌ Pi SDK init failed:', initError);
-                    throw new Error(`Failed to initialize Pi SDK: ${initError.message}`);
+                const initialized = await initializePi();
+                if (!initialized) {
+                    setIsLoading(false);
+                    return;
                 }
             }
+
+            console.log('🔐 Requesting Pi Network authentication...');
             
-            console.log('🔐 Calling Pi.authenticate...');
-            console.log('🔍 Pi.authenticate method exists:', typeof window.Pi.authenticate);
-            console.log('🔍 Scopes requested: ["username", "payments"]');
-            
-            // Now authenticate - using array format for scopes
-            const authPromise = window.Pi.authenticate(
-                ['username', 'payments'],
-                (payment) => {
-                    console.log('💰 Incomplete payment callback triggered:', payment);
+            // This triggers the native Pi Browser permission dialog
+            // User will see: "Share information with ChordyPi?"
+            // - Auth: Authenticate you on this app with your Pi account
+            // - Username: Your Pi username
+            // - Roles: Your Pi Community roles
+            const auth = await window.Pi.authenticate({
+                scopes: ['username', 'payments'],
+                onIncompletePaymentFound: (payment) => {
+                    console.log('💰 Incomplete payment found:', payment);
                     setPiPayment(payment);
                 }
-            );
-            
-            console.log('🔄 authPromise created:', authPromise);
-            console.log('⏳ Waiting for Pi Browser permission dialog...');
-            console.log('💡 User should see a Pi permission dialog now...');
-            console.log('💡 If the dialog doesn\'t appear, your domain may not be verified in Pi Developer Portal.');
-            
-            // Increase timeout to 60 seconds - give user time to review and click "Allow"
-            const timeoutPromise = new Promise((_, reject) => 
-                setTimeout(() => {
-                    console.error('❌ TIMEOUT: Authentication dialog did not complete in 60 seconds');
-                    console.error('❌ This usually means:');
-                    console.error('   1. The permission dialog did not appear');
-                    console.error('   2. Your domain is not verified in Pi Developer Portal');
-                    console.error('   3. The Pi Browser is blocking the dialog');
-                    reject(new Error('TIMEOUT_NO_DIALOG'));
-                }, 60000) // 60 seconds timeout
-            );
-            
-            console.log('⏱️ Starting Promise.race with 60-second timeout...');
-            const auth = await Promise.race([authPromise, timeoutPromise]);
-            console.log('✅ Promise.race resolved! Authentication response received.');
+            });
 
-            console.log('✅ Pi Authentication successful!');
-            console.log('✅ Auth object:', JSON.stringify(auth, null, 2));
-            console.log('✅ User data:', auth.user);
-            
+            console.log('✅ Pi Authentication successful:', auth);
             setPiUser(auth.user);
             setIsAuthenticated(true);
             
             // Call the parent callback if provided
             if (onAuthSuccess) {
-                console.log('📞 Calling onAuthSuccess callback with user:', auth.user);
                 onAuthSuccess(auth.user);
-            } else {
-                console.warn('⚠️ No onAuthSuccess callback provided');
             }
             
         } catch (error) {
             console.error('❌ Pi Authentication failed:', error);
-            console.error('❌ Error type:', error.constructor.name);
-            console.error('❌ Error message:', error.message);
-            console.error('❌ Error stack:', error.stack);
             
-            // Handle specific error types
-            if (error.message && error.message.includes('Error_blocked_by_Response')) {
-                setError('⚠️ Pi SDK blocked. Please reload the page and try again.');
-                setSdkInitialized(false);
-            } else if (error.message && error.message.includes('TIMEOUT_NO_DIALOG')) {
-                setError('⏱️ Authentication timed out after 60 seconds. The permission dialog may not have appeared. Click "Try Again" below or refresh the page.');
-                setSdkInitialized(false); // Reset so user can try again
-            } else if (error.message && (error.message.includes('declined') || error.message.includes('denied'))) {
-                setError('❌ Authentication declined. Please click "Allow" in the Pi dialog to continue.');
-            } else if (error.message && error.message.includes('blocked')) {
-                setError('⚠️ Pi SDK blocked. Please reload the page and try again.');
-                setSdkInitialized(false);
+            // Handle user decline
+            if (error.message && error.message.includes('declined')) {
+                setError('Authentication declined. Please allow access to continue.');
             } else {
                 setError(error.message || 'Failed to authenticate with Pi Network');
             }
@@ -237,23 +138,13 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
     };
 
     // Premium feature: Unlock advanced chord analysis
-    const unlockPremiumFeatures = async () => {
-        console.log('🎸 User clicked: Unlock Premium Features');
-        const payment = await createPiPayment(0.000095493, 'ChordyPi Premium Access - Advanced Features');
-        if (payment) {
-            console.log('✅ Premium payment successful, redirecting...');
-            setTimeout(() => history.push('/'), 1000);
-        }
+    const unlockPremiumFeatures = () => {
+        createPiPayment(1, 'ChordyPi Premium Access - Advanced Features');
     };
 
     // Premium feature: Remove ads
-    const removeAds = async () => {
-        console.log('🚫 User clicked: Remove Ads');
-        const payment = await createPiPayment(0.0000477466, 'ChordyPi - Remove Advertisements');
-        if (payment) {
-            console.log('✅ Remove ads payment successful, redirecting...');
-            setTimeout(() => history.push('/'), 1000);
-        }
+    const removeAds = () => {
+        createPiPayment(0.5, 'ChordyPi - Remove Advertisements');
     };
 
     // Show Pi Browser required message if SDK is not available
@@ -281,42 +172,27 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
 
     return (
         <div className="pi-integration-container">
-            {/* Debug Info - Remove after testing */}
-            <div style={{background: '#ffe0e0', padding: '10px', marginBottom: '10px', fontSize: '12px', borderRadius: '5px'}}>
-                <strong>🔧 Debug Info:</strong><br/>
-                Pi SDK Available: {isPiAvailable ? '✅ Yes' : '❌ No'}<br/>
-                SDK Initialized: {sdkInitialized ? '✅ Yes' : '❌ No'}<br/>
-                Authenticated: {isAuthenticated ? '✅ Yes' : '❌ No'}<br/>
-                Loading: {isLoading ? '✅ Yes' : '❌ No'}<br/>
-                Error: {error || 'None'}
+            <div className="pi-header">
+                <h3>🥧 Pi Network Integration</h3>
+                <div className="pi-status">
+                    {isAuthenticated ? (
+                        <span className="status-connected">✅ Connected</span>
+                    ) : (
+                        <span className="status-disconnected">⭕ Not Connected</span>
+                    )}
+                </div>
             </div>
 
             {error && (
                 <div className="error-message">
                     <span>⚠️ {error}</span>
-                    <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                        <button 
-                            className="error-dismiss"
-                            onClick={() => setError(null)}
-                            aria-label="Dismiss error"
-                        >
-                            ✕ Dismiss
-                        </button>
-                        {error.includes('timed out') && (
-                            <button 
-                                className="error-dismiss"
-                                onClick={() => {
-                                    setError(null);
-                                    setSdkInitialized(false);
-                                    handlePiAuth();
-                                }}
-                                style={{ background: '#4CAF50' }}
-                                aria-label="Try again"
-                            >
-                                🔄 Try Again
-                            </button>
-                        )}
-                    </div>
+                    <button 
+                        className="error-dismiss"
+                        onClick={() => setError(null)}
+                        aria-label="Dismiss error"
+                    >
+                        ✕
+                    </button>
                 </div>
             )}
 
@@ -325,62 +201,13 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                     <p>Connect your Pi Network account to sign in securely!</p>
                     <p className="pi-auth-hint">📱 You'll be asked to allow ChordyPi to access your Pi username</p>
                     
-                    {!isPiAvailable && (
-                        <div className="pi-warning" style={{
-                            background: '#fff3cd',
-                            color: '#856404',
-                            padding: '12px',
-                            borderRadius: '8px',
-                            marginBottom: '15px',
-                            fontSize: '14px'
-                        }}>
-                            ⚠️ <strong>Important:</strong> This app must be opened in the official Pi Browser app to use Pi Network authentication.
-                        </div>
-                    )}
-                    
-                    <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-                        <button 
-                            className="pi-auth-button"
-                            onClick={handlePiAuth}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? '🔄 Connecting...' : '🥧 Sign in with Pi Network'}
-                        </button>
-                    </div>
-                    
-                    {isLoading && (
-                        <>
-                            <div style={{
-                                background: '#e3f2fd',
-                                color: '#1976d2',
-                                padding: '12px',
-                                borderRadius: '8px',
-                                marginTop: '10px',
-                                fontSize: '14px',
-                                textAlign: 'left'
-                            }}>
-                                <strong>⏳ Waiting for permission dialog...</strong>
-                                <p style={{ margin: '8px 0 0 0', fontSize: '13px' }}>
-                                    If the Pi Browser permission dialog doesn't appear:
-                                </p>
-                                <ul style={{ margin: '8px 0 0 20px', fontSize: '13px' }}>
-                                    <li>Make sure your app is submitted in Pi Developer Portal</li>
-                                    <li>Verify the domain is approved (may take 5-10 minutes)</li>
-                                    <li>Try refreshing the page</li>
-                                </ul>
-                            </div>
-                            <button 
-                                className="pi-auth-button"
-                                onClick={() => {
-                                    setIsLoading(false);
-                                    setError('Authentication cancelled. Please try again.');
-                                }}
-                                style={{ marginTop: '10px', background: '#666' }}
-                            >
-                                ✕ Cancel
-                            </button>
-                        </>
-                    )}
+                    <button 
+                        className="pi-auth-button"
+                        onClick={handlePiAuth}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? '🔄 Connecting...' : '🥧 Sign in with Pi Network'}
+                    </button>
                     
                     <div className="pi-auth-benefits">
                         <p><strong>Why Pi Network?</strong></p>
@@ -399,41 +226,13 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                     </div>
 
                     <div className="pi-premium-features">
-                        <h4>🌟 Choose Your Experience</h4>
-                        
-                        {/* Free Option with Ads */}
-                        <div className="premium-option" style={{ 
-                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                            border: '2px solid #667eea'
-                        }}>
-                            <div className="feature-info">
-                                <h5>🆓 Use Free (with ads)</h5>
-                                <p>Access all basic features with advertisement support.</p>
-                                <span className="pi-price" style={{ color: '#fff' }}>FREE</span>
-                            </div>
-                            <button 
-                                className="pi-payment-button free"
-                                onClick={() => {
-                                    console.log('✅ User chose free version with ads');
-                                    console.log('🔄 Redirecting to home page...');
-                                    // Redirect to home page with free tier
-                                    history.push('/');
-                                }}
-                                style={{
-                                    background: '#fff',
-                                    color: '#667eea',
-                                    fontWeight: 'bold'
-                                }}
-                            >
-                                ✅ Continue Free
-                            </button>
-                        </div>
+                        <h4>🌟 Premium Features</h4>
                         
                         <div className="premium-option">
                             <div className="feature-info">
                                 <h5>🎸 Advanced Chord Analysis</h5>
                                 <p>Unlock AI-powered chord recognition, key detection, and professional chord progressions.</p>
-                                <span className="pi-price">0.000095493 π</span>
+                                <span className="pi-price">1 π</span>
                             </div>
                             <button 
                                 className="pi-payment-button premium"
@@ -448,7 +247,7 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                             <div className="feature-info">
                                 <h5>🚫 Remove Advertisements</h5>
                                 <p>Enjoy an ad-free experience while learning guitar chords.</p>
-                                <span className="pi-price">0.0000477466 π</span>
+                                <span className="pi-price">0.5 π</span>
                             </div>
                             <button 
                                 className="pi-payment-button ads"

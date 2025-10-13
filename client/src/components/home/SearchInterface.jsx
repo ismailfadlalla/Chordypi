@@ -5,13 +5,6 @@ import '../../styles/components/search-enhanced.css';
 
 const SearchInterface = ({ onSearch }) => {
     const [query, setQuery] = useState('');
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-
-    React.useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < 768);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     const handleInputChange = (e) => {
         setQuery(e.target.value);
@@ -56,7 +49,7 @@ const SearchInterface = ({ onSearch }) => {
                         type="text"
                         value={query}
                         onChange={handleInputChange}
-                        placeholder={isMobile ? "Search any song..." : "Search any song... (e.g., 'Let It Be by The Beatles')"}
+                        placeholder="Search any song... (e.g., 'Let It Be by The Beatles')"
                         className="search-input-ai"
                     />
                     <button 
