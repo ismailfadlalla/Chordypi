@@ -485,7 +485,7 @@ const HomePage = () => {
             </div>
             
             {/* User Library Quick Access */}
-            {user && (recentHistory.length > 0 || favorites.length > 0) && (
+            {(recentHistory.length > 0 || favorites.length > 0) && (
                 <div className="user-library-preview" style={{
                     background: 'rgba(255, 255, 255, 0.05)',
                     borderRadius: '20px',

@@ -687,21 +687,27 @@ const PlayerPage = () => {
 
     return (
         <div className="player-page" style={{ 
-            minHeight: '80vh', 
+            minHeight: '100vh', 
+            width: '100%',
+            maxWidth: '100vw',
             backgroundColor: '#1a1a1a', 
             overflow: 'hidden',
+            overflowX: 'hidden',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            position: 'relative'
         }}>
             
             {/* Main Container - Proper containment */}
             <div style={{
                 flex: 1,
-                maxWidth: '1800px',
+                width: '100%',
+                maxWidth: '100%',
                 margin: '0 auto',
-                padding: '20px',
+                padding: '10px',
                 boxSizing: 'border-box',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                overflowX: 'hidden'
             }}>
                 {/* Back Button and Song Info */}
                 <div style={{
