@@ -4,7 +4,8 @@ import requests
 import hashlib
 import time
 from datetime import datetime
-from models import User, PiPayment, db
+from models import User, db
+from models.pi_payment import PiPayment
 from utils.auth_middleware import require_auth
 
 pi_bp = Blueprint('pi', __name__, url_prefix='/api/pi')
