@@ -29,10 +29,19 @@ const PiNetworkAuth = ({ onAuthenticated }) => {
 
             console.log('✅ Pi SDK initialized (SANDBOX MODE), authenticating user...');
 
-            // Authenticate user - This will show the permission dialog
+            // Authenticate user with timeout
             const scopes = ['username', 'payments', 'wallet_address'];
             
+            // Set a timeout for authentication (30 seconds)
+            const authTimeout = setTimeout(() => {
+                console.warn('⏱️ Pi authentication timeout - origin mismatch or network issue');
+                setError('Authentication timeout. This may be due to domain configuration in Pi Developer Portal.');
+                setLoading(false);
+            }, 30000);
+            
             const authResult = await window.Pi.authenticate(scopes, onIncompletePaymentFound);
+            
+            clearTimeout(authTimeout);
             
             console.log('✅ Pi authentication successful:', authResult);
             
@@ -70,15 +79,58 @@ const PiNetworkAuth = ({ onAuthenticated }) => {
             <div className="pi-auth-container">
                 <div className="pi-auth-error">
                     <div className="error-icon">⚠️</div>
-                    <h2>Authentication Error</h2>
+                    <h2>Pi Authentication Issue</h2>
                     <p>{error}</p>
-                    <button 
-                        className="retry-button"
-                        onClick={initializePiSDK}
-                    >
-                        🔄 Retry
-                    </button>
-                    <p className="error-hint">
+                    <div style={{ marginTop: '20px' }}>
+                        <button 
+                            className="retry-button"
+                            onClick={initializePiSDK}
+                            style={{
+                                padding: '12px 24px',
+                                fontSize: '16px',
+                                backgroundColor: '#764ba2',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                                marginRight: '10px'
+                            }}
+                        >
+                            🔄 Retry Authentication
+                        </button>
+                        <button 
+                            onClick={() => {
+                                console.log('⚠️ Skipping Pi authentication (demo mode)');
+                                // Create a demo user for testing
+                                const demoUser = {
+                                    username: 'demo_user',
+                                    uid: 'demo_' + Date.now()
+                                };
+                                localStorage.setItem('piNetworkAuth', JSON.stringify({
+                                    user: demoUser,
+                                    accessToken: 'demo_token',
+                                    timestamp: Date.now()
+                                }));
+                                if (onAuthenticated) {
+                                    onAuthenticated(demoUser);
+                                }
+                            }}
+                            style={{
+                                padding: '12px 24px',
+                                fontSize: '16px',
+                                backgroundColor: '#6c757d',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '8px',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            🚀 Continue Without Pi Auth (Demo Mode)
+                        </button>
+                    </div>
+                    <p className="error-hint" style={{ marginTop: '20px', fontSize: '14px', opacity: 0.8' }}>
+                        If you're testing on Vercel, the Pi SDK may have origin issues. Use demo mode or test in Pi Browser mobile app.
+                    </p>
                         Make sure you're opening this app in the official Pi Browser
                     </p>
                 </div>
