@@ -14,7 +14,6 @@ import SearchResultsPage from './SearchResultsPage';
 import UserLibrary from '../components/library/UserLibrary';
 import SongCard from '../components/common/SongCard';
 import ChordyPiLogo from '../components/common/ChordyPiLogo';
-import Footer from '../components/common/Footer';
 import { useAuth } from '../hooks/useAuth';
 import { analyzeSong, addToHistory, getFavorites, getHistory, addToFavorites, removeFromFavorites, analyzeUploadedAudio } from '../services/api';
 import '../styles/global.css';
@@ -276,14 +275,16 @@ const HomePage = () => {
     // Show main HomePage
     return (
         <div className="home-page">
+            
             {/* 🏆 HACKATHON JUDGE BANNER */}
             <div className="hackathon-banner" style={{
                 background: 'linear-gradient(135deg, #FFD700, #6c5ce7)',
                 padding: '20px',
                 textAlign: 'center',
                 boxShadow: '0 4px 20px rgba(255, 215, 0, 0.3)',
-                position: 'relative',
-                zIndex: 100
+                position: 'sticky',
+                top: 0,
+                zIndex: 1000
             }}>
                 <h3 style={{ margin: '0 0 10px 0', fontSize: '1.5rem', color: '#1a1a1a' }}>
                     🏆 Pi Network Hackathon 2025 - ChordyPi
@@ -402,74 +403,20 @@ const HomePage = () => {
                         </div>
                     )}
                     
-                    {/* Authenticated user welcome */}
-                    {user && (
-                        <div className="auth-invitation" style={{
-                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                            color: 'white'
-                        }}>
-                            <p className="auth-message" style={{ fontSize: '20px', fontWeight: '600' }}>
-                                👋 Welcome back, {user.username}!
-                            </p>
-                            <p style={{ fontSize: '14px', marginTop: '10px', opacity: '0.9' }}>
-                                {isPiUser ? '🥧 Pi Network account connected' : 'Free tier with ads'}
-                            </p>
-                            <div className="auth-links" style={{ marginTop: '15px' }}>
-                                <Link 
-                                    to="/signup" 
-                                    className="auth-link signup-link"
-                                    style={{
-                                        background: 'rgba(255,255,255,0.2)',
-                                        backdropFilter: 'blur(10px)',
-                                        border: '2px solid rgba(255,255,255,0.3)',
-                                        color: 'white',
-                                        padding: '12px 24px',
-                                        borderRadius: '8px',
-                                        fontWeight: '600',
-                                        textDecoration: 'none',
-                                        display: 'inline-block',
-                                        transition: 'all 0.3s ease'
-                                    }}
-                                >
-                                    ✨ Upgrade to Premium
-                                </Link>
-                                <Link 
-                                    to="/signup" 
-                                    className="auth-link"
-                                    style={{
-                                        background: 'rgba(255,255,255,0.1)',
-                                        backdropFilter: 'blur(10px)',
-                                        border: '2px solid rgba(255,255,255,0.2)',
-                                        color: 'white',
-                                        padding: '12px 24px',
-                                        borderRadius: '8px',
-                                        fontWeight: '600',
-                                        textDecoration: 'none',
-                                        display: 'inline-block',
-                                        marginLeft: '10px',
-                                        transition: 'all 0.3s ease'
-                                    }}
-                                >
-                                    🚫 Remove Ads
-                                </Link>
-                            </div>
-                            <p style={{ fontSize: '13px', marginTop: '12px', opacity: '0.8' }}>
-                                💎 Pay with Pi Network cryptocurrency
-                            </p>
-                        </div>
-                    )}
-                    
                     {/* Non-user invitation */}
                     {!user && (
                         <div className="auth-invitation">
                             <p className="auth-message">Join thousands of musicians improving their skills</p>
                             <div className="auth-links">
                                 <Link to="/signup" className="auth-link signup-link">
-                                    🚀 Sign Up / Sign In
+                                    🚀 Get Started Free
+                                </Link>
+                                <Link to="/signin" className="auth-link signin-link">
+                                    🔑 Sign In
                                 </Link>
                             </div>
                             <p className="pi-invitation">
-                                💎 Pi Network users get exclusive benefits!{' '}
+                                💎 Pi Network users get premium features!{' '}
                                 <Link to="/signup?method=pi" className="pi-link">Connect with Pi</Link>
                             </p>
                         </div>
@@ -797,9 +744,6 @@ const HomePage = () => {
                     </div>
                 </div>
             )}
-            
-            {/* Footer */}
-            <Footer />
         </div>
     );
 };
