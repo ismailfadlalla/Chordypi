@@ -469,17 +469,18 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
         return (
             <div className={`demo-fretboard-container ${isLarge ? 'large' : ''}`} style={{ 
                 maxWidth: '100%', 
-                overflow: 'hidden'
+                overflow: 'visible',
+                paddingRight: '30px'
             }}>
                 <div className="demo-chord-label">{chordName}</div>
                 <div className="demo-fretboard-visual" style={{ 
                     maxWidth: '100%', 
-                    overflow: 'hidden'
+                    overflow: 'visible'
                 }}>
                     <div className="demo-fretboard-strings" style={{ 
                         position: 'relative',
                         maxWidth: '100%',
-                        overflow: 'hidden'
+                        overflow: 'visible'
                     }}>
                         {/* Render barre lines first (behind the dots) */}
                         {pattern.barres?.map((barreInfo, barreIdx) => {
