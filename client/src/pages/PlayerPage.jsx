@@ -1052,14 +1052,32 @@ const PlayerPage = () => {
                     </div>
                 </div>
 
-
-                {/* FRETBOARD SECTION - More Compact Layout */}
+                {/* CHORD PROGRESSION TIMELINE - Full view with 4/4 time signature */}
                 <div style={{
+                    maxWidth: '1200px',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    marginTop: '20px',
+                    marginBottom: '20px'
+                }}>
+                    <ChordProgressionDisplay
+                        realisticChords={realisticChords}
+                        currentTime={currentTime}
+                        onSeek={handleSeek}
+                        currentChord={currentChord}
+                        nextChord={nextChord}
+                        currentChordIndex={currentChordIndex}
+                        seekTo={handleSeek}
+                    />
+                </div>
+
+                {/* FRETBOARD SECTION - Fully Responsive Layout */}
+                <div className="fretboard-section-responsive" style={{
                     backgroundColor: 'rgba(255,255,255,0.05)',
                     borderRadius: '15px',
                     padding: '15px',
                     marginTop: '15px',
-                    maxWidth: '900px',
+                    maxWidth: '1200px',
                     marginLeft: 'auto',
                     marginRight: 'auto'
                 }}>
@@ -1073,9 +1091,9 @@ const PlayerPage = () => {
                     }}>
                         🎸 Guitar Fretboard
                     </h3>
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: window.innerWidth > 768 ? 'row' : 'column',
+                    <div className="fretboard-grid" style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
                         gap: '20px',
                         justifyContent: 'center',
                         alignItems: 'stretch'
