@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Switch, useLocation } from 'react-route
 import { PlayerProvider } from './context/PlayerContext';
 import HomePage from './pages/HomePage';
 import PlayerPage from './pages/PlayerPage';
-import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
 import LibraryPage from './pages/LibraryPage';
 import JudgeDemoPage from './pages/JudgeDemoPage';
@@ -73,7 +72,6 @@ const AppContent = () => {
     const location = useLocation();
     const isPlayerPage = location.pathname === '/player';
     const isHomePage = location.pathname === '/' || location.pathname === '/home';
-    const isAuthPage = location.pathname === '/auth' || location.pathname === '/signup' || location.pathname === '/signin';
     const isDemoPage = location.pathname === '/demo' || location.pathname === '/demo-judge';
     const isSearchPage = location.pathname === '/search' || location.pathname === '/search-results';
     const isAnalyzingPage = location.pathname === '/analyzing';
@@ -92,8 +90,8 @@ const AppContent = () => {
             {/* Top-right Sign Out Button - Only show on home page, not on search or library */}
             {isHomePage && !isSearchPage && !isLibraryPage && <TopSignOutButton />}
             
-            {/* Hide header on player, home, auth, demo, search, and analyzing pages for clean, focused experience */}
-            {!isPlayerPage && !isHomePage && !isAuthPage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Header />}
+            {/* Hide header on player, home, demo, search, and analyzing pages for clean, focused experience */}
+            {!isPlayerPage && !isHomePage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Header />}
             
             <main className="main-content" style={{
                 width: '100%',
@@ -110,11 +108,6 @@ const AppContent = () => {
                     <Route path="/home" component={HomePage} />
                     <Route path="/" exact component={HomePage} />
                     
-                    {/* Auth Routes */}
-                    <Route path="/signup" component={AuthPage} />
-                    <Route path="/signin" component={AuthPage} />
-                    <Route path="/auth" component={AuthPage} />
-                    
                     {/* App Routes */}
                     <Route path="/analyzing" component={AnalyzingPage} />
                     <Route path="/player" component={PlayerPage} />
@@ -125,8 +118,8 @@ const AppContent = () => {
                 </Switch>
             </main>
             
-            {/* Hide footer on player, home, auth, demo, search, and analyzing pages for clean, focused experience */}
-            {!isPlayerPage && !isHomePage && !isAuthPage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Footer />}
+            {/* Hide footer on player, home, demo, search, and analyzing pages for clean, focused experience */}
+            {!isPlayerPage && !isHomePage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Footer />}
         </div>
     );
 };
