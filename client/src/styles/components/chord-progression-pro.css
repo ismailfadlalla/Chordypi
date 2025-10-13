@@ -119,9 +119,9 @@
     gap: 20px; /* Match the gap between fret positions */
     margin-top: 20px; /* Space from fretboard */
     margin-bottom: 0;
-    padding-left: 50px; /* 30px string label + 20px gap to first fret */
-    position: relative; /* Ensure it's not affected by parent positioning */
-    z-index: 100; /* High z-index to be on top */
+    padding-left: 75px; /* 30px string label + 20px gap + 25px to center on first fret */
+    position: relative;
+    z-index: 100;
 }
 
 .string-label-spacer {
@@ -143,7 +143,6 @@
     position: relative;
     z-index: 10;
     flex-shrink: 0; /* Prevent shrinking */
-    transform: translateX(30px); /* Shift right to align with dot centers */
 }
 
 .demo-fretboard-strings {
@@ -339,10 +338,12 @@
     
     .demo-fretboard-visual {
         padding: 15px;
+        overflow-x: auto; /* Allow horizontal scroll if needed */
     }
     
     .demo-fretboard-strings {
         gap: 10px;
+        min-width: 100%; /* Prevent overflow */
     }
     
     .demo-fret-position {
@@ -356,6 +357,18 @@
     
     .chord-metadata {
         gap: 10px;
+    }
+    
+    /* Fix fret numbers alignment on mobile */
+    .fret-numbers {
+        padding-left: 60px; /* Adjust for mobile */
+        gap: 18px; /* Slightly smaller gap for mobile */
+    }
+    
+    .fret-number {
+        width: 40px; /* Match smaller fret positions on mobile */
+        font-size: 0.9rem;
+        padding: 4px 0;
     }
 }
 
