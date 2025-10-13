@@ -467,10 +467,20 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
         }
         
         return (
-            <div className={`demo-fretboard-container ${isLarge ? 'large' : ''}`}>
+            <div className={`demo-fretboard-container ${isLarge ? 'large' : ''}`} style={{ 
+                maxWidth: '100%', 
+                overflow: 'hidden'
+            }}>
                 <div className="demo-chord-label">{chordName}</div>
-                <div className="demo-fretboard-visual">
-                    <div className="demo-fretboard-strings" style={{ position: 'relative' }}>
+                <div className="demo-fretboard-visual" style={{ 
+                    maxWidth: '100%', 
+                    overflow: 'hidden'
+                }}>
+                    <div className="demo-fretboard-strings" style={{ 
+                        position: 'relative',
+                        maxWidth: '100%',
+                        overflow: 'hidden'
+                    }}>
                         {/* Render barre lines first (behind the dots) */}
                         {pattern.barres?.map((barreInfo, barreIdx) => {
                             const [barreFret, startStr, endStr] = barreInfo;
@@ -501,6 +511,7 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                                         left: `${leftPosition}px`,
                                         top: `${topPosition}px`,
                                         width: '50px',
+                                        maxWidth: '50px',
                                         height: `${height}px`,
                                         background: 'linear-gradient(90deg, rgba(108, 92, 231, 0.95) 0%, rgba(108, 92, 231, 1) 50%, rgba(108, 92, 231, 0.95) 100%)',
                                         borderRadius: '25px',
@@ -513,7 +524,8 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                                         `,
                                         zIndex: 10,
                                         pointerEvents: 'none',
-                                        backdropFilter: 'blur(2px)'
+                                        backdropFilter: 'blur(2px)',
+                                        boxSizing: 'border-box'
                                     }}
                                 />
                             );
