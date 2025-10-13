@@ -128,8 +128,13 @@ const AppContent = () => {
 const App = () => {
     const [piAuthenticated, setPiAuthenticated] = React.useState(false);
     const [checkingAuth, setCheckingAuth] = React.useState(true);
+    const [isPiBrowser, setIsPiBrowser] = React.useState(false);
 
     React.useEffect(() => {
+        // Detect if we're in Pi Browser
+        const checkPiBrowser = typeof window !== 'undefined' && window.Pi !== undefined;
+        setIsPiBrowser(checkPiBrowser);
+        
         // Check if user is already authenticated
         const checkExistingAuth = () => {
             const piAuth = localStorage.getItem('piNetworkAuth');
@@ -146,6 +151,13 @@ const App = () => {
                     console.error('Error parsing Pi auth:', e);
                 }
             }
+            
+            // If not in Pi Browser, skip authentication requirement
+            if (!checkPiBrowser) {
+                console.log('🖥️ Desktop browser detected - skipping Pi authentication');
+                setPiAuthenticated(true);
+            }
+            
             setCheckingAuth(false);
         };
 
