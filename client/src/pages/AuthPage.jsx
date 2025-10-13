@@ -6,135 +6,23 @@ import ChordyPiLogo from '../components/common/ChordyPiLogo';
 import '../styles/components/auth.css';
 
 const AuthPage = () => {
-    const { signIn, signUp, user } = useAuth();
+    const { signUp, user } = useAuth();
     const history = useHistory();
     
     const [piError, setPiError] = useState('');
     const [showError, setShowError] = useState(true);
 
-    // Update isSignUp when route changes
-    React.useEffect(() => {
-        setIsSignUp(location.pathname === '/signup');
-    }, [location.pathname]);
-
-    // DISABLED for debugging - Redirect if already authenticated (but not during active authentication)
-    // React.useEffect(() => {
-    //     // Add a small delay to ensure error state is processed first
-    //     const timeoutId = setTimeout(() => {
-    //         if (user && !isAuthenticating && !localError) {
-    //             console.log('🔍 Redirecting because user exists, not authenticating, and no error:', user);
-    //             history.push('/');
-    //         } else {
-    //             console.log('🔍 Not redirecting. User:', !!user, 'Authenticating:', isAuthenticating, 'Error:', !!localError);
-    //         }
-    //     }, 100);
-        
-    //     return () => clearTimeout(timeoutId);
-    // }, [user, history, isAuthenticating, localError]);
-
-    const showLocalStorageState = () => {
-        console.log('📋 Current localStorage state:');
-        console.log('📋 users:', localStorage.getItem('users'));
-        console.log('📋 user:', localStorage.getItem('user'));
-        console.log('📋 token:', localStorage.getItem('token'));
-        
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        console.log('📋 Parsed users:', users);
-        
-        alert('Check console for localStorage state');
-    };
-
-    const testDirectAuth = async () => {
-        console.log('🧪 Testing direct authentication...');
-        setLocalError('');
-        
-        try {
-            // Import authService directly
-            const authService = await import('../services/authService');
-            
-            // Test with wrong credentials
-            await authService.signIn({ email: 'test@test.com', password: 'wrongpassword' });
-            console.log('❌ This should not happen - auth should have failed');
-            
-        } catch (err) {
-            console.log('✅ Direct auth correctly failed:', err.message);
-            setLocalError(err.message);
-        }
-    };
-
-    const clearAuthData = () => {
-        console.log('🧹 Clearing all authentication data...');
-        console.log('🔍 Current localStorage state:', {
-            token: localStorage.getItem('token'),
-            user: localStorage.getItem('user'),
-            users: localStorage.getItem('users'),
-        });
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('users');
-        localStorage.removeItem('piNetworkUser');
-        localStorage.removeItem('piNetworkAuth');
-        console.log('🧹 All auth data cleared');
-        window.location.reload(); // Reload to reset all state
-    };
-
-    const createTestUser = () => {
-        console.log('👤 Creating test user...');
-        const testUsers = [
-            {
-                id: 'test-user-1',
-                username: 'testuser',
-                email: 'test@test.com',
-                password: 'test123',
-                createdAt: Date.now()
-            }
-        ];
-        localStorage.setItem('users', JSON.stringify(testUsers));
-        console.log('👤 Test user created: test@test.com / test123');
-    };
-
-    const handleTraditionalAuth = async (formData) => {
-        setLocalError(''); // Clear any previous error
-        setIsAuthenticating(true);
-        
-        try {
-            const { email, password, username } = formData;
-            
-            if (isSignUp) {
-                await signUp(email, password, username);
-                console.log('✅ Account created successfully!');
-                setIsAuthenticating(false);
-                history.push('/');
-            } else {
-                await signIn(email, password);
-                console.log('✅ Signed in successfully!');
-                setIsAuthenticating(false);
-                history.push('/');
-            }
-            
-        } catch (err) {
-            console.error('❌ Authentication error:', err);
-            
-            // Clear any authentication tokens on error
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            
-            setLocalError(err.message || 'Authentication failed. Please try again.');
-            setIsAuthenticating(false);
-        }
-    };
-
+    // Handle Pi Network authentication
     const handlePiAuth = async (piUserData) => {
         setPiError('');
         
         try {
             console.log('🥧 Pi Network authentication:', piUserData);
-            setPiUser(piUserData);
             
             // Create account using Pi Network data
             await signUp(
-                piUserData.username + '@pi.network', // Temporary email
-                'pi-network-auth', // Temporary password
+                piUserData.username + '@pi.network',
+                'pi-network-auth',
                 piUserData.username
             );
             
@@ -147,6 +35,7 @@ const AuthPage = () => {
         }
     };
 
+    // Redirect if already authenticated
     if (user) {
         return (
             <div className="auth-page loading">
