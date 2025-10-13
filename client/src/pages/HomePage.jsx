@@ -188,11 +188,9 @@ const HomePage = () => {
     };
 
     const handlePremiumFeatureRequest = () => {
-        if (!user) {
-            history.push('/signin');
-        } else if (!isPiUser) {
-            setShowPremiumModal(true);
-        }
+        // Pi Network users already have premium features - this is just a placeholder
+        // Future: Could show info modal about Pi Network benefits
+        console.log('Premium features available for Pi Network users');
     };
 
     const handleToggleFavorite = (song) => {
@@ -402,53 +400,8 @@ const HomePage = () => {
                             </div>
                         </div>
                     )}
-                    
-                    {/* Non-user invitation */}
-                    {!user && (
-                        <div className="auth-invitation">
-                            <p className="auth-message">Join thousands of musicians improving their skills</p>
-                            <div className="auth-links">
-                                <Link to="/signup" className="auth-link signup-link">
-                                    🚀 Get Started Free
-                                </Link>
-                                <Link to="/signin" className="auth-link signin-link">
-                                    🔑 Sign In
-                                </Link>
-                            </div>
-                            <p className="pi-invitation">
-                                💎 Pi Network users get premium features!{' '}
-                                <Link to="/signup?method=pi" className="pi-link">Connect with Pi</Link>
-                            </p>
-                        </div>
-                    )}
                 </div>
             </div>
-            
-            {/* Feature Highlights for Non-Users */}
-            {!user && (
-                <div className="feature-highlights">
-                    <div className="feature-grid">
-                        <div className="feature-card">
-                            <div className="feature-icon">🎯</div>
-                            <h3>Real-time Analysis</h3>
-                            <p>Get instant chord progressions from any YouTube song</p>
-                        </div>
-                        <div className="feature-card">
-                            <div className="feature-icon">🎸</div>
-                            <h3>Interactive Fretboard</h3>
-                            <p>See exactly where to place your fingers</p>
-                        </div>
-                        <div className="feature-card premium">
-                            <div className="feature-icon">⚡</div>
-                            <h3>Premium Features</h3>
-                            <p>Advanced analysis, custom speeds, and more with Pi Network</p>
-                            <button className="premium-cta" onClick={handlePremiumFeatureRequest}>
-                                Learn More
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
             
             {/* Quick Stats Banner */}
             <div className="stats-banner">
