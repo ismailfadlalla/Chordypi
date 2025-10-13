@@ -744,6 +744,135 @@ const HomePage = () => {
                     </div>
                 </div>
             )}
+            
+            {/* Footer with Social Media Links */}
+            <footer style={{
+                marginTop: '60px',
+                padding: '40px 20px',
+                background: 'linear-gradient(135deg, rgba(108, 92, 231, 0.1), rgba(137, 155, 232, 0.05))',
+                borderTop: '2px solid rgba(108, 92, 231, 0.3)',
+                textAlign: 'center'
+            }}>
+                <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                    {/* Social Media Links */}
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: '30px',
+                        marginBottom: '30px',
+                        flexWrap: 'wrap'
+                    }}>
+                        <a 
+                            href="https://twitter.com/chordypi" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            style={{
+                                color: '#FFD700',
+                                fontSize: '32px',
+                                transition: 'transform 0.3s ease',
+                                textDecoration: 'none'
+                            }}
+                            onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
+                            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                        >
+                            <i className="fab fa-twitter"></i> 🐦
+                        </a>
+                        <a 
+                            href="https://facebook.com/chordypi" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            style={{
+                                color: '#FFD700',
+                                fontSize: '32px',
+                                transition: 'transform 0.3s ease',
+                                textDecoration: 'none'
+                            }}
+                            onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
+                            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                        >
+                            📘
+                        </a>
+                        <a 
+                            href="https://instagram.com/chordypi" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            style={{
+                                color: '#FFD700',
+                                fontSize: '32px',
+                                transition: 'transform 0.3s ease',
+                                textDecoration: 'none'
+                            }}
+                            onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
+                            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                        >
+                            📸
+                        </a>
+                        <a 
+                            href="https://github.com/chordypi" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            style={{
+                                color: '#FFD700',
+                                fontSize: '32px',
+                                transition: 'transform 0.3s ease',
+                                textDecoration: 'none'
+                            }}
+                            onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
+                            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                        >
+                            💻
+                        </a>
+                        <a 
+                            href="https://youtube.com/@chordypi" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            style={{
+                                color: '#FFD700',
+                                fontSize: '32px',
+                                transition: 'transform 0.3s ease',
+                                textDecoration: 'none'
+                            }}
+                            onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
+                            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                        >
+                            📺
+                        </a>
+                    </div>
+
+                    {/* Footer Text */}
+                    <div style={{ color: 'rgba(255, 255, 255, 0.8)', marginBottom: '20px' }}>
+                        <p style={{ margin: '10px 0', fontSize: '16px' }}>
+                            <strong>🎸 ChordyPi</strong> - AI-Powered Guitar Chord Detection
+                        </p>
+                        <p style={{ margin: '10px 0', fontSize: '14px', opacity: 0.9 }}>
+                            Learn guitar chords from any song • Powered by Pi Network
+                        </p>
+                    </div>
+
+                    {/* Links */}
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: '20px',
+                        marginBottom: '20px',
+                        flexWrap: 'wrap'
+                    }}>
+                        <a href="/about" style={{ color: '#61dafb', textDecoration: 'none' }}>About</a>
+                        <a href="/privacy" style={{ color: '#61dafb', textDecoration: 'none' }}>Privacy</a>
+                        <a href="/terms" style={{ color: '#61dafb', textDecoration: 'none' }}>Terms</a>
+                        <a href="/contact" style={{ color: '#61dafb', textDecoration: 'none' }}>Contact</a>
+                    </div>
+
+                    {/* Copyright */}
+                    <p style={{ 
+                        color: 'rgba(255, 255, 255, 0.6)', 
+                        fontSize: '14px',
+                        margin: '20px 0 0 0'
+                    }}>
+                        © 2025 ChordyPi. All rights reserved. | Built for Pi Network Hackathon
+                    </p>
+                </div>
+            </footer>
         </div>
     );
 };
