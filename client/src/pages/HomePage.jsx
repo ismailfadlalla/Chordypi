@@ -858,8 +858,8 @@ const HomePage = () => {
                         flexWrap: 'wrap'
                     }}>
                         <a href="/about" style={{ color: '#61dafb', textDecoration: 'none' }}>About</a>
-                        <a href="/privacy" style={{ color: '#61dafb', textDecoration: 'none' }}>Privacy</a>
-                        <a href="/terms" style={{ color: '#61dafb', textDecoration: 'none' }}>Terms</a>
+                        <a href="/legal/privacy-policy.html" style={{ color: '#61dafb', textDecoration: 'none' }}>Privacy Policy</a>
+                        <a href="/legal/terms-of-service.html" style={{ color: '#61dafb', textDecoration: 'none' }}>Terms of Service</a>
                         <a href="/contact" style={{ color: '#61dafb', textDecoration: 'none' }}>Contact</a>
                     </div>
 
