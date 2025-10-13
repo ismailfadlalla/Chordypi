@@ -50,16 +50,12 @@ const HomePage = () => {
 
     // Load user data when component mounts or user changes
     useEffect(() => {
-        if (user) {
-            const favs = getFavorites();
-            const hist = getHistory();
-            console.log('📚 Loading user data:', { favorites: favs.length, history: hist.length });
-            setFavorites(favs);
-            setRecentHistory(hist);
-        } else {
-            setFavorites([]);
-            setRecentHistory([]);
-        }
+        // ALWAYS load favorites and history from localStorage, regardless of user state
+        const favs = getFavorites();
+        const hist = getHistory();
+        console.log('📚 Loading user data:', { favorites: favs.length, history: hist.length });
+        setFavorites(favs);
+        setRecentHistory(hist);
     }, [user]);
 
     // Scroll to top when homepage loads - AGGRESSIVE RESET
