@@ -396,7 +396,7 @@ const SearchResultsPage = ({ searchQuery, onSongSelect, onBack, analyzingChords,
             url: youtubeUrl,
             youtubeUrl: youtubeUrl,
             title: song.title || 'Unknown Title',
-            artist: song.channel || song.artist || 'Unknown Artist',
+            artist: song.channelTitle || song.channel || song.artist || 'Unknown Artist',
             thumbnail: song.thumbnail || song.thumbnails?.default?.url || ''
         };
         
