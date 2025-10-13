@@ -274,7 +274,41 @@ const HomePage = () => {
     return (
         <div className="home-page">
             
-            {/* 🏆 HACKATHON JUDGE BANNER */}
+            {/* � CHORDYPI LOGO BANNER */}
+            <div className="logo-banner" style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                padding: '40px 20px',
+                textAlign: 'center',
+                marginBottom: '0',
+                position: 'relative',
+                overflow: 'hidden'
+            }}>
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%)',
+                    pointerEvents: 'none'
+                }}></div>
+                <img 
+                    src="/images/chordypi-logo.png" 
+                    alt="ChordyPi Logo" 
+                    style={{
+                        maxWidth: '100%',
+                        width: 'auto',
+                        height: 'auto',
+                        maxHeight: '150px',
+                        objectFit: 'contain',
+                        filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.3))',
+                        position: 'relative',
+                        zIndex: 1
+                    }}
+                />
+            </div>
+            
+            {/* �🏆 HACKATHON JUDGE BANNER */}
             <div className="hackathon-banner" style={{
                 background: 'linear-gradient(135deg, #FFD700, #6c5ce7)',
                 padding: '20px',
@@ -335,10 +369,10 @@ const HomePage = () => {
                         </div>
                     </div>
                     
-                    {/* Bottom: Two-column layout for user boxes */}
-                    {user && (
-                        <div className="hero-boxes-container">
-                            {/* Left Box: User Welcome */}
+                    {/* Bottom: Two-column layout for boxes */}
+                    <div className="hero-boxes-container">
+                        {/* Left Box: User Welcome or App Info */}
+                        {user ? (
                             <div className="hero-box user-welcome">
                                 <div className="welcome-message">
                                     <span className="greeting">Welcome back, {user.username}!</span>
@@ -361,9 +395,30 @@ const HomePage = () => {
                                     )}
                                 </div>
                             </div>
-                            
-                            {/* Right Box: Featured Songs */}
-                            <div className="hero-box hero-featured-preview">
+                        ) : (
+                            <div className="hero-box user-welcome">
+                                <div className="welcome-message">
+                                    <span className="greeting">🎸 Learn Guitar Chords with AI</span>
+                                </div>
+                                <div className="user-stats">
+                                    <div className="stat-item">
+                                        <span className="stat-number">🎵</span>
+                                        <span className="stat-label">Real-time Analysis</span>
+                                    </div>
+                                    <div className="stat-item">
+                                        <span className="stat-number">🎯</span>
+                                        <span className="stat-label">Interactive Fretboard</span>
+                                    </div>
+                                    <div className="stat-item">
+                                        <span className="stat-number">⚡</span>
+                                        <span className="stat-label">Instant Results</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        
+                        {/* Right Box: Featured Songs */}
+                        <div className="hero-box hero-featured-preview">
                                 <h3 className="preview-title">🎸 Quick Start</h3>
                                 <div className="preview-songs">
                                     <div className="preview-song-card" onClick={() => handleAnalyzeSong('9bZkp7q19f0', 'Gangnam Style', 'PSY')}>
@@ -398,8 +453,7 @@ const HomePage = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                    </div>
                 </div>
             </div>
             
