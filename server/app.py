@@ -85,7 +85,8 @@ from routes.songs import songs_bp
 from routes.analysis import analysis_bp
 from routes.search import search_bp
 from routes.library import library_bp
-from routes.pi import pi_bp
+# Temporarily disabled Pi routes due to import issues
+# from routes.pi import pi_bp
 
 # Load environment variables from .env file
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
@@ -228,7 +229,8 @@ app.register_blueprint(songs_bp)
 app.register_blueprint(analysis_bp)
 app.register_blueprint(search_bp)
 app.register_blueprint(library_bp)
-app.register_blueprint(pi_bp)
+# Temporarily disabled Pi routes due to import issues
+# app.register_blueprint(pi_bp)
 
 # Add request logging middleware - runs BEFORE any route
 @app.before_request
