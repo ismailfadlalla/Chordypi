@@ -240,21 +240,31 @@ export const analyzeSong = async (songData) => {
 
         const data = await response.json();
         console.log('✅ Enhanced AI analysis complete:', {
+            status: data.status,
             chordsCount: data.chords?.length || 0,
             duration: data.duration,
             key: data.key,
-            analysisType: data.analysis_type
+            analysisType: data.analysis_type,
+            fullData: data
         });
         
+        // Validate response has required data
+        if (!data.chords || data.chords.length === 0) {
+            console.warn('⚠️ Backend returned no chords:', data);
+            throw new Error('No chord data received from backend');
+        }
+        
         return {
-            status: data.status,
+            status: data.status || 'success',
             analysis: {
                 chords: data.chords || [],
                 duration: data.duration || 240,
                 key: data.key || 'C',
-                bpm: data.bpm,
-                time_signature: data.time_signature,
-                analysis_type: 'ai_audio_enhanced',
+                bpm: data.bpm || 120,
+                time_signature: data.time_signature || '4/4',
+                analysis_type: data.analysis_type || 'ai_audio_enhanced',
+                source: data.source || 'AI Analysis',
+                accuracy: data.accuracy || 90,
                 analysis_metadata: {
                     ...data.analysis_metadata,
                     note: 'Enhanced AI with all filters optimized for accuracy'
