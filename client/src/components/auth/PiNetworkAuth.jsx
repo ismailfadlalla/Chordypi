@@ -128,10 +128,8 @@ const PiNetworkAuth = ({ onAuthenticated }) => {
                             🚀 Continue Without Pi Auth (Demo Mode)
                         </button>
                     </div>
-                    <p className="error-hint" style={{ marginTop: '20px', fontSize: '14px', opacity: 0.8' }}>
+                    <p className="error-hint" style={{ marginTop: '20px', fontSize: '14px', opacity: 0.8 }}>
                         If you're testing on Vercel, the Pi SDK may have origin issues. Use demo mode or test in Pi Browser mobile app.
-                    </p>
-                        Make sure you're opening this app in the official Pi Browser
                     </p>
                 </div>
             </div>
