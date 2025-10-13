@@ -4,7 +4,6 @@ import ChordProgressionDisplay from '../components/player/ChordProgressionDispla
 import ChordQualityBadge from '../components/common/ChordQualityBadge';
 import AudioVisualizer from '../components/player/AudioVisualizer';
 import '../styles/components/player.css';
-import './player.css'; // Responsive layout styles
 
 const PlayerPage = () => {
     const location = useLocation();
@@ -763,9 +762,9 @@ const PlayerPage = () => {
                 </div>
 
                 {/* Two-Column Layout: Video Player + Unique Chords Dashboard */}
-                <div className="player-main-grid" style={{
+                <div style={{
                     display: 'grid',
-                    gridTemplateColumns: '1fr',
+                    gridTemplateColumns: window.innerWidth > 1024 ? '2fr 1fr' : '1fr',
                     gap: '20px',
                     marginBottom: '20px'
                 }}>
@@ -1053,32 +1052,14 @@ const PlayerPage = () => {
                     </div>
                 </div>
 
-                {/* CHORD PROGRESSION TIMELINE - Full view with 4/4 time signature */}
-                <div style={{
-                    maxWidth: '1200px',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    marginTop: '20px',
-                    marginBottom: '20px'
-                }}>
-                    <ChordProgressionDisplay
-                        realisticChords={realisticChords}
-                        currentTime={currentTime}
-                        onSeek={handleSeek}
-                        currentChord={currentChord}
-                        nextChord={nextChord}
-                        currentChordIndex={currentChordIndex}
-                        seekTo={handleSeek}
-                    />
-                </div>
 
-                {/* FRETBOARD SECTION - Fully Responsive Layout */}
-                <div className="fretboard-section-responsive" style={{
+                {/* FRETBOARD SECTION - More Compact Layout */}
+                <div style={{
                     backgroundColor: 'rgba(255,255,255,0.05)',
                     borderRadius: '15px',
                     padding: '15px',
                     marginTop: '15px',
-                    maxWidth: '1200px',
+                    maxWidth: '900px',
                     marginLeft: 'auto',
                     marginRight: 'auto'
                 }}>
@@ -1092,9 +1073,9 @@ const PlayerPage = () => {
                     }}>
                         🎸 Guitar Fretboard
                     </h3>
-                    <div className="fretboard-grid" style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: window.innerWidth > 768 ? 'row' : 'column',
                         gap: '20px',
                         justifyContent: 'center',
                         alignItems: 'stretch'

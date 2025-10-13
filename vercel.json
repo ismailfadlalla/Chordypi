@@ -5,31 +5,27 @@
   "rewrites": [
     {
       "source": "/api/analyze-song",
-      "destination": "https://chordypi-production.up.railway.app/api/analyze-song"
+      "destination": "https://chordypi.onrender.com/api/analyze-song"
     },
     {
       "source": "/api/analyze-audio-upload",
-      "destination": "https://chordypi-production.up.railway.app/api/analyze-audio-upload"
+      "destination": "https://chordypi.onrender.com/api/analyze-audio-upload"
     },
     {
       "source": "/api/search-songs",
-      "destination": "https://chordypi-production.up.railway.app/api/search-songs"
+      "destination": "https://chordypi.onrender.com/api/search-songs"
     },
     {
       "source": "/api/featured-songs",
-      "destination": "https://chordypi-production.up.railway.app/api/featured-songs"
+      "destination": "https://chordypi.onrender.com/api/featured-songs"
     },
     {
       "source": "/api/songs/:path*",
-      "destination": "https://chordypi-production.up.railway.app/api/songs/:path*"
+      "destination": "https://chordypi.onrender.com/api/songs/:path*"
     },
     {
       "source": "/api/library/:path*",
-      "destination": "https://chordypi-production.up.railway.app/api/library/:path*"
-    },
-    {
-      "source": "/legal/:path*",
-      "destination": "https://chordypi-production.up.railway.app/legal/:path*"
+      "destination": "https://chordypi.onrender.com/api/library/:path*"
     },
     {
       "source": "/(.*)",
@@ -38,28 +34,15 @@
   ],
   "headers": [
     {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, PUT, DELETE, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization"
-        }
-      ]
-    },
-    {
       "source": "/(.*)",
       "headers": [
         {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
         },
         {
           "key": "X-XSS-Protection",

@@ -691,7 +691,6 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                     overflowX: 'auto',
                     gap: '0px',
                     padding: '15px 10px',
-                    maxHeight: '200px',
                     position: 'relative',
                     scrollBehavior: 'smooth',
                     background: 'rgba(0, 0, 0, 0.2)',

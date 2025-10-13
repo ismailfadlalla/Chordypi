@@ -77,8 +77,7 @@
 
 .auth-page {
     min-height: 100vh;
-    width: 100%;
-    max-width: 100vw;
+    width: 100vw;
     margin: 0;
     padding: 0;
     background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 50%, #fd79a8 100%);
@@ -87,7 +86,6 @@
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow-x: hidden;
-    box-sizing: border-box;
 }
 
 .auth-page.enhanced {
@@ -114,32 +112,13 @@
     padding: 40px;
     width: 100%;
     max-width: 500px;
-    margin: 20px auto;
+    margin: 40px auto;
     box-shadow: 0 20px 40px rgba(108, 92, 231, 0.3);
     color: #333;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     position: relative;
-    box-sizing: border-box;
-}
-
-@media (max-width: 768px) {
-    .auth-container {
-        margin: 10px;
-        padding: 20px;
-        border-radius: 15px;
-        max-width: calc(100% - 20px);
-    }
-}
-
-@media (max-width: 480px) {
-    .auth-container {
-        margin: 5px;
-        padding: 15px;
-        border-radius: 12px;
-        max-width: calc(100% - 10px);
-    }
 }
 
 .auth-method-selector {
@@ -956,132 +935,4 @@ body {
     gap: 10px;
     font-size: 16px;
     padding: 12px 20px;
-}
-
-/* Pi Network Benefits Section */
-.pi-benefits {
-    background: linear-gradient(135deg, rgba(108, 92, 231, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
-    border-radius: 12px;
-    padding: 20px;
-    margin: 20px 0;
-}
-
-.pi-benefits h3 {
-    color: #6c5ce7;
-    margin-bottom: 15px;
-    font-size: 18px;
-    text-align: center;
-}
-
-.pi-benefits ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.pi-benefits li {
-    padding: 10px 0;
-    color: #555;
-    font-size: 15px;
-    line-height: 1.5;
-}
-
-/* Features Preview Section */
-.features-preview {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(108, 92, 231, 0.1);
-}
-
-.features-preview h3 {
-    color: #6c5ce7;
-    margin-bottom: 15px;
-    font-size: 18px;
-    text-align: center;
-}
-
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.feature-item {
-    background: linear-gradient(135deg, rgba(108, 92, 231, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
-    border-radius: 10px;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-}
-
-.feature-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.15);
-}
-
-.feature-icon {
-    font-size: 24px;
-}
-
-.feature-item span:last-child {
-    color: #555;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-/* Mobile responsive fixes */
-@media (max-width: 768px) {
-    .pi-benefits h3,
-    .features-preview h3 {
-        font-size: 16px;
-    }
-    
-    .pi-benefits li {
-        font-size: 14px;
-        padding: 8px 0;
-    }
-    
-    .features-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-    
-    .feature-item {
-        padding: 12px;
-    }
-    
-    .feature-icon {
-        font-size: 20px;
-    }
-    
-    .feature-item span:last-child {
-        font-size: 13px;
-    }
-}
-
-@media (max-width: 480px) {
-    .pi-benefits {
-        padding: 15px;
-        margin: 15px 0;
-    }
-    
-    .features-preview {
-        margin-top: 20px;
-        padding-top: 15px;
-    }
-    
-    .pi-benefits h3,
-    .features-preview h3 {
-        font-size: 15px;
-        margin-bottom: 12px;
-    }
-    
-    .pi-benefits li {
-        font-size: 13px;
-        padding: 6px 0;
-    }
 }
