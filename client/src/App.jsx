@@ -130,14 +130,21 @@ const App = () => {
     const [checkingAuth, setCheckingAuth] = React.useState(true);
     const [isPiBrowser, setIsPiBrowser] = React.useState(false);
 
+    console.log('🚀 App component loaded');
+
     React.useEffect(() => {
+        console.log('🔍 Checking authentication...');
+        
         // Detect if we're in Pi Browser
         const checkPiBrowser = typeof window !== 'undefined' && window.Pi !== undefined;
         setIsPiBrowser(checkPiBrowser);
+        console.log('Pi Browser detected:', checkPiBrowser);
         
         // Check if user is already authenticated
         const checkExistingAuth = () => {
             const piAuth = localStorage.getItem('piNetworkAuth');
+            console.log('Stored Pi auth:', piAuth ? 'exists' : 'none');
+            
             if (piAuth) {
                 try {
                     const authData = JSON.parse(piAuth);
@@ -169,8 +176,11 @@ const App = () => {
         setPiAuthenticated(true);
     };
 
+    console.log('App state:', { checkingAuth, piAuthenticated, isPiBrowser });
+
     // Show loading while checking auth
     if (checkingAuth) {
+        console.log('📄 Rendering: Loading screen');
         return (
             <div style={{
                 width: '100vw',
@@ -189,8 +199,11 @@ const App = () => {
 
     // Show Pi authentication screen if not authenticated
     if (!piAuthenticated) {
+        console.log('📄 Rendering: Pi authentication screen');
         return <PiNetworkAuth onAuthenticated={handleAuthenticated} />;
     }
+
+    console.log('📄 Rendering: Main app');
 
     // Show main app if authenticated
     return (
