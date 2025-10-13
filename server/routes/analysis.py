@@ -463,3 +463,43 @@ def analyze_uploaded_file():
             "status": "error",
             "error": f"Failed to analyze uploaded file: {str(e)}"
         }), 500
+
+@analysis_bp.route('/api/test-rapidapi', methods=['GET'])
+def test_rapidapi():
+    """
+    Test endpoint to verify RapidAPI YouTube downloader is configured correctly
+    """
+    try:
+        from utils.youtube_api_downloader import test_rapidapi_connection
+        
+        logger.info("=" * 80)
+        logger.info("🧪 TESTING RAPIDAPI CONNECTION")
+        logger.info("=" * 80)
+        
+        result = test_rapidapi_connection()
+        
+        logger.info(f"Test result: {result}")
+        
+        if result['status'] == 'success':
+            return jsonify({
+                "status": "success",
+                "message": "✅ RapidAPI is configured and working!",
+                "details": result
+            }), 200
+        else:
+            return jsonify({
+                "status": "error",
+                "message": "❌ RapidAPI test failed",
+                "details": result
+            }), 500
+            
+    except Exception as e:
+        logger.error(f"❌ Test error: {e}")
+        import traceback
+        traceback.print_exc()
+        
+        return jsonify({
+            "status": "error",
+            "message": f"Test failed: {str(e)}",
+            "solution": "Check server logs for details"
+        }), 500
