@@ -801,12 +801,6 @@ const PlayerPage = () => {
                                     title={songData.title}
                                     artist={songData.artist || 'Uploaded File'}
                                 />
-                                
-                                <div style={{ marginTop: '10px', fontSize: '14px', color: 'white', opacity: 0.8, textAlign: 'center' }}>
-                                    <p>🎵 Chord progression synced with audio playback</p>
-                                    <p>⏰ Real-time tracking: {isPlaying ? 'Active' : 'Paused'}</p>
-                                    <p>🎸 AI Accuracy: {songData.accuracy || '90-95'}%</p>
-                                </div>
                             </div>
                         ) : originalVideoId ? (
                             // YouTube video player
@@ -824,10 +818,6 @@ const PlayerPage = () => {
                                         backgroundColor: '#000'
                                     }}
                                 ></div>
-                                <div style={{ marginTop: '10px', fontSize: '14px', color: 'white', opacity: 0.8, textAlign: 'center' }}>
-                                    <p>🎵 Chord progression synced with video playback</p>
-                                    <p>⏰ Real-time tracking: {isPlaying ? 'Active' : 'Paused'}</p>
-                                </div>
                             </div>
                         ) : (
                             // Fallback when no video available
@@ -1052,6 +1042,20 @@ const PlayerPage = () => {
                     </div>
                 </div>
 
+                {/* CHORD PROGRESSION TIMELINE (4/4 Time) - Between Player and Fretboards */}
+                <div style={{
+                    marginTop: '20px',
+                    marginBottom: '20px'
+                }}>
+                    <ChordProgressionDisplay
+                        realisticChords={realisticChords}
+                        currentTime={currentTime}
+                        onSeek={handleSeek}
+                        currentChord={currentChord}
+                        currentChordIndex={currentChordIndex}
+                        displayMode="timeline"
+                    />
+                </div>
 
                 {/* FRETBOARD SECTION - More Compact Layout */}
                 <div style={{
@@ -1141,26 +1145,6 @@ const PlayerPage = () => {
                             />
                         </div>
                     </div>
-                </div>
-
-                {/* FULL CHORD PROGRESSION TIMELINE (4/4 Time Signature) */}
-                <div style={{
-                    backgroundColor: 'rgba(255,255,255,0.05)',
-                    borderRadius: '15px',
-                    padding: '20px',
-                    marginTop: '20px',
-                    maxWidth: '1200px',
-                    marginLeft: 'auto',
-                    marginRight: 'auto'
-                }}>
-                    <ChordProgressionDisplay
-                        realisticChords={realisticChords}
-                        currentTime={currentTime}
-                        onSeek={handleSeek}
-                        currentChord={currentChord}
-                        currentChordIndex={currentChordIndex}
-                        displayMode="timeline"
-                    />
                 </div>
             </div>
         </div>

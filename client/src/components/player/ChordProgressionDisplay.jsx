@@ -657,34 +657,24 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
     }
 
     return (
-        <div className="professional-chord-learning-interface" style={{
-            backgroundColor: 'rgba(255,255,255,0.1)',
-            borderRadius: '10px',
-            padding: '20px'
+        // Guitar Chord Progression Timeline (4/4 Time) - ENHANCED THEME WITH GROUPING
+        <div style={{
+            background: 'linear-gradient(135deg, rgba(108, 92, 231, 0.95), rgba(137, 155, 232, 0.85))',
+            borderRadius: '12px',
+            padding: '20px',
+            border: '3px solid rgba(255, 215, 0, 0.4)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 2px 8px rgba(255, 255, 255, 0.1)'
         }}>
-            <h3 style={{ color: '#f4f0f5ff', marginBottom: '20px', textAlign: 'center' }}>
-                🎸 Guitar Chord Progression Timeline
-            </h3>
-            
-            {/* Guitar Chord Progression Timeline (4/4 Time) - ENHANCED THEME WITH GROUPING */}
-            <div style={{
-                background: 'linear-gradient(135deg, rgba(108, 92, 231, 0.95), rgba(137, 155, 232, 0.85))',
-                borderRadius: '12px',
-                padding: '20px',
-                marginBottom: '20px',
-                border: '3px solid rgba(255, 215, 0, 0.4)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 2px 8px rgba(255, 255, 255, 0.1)'
+            <h4 style={{ 
+                color: '#FFD700', 
+                marginBottom: '15px', 
+                fontSize: '18px', 
+                textAlign: 'center',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
+                fontWeight: 'bold'
             }}>
-                <h4 style={{ 
-                    color: '#FFD700', 
-                    marginBottom: '15px', 
-                    fontSize: '18px', 
-                    textAlign: 'center',
-                    textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
-                    fontWeight: 'bold'
-                }}>
-                    🎼 Guitar Chord Progression (4/4 Time) - {realisticChords.length} changes
-                </h4>
+                🎼 Guitar Chord Progression (4/4 Time) - {realisticChords.length} changes
+            </h4>
                 
                 <div ref={timelineRef} className="horizontal-chord-timeline" style={{
                     display: 'flex',
