@@ -1,31 +1,16 @@
 import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import AuthForm from '../components/auth/AuthForm';
 import PiNetworkIntegration from '../components/pi/PiNetworkIntegration';
 import ChordyPiLogo from '../components/common/ChordyPiLogo';
 import '../styles/components/auth.css';
 
 const AuthPage = () => {
-    const { signIn, signUp, loading: authLoading, user } = useAuth();
+    const { signIn, signUp, user } = useAuth();
     const history = useHistory();
-    const location = useLocation();
     
-    // Detect if we're on signup or signin route
-    const isSignUpRoute = location.pathname === '/signup';
-    const [isSignUp, setIsSignUp] = useState(isSignUpRoute);
     const [piError, setPiError] = useState('');
-    const [piUser, setPiUser] = useState(null);
-    const [isAuthenticating, setIsAuthenticating] = useState(false);
-    
-    // Local error state - independent of useAuth hook
-    const [localError, setLocalError] = useState('');
     const [showError, setShowError] = useState(true);
-    
-    // Check for Pi Network method in URL params
-    const urlParams = new URLSearchParams(location.search);
-    const defaultMethod = urlParams.get('method') === 'pi' ? 'pi' : 'traditional';
-    const [authMethod, setAuthMethod] = useState(defaultMethod);
 
     // Update isSignUp when route changes
     React.useEffect(() => {
@@ -181,51 +166,27 @@ const AuthPage = () => {
                 </div>
 
                 <div className="auth-content">
-                    {/* Authentication Method Selector */}
-                    <div className="auth-method-selector">
-                        <button 
-                            className={`method-button ${authMethod === 'traditional' ? 'active' : ''}`}
-                            onClick={() => setAuthMethod('traditional')}
-                            disabled={authLoading}
-                        >
-                            📧 Email & Password
-                        </button>
-                        <button 
-                            className={`method-button ${authMethod === 'pi' ? 'active' : ''}`}
-                            onClick={() => setAuthMethod('pi')}
-                            disabled={authLoading}
-                        >
-                            🥧 Pi Network
-                        </button>
-                    </div>
-
                     {/* Modal Overlay Backdrop - Blocks Interaction */}
-                    {(localError || piError) && showError && (
+                    {piError && showError && (
                         <div className="error-modal-overlay">
                             {/* Enhanced Error Message */}
                             <div className="error-message enhanced">
                                 <div className="error-content">
                                     <span className="error-icon">⚠️</span>
                                     <div className="error-text-container">
-                                        <p className="error-main-text">{localError || piError}</p>
-                                        {(localError || piError).includes('Invalid email or password') && (
-                                            <p className="error-hint">💡 Please check your credentials and try again</p>
-                                        )}
-                                        {(localError || piError).includes('network') && (
+                                        <p className="error-main-text">{piError}</p>
+                                        {piError.includes('network') && (
                                             <p className="error-hint">🌐 Please check your internet connection</p>
                                         )}
-                                        {(localError || piError).includes('server') && (
+                                        {piError.includes('server') && (
                                             <p className="error-hint">⚙️ Our servers might be experiencing issues. Please try again later</p>
                                         )}
                                     </div>
                                     <button 
                                         className="error-close-btn"
                                         onClick={() => {
-                                            setTimeout(() => {
-                                                setShowError(false);
-                                                setLocalError('');
-                                                setPiError('');
-                                            }, 300);
+                                            setShowError(false);
+                                            setPiError('');
                                         }}
                                         aria-label="Close error message"
                                     >
@@ -234,65 +195,31 @@ const AuthPage = () => {
                                 </div>
                             </div>
                         </div>
-                    )}                    {/* Traditional Authentication */}
-                    {authMethod === 'traditional' && (
-                        <div className="traditional-auth">
-                            <h2>{isSignUp ? '🚀 Create Account' : '🔑 Welcome Back'}</h2>
-                            <p className="auth-description">
-                                {isSignUp 
-                                    ? 'Join thousands of guitar learners worldwide!' 
-                                    : 'Sign in to access your chord history and favorites.'}
-                            </p>
-                            
-                            <AuthForm 
-                                onSubmit={handleTraditionalAuth}
-                                isSignUp={isSignUp}
-                                loading={authLoading || isAuthenticating}
-                            />
-                            
-                            <div className="auth-toggle">
-                                <p>
-                                    {isSignUp 
-                                        ? 'Already have an account? ' 
-                                        : "Don't have an account? "}
-                                    <button 
-                                        className="toggle-button"
-                                        onClick={() => {
-                                            setIsSignUp(!isSignUp);
-                                        }}
-                                        disabled={authLoading}
-                                    >
-                                        {isSignUp ? 'Sign In' : 'Sign Up'}
-                                    </button>
-                                </p>
-                            </div>
-                        </div>
                     )}
 
-                    {/* Pi Network Authentication */}
-                    {authMethod === 'pi' && (
-                        <div className="pi-auth">
-                            <h2>🥧 Pi Network Authentication</h2>
-                            <p className="auth-description">
-                                Connect with your Pi Network account for secure, blockchain-based authentication.
-                            </p>
-                            
-                            <PiNetworkIntegration 
-                                onAuthSuccess={handlePiAuth}
-                                authMode={true}
-                            />
-                            
-                            <div className="pi-benefits">
-                                <h3>🌟 Pi Network Benefits:</h3>
-                                <ul>
-                                    <li>🔒 Secure blockchain authentication</li>
-                                    <li>💰 Pay for premium features with Pi</li>
-                                    <li>🚀 Support decentralized web</li>
-                                    <li>💎 Exclusive Pi user features</li>
-                                </ul>
-                            </div>
+                    {/* Pi Network Authentication ONLY */}
+                    <div className="pi-auth">
+                        <h2>🥧 Pi Network Authentication</h2>
+                        <p className="auth-description">
+                            ChordyPi is exclusively for Pi Network users. Connect with your Pi Network account for secure, blockchain-based authentication.
+                        </p>
+                        
+                        <PiNetworkIntegration 
+                            onAuthSuccess={handlePiAuth}
+                            authMode={true}
+                        />
+                        
+                        <div className="pi-benefits">
+                            <h3>🌟 Pi Network Benefits:</h3>
+                            <ul>
+                                <li>🔒 Secure blockchain authentication</li>
+                                <li>💰 Pay for premium features with Pi</li>
+                                <li>🚀 Support decentralized web</li>
+                                <li>💎 Exclusive Pi user features</li>
+                                <li>🎸 Learn guitar with blockchain rewards</li>
+                            </ul>
                         </div>
-                    )}
+                    </div>
 
                     {/* Quick Features Preview */}
                     <div className="features-preview">
