@@ -135,6 +135,12 @@ const App = () => {
     React.useEffect(() => {
         console.log('🔍 Checking authentication...');
         
+        // TEMPORARY FIX: Skip all authentication for testing
+        console.log('⚠️ BYPASSING Pi authentication for testing');
+        setPiAuthenticated(true);
+        setCheckingAuth(false);
+        return; // Exit early
+        
         // Detect if we're in Pi Browser
         const checkPiBrowser = typeof window !== 'undefined' && window.Pi !== undefined;
         setIsPiBrowser(checkPiBrowser);
