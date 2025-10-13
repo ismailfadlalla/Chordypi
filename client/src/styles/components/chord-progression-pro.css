@@ -143,7 +143,7 @@
     position: relative;
     z-index: 10;
     flex-shrink: 0; /* Prevent shrinking */
-    transform: translateX(-10px); /* Shift LEFT to align with dot centers */
+    transform: translateX(10px); /* Shift RIGHT to align with dot centers */
 }
 
 .demo-fretboard-strings {
