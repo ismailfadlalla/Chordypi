@@ -1142,6 +1142,26 @@ const PlayerPage = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* FULL CHORD PROGRESSION TIMELINE (4/4 Time Signature) */}
+                <div style={{
+                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    borderRadius: '15px',
+                    padding: '20px',
+                    marginTop: '20px',
+                    maxWidth: '1200px',
+                    marginLeft: 'auto',
+                    marginRight: 'auto'
+                }}>
+                    <ChordProgressionDisplay
+                        realisticChords={realisticChords}
+                        currentTime={currentTime}
+                        onSeek={handleSeek}
+                        currentChord={currentChord}
+                        currentChordIndex={currentChordIndex}
+                        displayMode="timeline"
+                    />
+                </div>
             </div>
         </div>
     );
