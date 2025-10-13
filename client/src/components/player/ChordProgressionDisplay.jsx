@@ -820,7 +820,6 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                 }}>
                     💡 Click any chord to jump to that time • Vertical lines show 4/4 time signature
                 </div>
-            </div>
         </div>
     );
 };
