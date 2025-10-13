@@ -398,6 +398,20 @@
     .demo-finger-number {
         font-size: 1rem;
     }
+    
+    /* Fix fret numbers for very small screens */
+    .fret-numbers {
+        padding-left: 45px; /* Adjust for smaller screens */
+        gap: 16px; /* Match smaller positions */
+        overflow-x: auto; /* Allow scroll if needed */
+    }
+    
+    .fret-number {
+        width: 35px; /* Match fret positions */
+        font-size: 0.8rem;
+        padding: 3px 0;
+        min-width: 35px; /* Prevent shrinking */
+    }
 }
 
 /* Animation */
