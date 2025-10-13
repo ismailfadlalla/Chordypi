@@ -4,6 +4,7 @@ import ChordProgressionDisplay from '../components/player/ChordProgressionDispla
 import ChordQualityBadge from '../components/common/ChordQualityBadge';
 import AudioVisualizer from '../components/player/AudioVisualizer';
 import '../styles/components/player.css';
+import './player.css'; // Responsive layout styles
 
 const PlayerPage = () => {
     const location = useLocation();
@@ -762,9 +763,9 @@ const PlayerPage = () => {
                 </div>
 
                 {/* Two-Column Layout: Video Player + Unique Chords Dashboard */}
-                <div style={{
+                <div className="player-main-grid" style={{
                     display: 'grid',
-                    gridTemplateColumns: window.innerWidth > 1024 ? '2fr 1fr' : '1fr',
+                    gridTemplateColumns: '1fr',
                     gap: '20px',
                     marginBottom: '20px'
                 }}>
