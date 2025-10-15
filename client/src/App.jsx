@@ -9,7 +9,7 @@ import LibraryPage from './pages/LibraryPage';
 import JudgeDemoPage from './pages/JudgeDemoPage';
 import SearchResultsPage from './pages/SearchResultsPage';
 import AnalyzingPage from './pages/AnalyzingPage';
-import Header from './components/common/Header';
+// REMOVED: Header - Not needed for Pi Network Hackathon (no auth pages)
 import Footer from './components/common/Footer';
 import './styles/mobile-responsive.css';
 
@@ -92,8 +92,7 @@ const AppContent = () => {
             {/* Top-right Sign Out Button - Only show on home page, not on search or library */}
             {isHomePage && !isSearchPage && !isLibraryPage && <TopSignOutButton />}
             
-            {/* Hide header on player, home, demo, search, and analyzing pages for clean, focused experience */}
-            {!isPlayerPage && !isHomePage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Header />}
+            {/* REMOVED: Header component - Not needed for Pi Network Hackathon */}
             
             <main className="main-content" style={{
                 width: '100%',
