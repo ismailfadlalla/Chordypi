@@ -1,11 +1,11 @@
 {
   "name": "chordypi-client",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ChordyPi - AI Guitar Learning with Pi Network Integration",
   "main": "index.js",
   "scripts": {
     "start": "webpack serve --mode development",
-    "prebuild": "echo 'Building from clean state...'",
+    "prebuild": "echo 'Building from clean state - No cache...'",
     "build": "webpack --mode production --no-cache",
     "test": "jest"
   },
