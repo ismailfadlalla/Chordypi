@@ -235,7 +235,7 @@
     }
     
     .demo-fretboard-string {
-        gap: 15px !important; /* Adjusted for wider fret spacing */
+        gap: 18px !important; /* INCREASED for wider fret spacing to match 35px base gap */
     }
     
     .string-label {
@@ -244,18 +244,29 @@
     }
     
     .demo-fret-position {
-        width: 35px !important; /* Adjusted for wider base frets */
-        height: 30px !important;
+        width: 45px !important; /* INCREASED for better visibility */
+        height: 45px !important; /* Made square for better circles */
+    }
+    
+    /* CRITICAL: Ensure active dots are VISIBLE */
+    .demo-fret-position.active {
+        background: #6c5ce7 !important;
+        border: 3px solid #FFD700 !important;
+        box-shadow: 0 0 25px rgba(108, 92, 231, 0.9), 0 0 15px rgba(255, 215, 0, 0.8) !important;
     }
     
     .demo-finger-number {
-        font-size: 0.8rem !important;
+        font-size: 1rem !important;
+        font-weight: 900 !important;
+        color: white !important;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9) !important;
     }
     
     .fret-number {
-        width: 45px !important; /* Adjusted for wider fret numbers */
-        font-size: 0.75rem !important;
-        padding: 3px 0 !important;
+        width: 55px !important; /* INCREASED to match wider frets */
+        font-size: 0.8rem !important;
+        padding: 4px 0 !important;
+        text-align: center !important;
     }
     
     /* Reduce fretboard string line positioning */
