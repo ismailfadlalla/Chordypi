@@ -146,7 +146,7 @@ const Footer = () => {
                         color: '#888',
                         fontSize: '14px'
                     }}>
-                        &copy; {new Date().getFullYear()} ChordyPi. All rights reserved.                             v1.0.9
+                        &copy; {new Date().getFullYear()} ChordyPi. All rights reserved.                             v1.1.0
                     </p>
                     <p style={{ 
                         margin: '0',
