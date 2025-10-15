@@ -22,7 +22,7 @@ const PlayerPage = () => {
     // Require song data
     if (!songData) {
         return (
-            <div className="player-page" style={{ minHeight: '100vh', backgroundColor: '#1a1a1a', overflow: 'hidden' }}>
+            <div className="player-page">
                 <div style={{ padding: '20px', textAlign: 'center', color: 'white' }}>
                     <button 
                         onClick={() => history.push('/')}
