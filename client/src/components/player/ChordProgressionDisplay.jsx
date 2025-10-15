@@ -497,8 +497,8 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                             // Convert pattern indices to display positions
                             const startDisplayIdx = numStrings - 1 - startStr; // Pattern to display
                             const endDisplayIdx = numStrings - 1 - endStr;     // Pattern to display
-                            const topPosition = Math.min(startDisplayIdx, endDisplayIdx) * stringSpacing - 10; // Start 10px above first string
-                            const height = (Math.abs(endDisplayIdx - startDisplayIdx) * stringSpacing) + 70; // Extended height to cover dots properly
+                            const topPosition = Math.min(startDisplayIdx, endDisplayIdx) * stringSpacing - 5; // Start 5px above first string
+                            const height = (Math.abs(endDisplayIdx - startDisplayIdx) * stringSpacing) + 40; // More proportional height
                             // Adjust position based on starting fret offset
                             const fretOffset = barreFret - startingFret;
                             const leftPosition = 30 + fretOffset * 70 + 35; // 30px label + fret spacing (70px) + center offset (35px) - shifted right to center over dots
@@ -510,17 +510,17 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                                         position: 'absolute',
                                         left: `${leftPosition}px`,
                                         top: `${topPosition}px`,
-                                        width: '50px',
-                                        maxWidth: '50px',
+                                        width: '40px',
+                                        maxWidth: '40px',
                                         height: `${height}px`,
                                         background: 'linear-gradient(90deg, rgba(108, 92, 231, 0.95) 0%, rgba(108, 92, 231, 1) 50%, rgba(108, 92, 231, 0.95) 100%)',
-                                        borderRadius: '25px',
-                                        border: '3px solid rgba(255, 215, 0, 0.9)',
+                                        borderRadius: '20px',
+                                        border: '2px solid rgba(255, 215, 0, 0.9)',
                                         boxShadow: `
-                                            0 0 30px rgba(108, 92, 231, 0.9),
-                                            0 0 15px rgba(255, 215, 0, 0.6),
-                                            inset 0 2px 8px rgba(255, 255, 255, 0.3),
-                                            inset 0 -2px 8px rgba(0, 0, 0, 0.3)
+                                            0 0 20px rgba(108, 92, 231, 0.8),
+                                            0 0 10px rgba(255, 215, 0, 0.5),
+                                            inset 0 2px 6px rgba(255, 255, 255, 0.3),
+                                            inset 0 -2px 6px rgba(0, 0, 0, 0.3)
                                         `,
                                         zIndex: 10,
                                         pointerEvents: 'none',
