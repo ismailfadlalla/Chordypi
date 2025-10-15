@@ -920,7 +920,9 @@ const PlayerPage = () => {
                                             backgroundColor: 'rgba(255,255,255,0.05)',
                                             border: '1px solid rgba(255,255,255,0.1)',
                                             position: 'relative',
-                                            overflow: 'hidden'
+                                            overflow: 'hidden',
+                                            pointerEvents: 'auto',
+                                            touchAction: 'manipulation'
                                         }}
                                         onMouseEnter={(e) => {
                                             e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)';
@@ -930,8 +932,16 @@ const PlayerPage = () => {
                                             e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)';
                                             e.currentTarget.style.transform = 'translateX(0)';
                                         }}
-                                        onClick={() => {
-                                            // TODO Phase 2: Open practice mode for this chord
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            console.log(`🎸 Chord clicked: ${chordData.chord}`);
+                                            alert(`🎸 Practice mode for ${chordData.chord} coming in Phase 2!\n\nThis chord appears ${chordData.count} times in the song.`);
+                                        }}
+                                        onTouchEnd={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            console.log(`🎸 Chord touched: ${chordData.chord}`);
                                             alert(`🎸 Practice mode for ${chordData.chord} coming in Phase 2!\n\nThis chord appears ${chordData.count} times in the song.`);
                                         }}
                                     >
@@ -946,7 +956,8 @@ const PlayerPage = () => {
                                             borderRadius: '8px',
                                             zIndex: 0,
                                             transition: 'width 0.3s ease',
-                                            boxShadow: '0 0 10px rgba(255, 215, 0, 0.3)'
+                                            boxShadow: '0 0 10px rgba(255, 215, 0, 0.3)',
+                                            pointerEvents: 'none'
                                         }}></div>
 
                                         {/* Chord Info (Above frequency bar) */}
