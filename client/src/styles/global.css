@@ -640,6 +640,15 @@ a {
 
 /* Responsive design */
 @media (max-width: 768px) {
+    html, body, #root {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+        position: relative !important;
+        zoom: 1 !important;
+        -webkit-text-size-adjust: 100% !important;
+    }
+    
     .search-title {
         font-size: 2.5rem;
     }
@@ -666,6 +675,9 @@ a {
         min-height: auto !important;
         padding-top: 0 !important;
         margin-top: 0 !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
     }
     
     .app, body {
