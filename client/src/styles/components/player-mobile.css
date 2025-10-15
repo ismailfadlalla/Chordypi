@@ -73,8 +73,16 @@
 
 /* Mobile responsive overrides */
 @media (max-width: 768px) {
+    /* Override PlayerPage container height - remove excessive vertical space */
+    .player-page {
+        min-height: auto !important;
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+    }
+    
     .player-main-container {
         padding: 5px !important;
+        margin-top: 0 !important;
     }
     
     .player-header-section {
