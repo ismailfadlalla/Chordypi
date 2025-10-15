@@ -765,21 +765,15 @@ const PlayerPage = () => {
                             </div>
                         ) : originalVideoId ? (
                             // YouTube video player
-                            <div>
-                                <p style={{ color: playerReady ? '#90EE90' : '#FFD700', marginBottom: '10px', textAlign: 'center' }}>
-                                    {playerReady ? '✅' : '🔄'} {songData.title} 
-                                    {playerReady ? ' (Ready)' : ' (Loading...)'}
-                                </p>
-                                <div 
-                                    ref={playerRef}
-                                    style={{
-                                        width: '100%',
-                                        height: '450px',
-                                        borderRadius: '10px',
-                                        backgroundColor: '#000'
-                                    }}
-                                ></div>
-                            </div>
+                            <div 
+                                ref={playerRef}
+                                style={{
+                                    width: '100%',
+                                    height: '450px',
+                                    borderRadius: '10px',
+                                    backgroundColor: '#000'
+                                }}
+                            ></div>
                         ) : (
                             // Fallback when no video available
                             <div style={{
