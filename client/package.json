@@ -1,6 +1,6 @@
 {
   "name": "chordypi-client",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "ChordyPi - AI Guitar Learning with Pi Network Integration",
   "main": "index.js",
   "scripts": {
