@@ -71,8 +71,8 @@
     justify-content: flex-start;
 }
 
-/* Mobile responsive overrides */
-@media (max-width: 768px) {
+/* Mobile responsive overrides - WIDER RANGE for tablets and Pi Browser */
+@media (max-width: 1024px) {
     /* Override PlayerPage container height - remove excessive vertical space */
     .player-page {
         min-height: auto !important;
