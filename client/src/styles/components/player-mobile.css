@@ -78,15 +78,23 @@
         min-height: auto !important;
         padding-top: 0 !important;
         margin-top: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: stretch !important;
     }
     
     .player-main-container {
         padding: 5px !important;
         margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        flex: 1 !important;
     }
     
     .player-header-section {
         margin-bottom: 10px !important;
+        margin-top: 0 !important;
         padding: 10px !important;
         flex-direction: column;
         gap: 10px;
@@ -96,15 +104,18 @@
         grid-template-columns: 1fr !important;
         gap: 10px !important;
         margin-bottom: 10px !important;
+        margin-top: 0 !important;
     }
     
     .video-player-container {
         padding: 10px !important;
         margin-bottom: 5px;
+        margin-top: 0 !important;
     }
     
     .dashboard-container {
         padding: 10px !important;
+        margin-top: 0 !important;
     }
     
     .fretboard-section-container {
