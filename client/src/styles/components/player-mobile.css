@@ -209,9 +209,9 @@
     
     /* CRITICAL: Scale down fretboards to fit mobile properly */
     .demo-fretboard-container {
-        transform: scale(0.45) !important;
+        transform: scale(0.55) !important; /* Increased from 0.45 for better visibility */
         transform-origin: top center !important;
-        margin-bottom: -120px !important; /* Negative margin to compensate for scale */
+        margin-bottom: -100px !important; /* Adjusted for larger scale */
     }
     
     .demo-chord-label {
@@ -228,7 +228,7 @@
     }
     
     .demo-fretboard-string {
-        gap: 10px !important;
+        gap: 15px !important; /* Adjusted for wider fret spacing */
     }
     
     .string-label {
@@ -237,7 +237,7 @@
     }
     
     .demo-fret-position {
-        width: 30px !important;
+        width: 35px !important; /* Adjusted for wider base frets */
         height: 30px !important;
     }
     
@@ -246,7 +246,7 @@
     }
     
     .fret-number {
-        width: 35px !important;
+        width: 45px !important; /* Adjusted for wider fret numbers */
         font-size: 0.75rem !important;
         padding: 3px 0 !important;
     }
