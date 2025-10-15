@@ -210,18 +210,23 @@
     }
     
     .fretboard-card {
-        padding: 5px !important;
+        padding: 8px !important; /* Increased from 5px for better spacing */
         width: 50% !important;
         max-width: 50% !important;
         box-sizing: border-box !important;
         flex: 1 !important;
+        overflow: visible !important; /* Allow fretboards to extend slightly */
     }
     
-    /* CRITICAL: Scale down fretboards to fit mobile properly */
+    /* CRITICAL: Scale fretboards larger to fill marked area */
     .demo-fretboard-container {
-        transform: scale(0.55) !important; /* Increased from 0.45 for better visibility */
+        transform: scale(0.8) !important; /* INCREASED from 0.55 to 0.8 for larger fretboards */
         transform-origin: top center !important;
-        margin-bottom: -100px !important; /* Adjusted for larger scale */
+        margin-bottom: -80px !important; /* Adjusted for larger scale (was -100px) */
+        margin-left: auto !important;
+        margin-right: auto !important;
+        max-width: 100% !important;
+        width: 100% !important;
     }
     
     .demo-chord-label {
