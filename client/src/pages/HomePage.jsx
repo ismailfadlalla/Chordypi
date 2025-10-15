@@ -50,12 +50,16 @@ const HomePage = () => {
 
     // Load user data when component mounts or user changes
     useEffect(() => {
-        // ALWAYS load favorites and history from localStorage, regardless of user state
-        const favs = getFavorites();
-        const hist = getHistory();
-        console.log('📚 Loading user data:', { favorites: favs.length, history: hist.length });
-        setFavorites(favs);
-        setRecentHistory(hist);
+        if (user) {
+            const favs = getFavorites();
+            const hist = getHistory();
+            console.log('📚 Loading user data:', { favorites: favs.length, history: hist.length });
+            setFavorites(favs);
+            setRecentHistory(hist);
+        } else {
+            setFavorites([]);
+            setRecentHistory([]);
+        }
     }, [user]);
 
     // Scroll to top when homepage loads - AGGRESSIVE RESET
@@ -184,9 +188,9 @@ const HomePage = () => {
     };
 
     const handlePremiumFeatureRequest = () => {
-        // Pi Network users already have premium features - this is just a placeholder
-        // Future: Could show info modal about Pi Network benefits
-        console.log('Premium features available for Pi Network users');
+        // For Pi Network Hackathon: No email auth, just show premium modal
+        // Users don't need to sign in - just use Pi Network auth for premium features
+        setShowPremiumModal(true);
     };
 
     const handleToggleFavorite = (song) => {
@@ -270,41 +274,7 @@ const HomePage = () => {
     return (
         <div className="home-page">
             
-            {/* � CHORDYPI LOGO BANNER */}
-            <div className="logo-banner" style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                padding: '40px 20px',
-                textAlign: 'center',
-                marginBottom: '0',
-                position: 'relative',
-                overflow: 'hidden'
-            }}>
-                <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%)',
-                    pointerEvents: 'none'
-                }}></div>
-                <img 
-                    src="/images/chordypi-logo.png" 
-                    alt="ChordyPi Logo" 
-                    style={{
-                        maxWidth: '100%',
-                        width: 'auto',
-                        height: 'auto',
-                        maxHeight: '150px',
-                        objectFit: 'contain',
-                        filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.3))',
-                        position: 'relative',
-                        zIndex: 1
-                    }}
-                />
-            </div>
-            
-            {/* �🏆 HACKATHON JUDGE BANNER */}
+            {/* 🏆 HACKATHON JUDGE BANNER */}
             <div className="hackathon-banner" style={{
                 background: 'linear-gradient(135deg, #FFD700, #6c5ce7)',
                 padding: '20px',
@@ -365,10 +335,10 @@ const HomePage = () => {
                         </div>
                     </div>
                     
-                    {/* Bottom: Two-column layout for boxes */}
-                    <div className="hero-boxes-container">
-                        {/* Left Box: User Welcome or App Info */}
-                        {user ? (
+                    {/* Bottom: Two-column layout for user boxes */}
+                    {user && (
+                        <div className="hero-boxes-container">
+                            {/* Left Box: User Welcome */}
                             <div className="hero-box user-welcome">
                                 <div className="welcome-message">
                                     <span className="greeting">Welcome back, {user.username}!</span>
@@ -391,30 +361,9 @@ const HomePage = () => {
                                     )}
                                 </div>
                             </div>
-                        ) : (
-                            <div className="hero-box user-welcome">
-                                <div className="welcome-message">
-                                    <span className="greeting">🎸 Learn Guitar Chords with AI</span>
-                                </div>
-                                <div className="user-stats">
-                                    <div className="stat-item">
-                                        <span className="stat-number">🎵</span>
-                                        <span className="stat-label">Real-time Analysis</span>
-                                    </div>
-                                    <div className="stat-item">
-                                        <span className="stat-number">🎯</span>
-                                        <span className="stat-label">Interactive Fretboard</span>
-                                    </div>
-                                    <div className="stat-item">
-                                        <span className="stat-number">⚡</span>
-                                        <span className="stat-label">Instant Results</span>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                        
-                        {/* Right Box: Featured Songs */}
-                        <div className="hero-box hero-featured-preview">
+                            
+                            {/* Right Box: Featured Songs */}
+                            <div className="hero-box hero-featured-preview">
                                 <h3 className="preview-title">🎸 Quick Start</h3>
                                 <div className="preview-songs">
                                     <div className="preview-song-card" onClick={() => handleAnalyzeSong('9bZkp7q19f0', 'Gangnam Style', 'PSY')}>
@@ -449,6 +398,71 @@ const HomePage = () => {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+            
+            {/* Pi Network Authentication Section - Only visible in Pi Browser */}
+            {window.Pi && (
+                <div className="pi-auth-section" style={{
+                    maxWidth: '100%',
+                    padding: '20px',
+                    margin: '20px auto',
+                    background: 'linear-gradient(135deg, rgba(123, 97, 255, 0.1) 0%, rgba(72, 52, 212, 0.1) 100%)',
+                    borderRadius: '16px',
+                    border: '2px solid rgba(123, 97, 255, 0.3)',
+                    textAlign: 'center'
+                }}>
+                    <h2 style={{ color: '#7b61ff', marginBottom: '15px' }}>🔐 Pi Network Integration</h2>
+                    <p style={{ marginBottom: '20px', color: '#ccc' }}>
+                        Connect with Pi Network to unlock premium features and support the creator economy!
+                    </p>
+                    {!isPiUser ? (
+                        <button 
+                            onClick={() => history.push('/signup?method=pi')}
+                            style={{
+                                padding: '15px 40px',
+                                fontSize: '18px',
+                                background: 'linear-gradient(135deg, #7b61ff 0%, #4834d4 100%)',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                                fontWeight: 'bold',
+                                boxShadow: '0 4px 15px rgba(123, 97, 255, 0.4)'
+                            }}
+                        >
+                            💎 Connect with Pi Network
+                        </button>
+                    ) : (
+                        <div style={{ color: '#4ade80' }}>
+                            ✅ Connected to Pi Network
+                        </div>
+                    )}
+                </div>
+            )}
+            
+            {/* Feature Highlights - Removed "for Non-Users" condition to show always */}
+            <div className="feature-highlights">
+                <div className="feature-grid">
+                    <div className="feature-card">
+                        <div className="feature-icon">🎯</div>
+                        <h3>Real-time Analysis</h3>
+                        <p>Get instant chord progressions from any YouTube song</p>
+                    </div>
+                    <div className="feature-card">
+                        <div className="feature-icon">🎸</div>
+                        <h3>Interactive Fretboard</h3>
+                        <p>See exactly where to place your fingers</p>
+                    </div>
+                    <div className="feature-card premium">
+                        <div className="feature-icon">⚡</div>
+                        <h3>Premium Features</h3>
+                        <p>Advanced analysis, custom speeds, and more with Pi Network</p>
+                        <button className="premium-cta" onClick={handlePremiumFeatureRequest}>
+                            Learn More
+                        </button>
                     </div>
                 </div>
             </div>
@@ -535,7 +549,7 @@ const HomePage = () => {
             </div>
             
             {/* User Library Quick Access */}
-            {(recentHistory.length > 0 || favorites.length > 0) && (
+            {user && (recentHistory.length > 0 || favorites.length > 0) && (
                 <div className="user-library-preview" style={{
                     background: 'rgba(255, 255, 255, 0.05)',
                     borderRadius: '20px',
