@@ -11,7 +11,7 @@ module.exports = (env, argv) => {
     entry: path.join(__dirname, 'src', 'index.js'),
     devtool: isProduction ? 'source-map' : 'inline-source-map', // Use inline-source-map instead of eval
     output: {
-      filename: 'bundle.js',
+      filename: isProduction ? 'bundle.[contenthash].js' : 'bundle.js', // Add hash in production
       path: path.resolve(__dirname, 'dist'),
       publicPath: '/',
       clean: true,
