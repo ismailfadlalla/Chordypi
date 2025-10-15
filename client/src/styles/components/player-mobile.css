@@ -266,17 +266,19 @@
     }
     
     .fret-number {
-        width: 55px !important; /* INCREASED to match wider frets */
-        font-size: 0.8rem !important;
+        width: 45px !important; /* MATCH dot width exactly for perfect alignment */
+        font-size: 0.75rem !important;
         padding: 4px 0 !important;
         text-align: center !important;
+        box-sizing: border-box !important;
     }
     
     /* CRITICAL: Ensure fret numbers have matching gap */
     .fret-numbers {
         gap: 18px !important; /* MATCH the demo-fretboard-string gap */
-        padding-left: 25px !important; /* Match string label width + small gap */
+        padding-left: 38px !important; /* 20px string label + 18px gap = perfect alignment */
         transform: translateX(0px) !important; /* NO shift - let gap handle alignment */
+        margin-top: 12px !important;
     }
     
     /* Reduce fretboard string line positioning */
