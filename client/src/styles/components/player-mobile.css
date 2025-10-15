@@ -185,17 +185,23 @@
     }
     
     .fretboard-cards-wrapper {
-        flex-direction: column !important;
-        gap: 10px !important;
+        flex-direction: row !important;
+        gap: 5px !important;
         width: 100% !important;
         max-width: 100% !important;
     }
     
     .fretboard-card {
-        padding: 10px !important;
-        width: 100% !important;
-        max-width: 100% !important;
+        padding: 5px !important;
+        width: 50% !important;
+        max-width: 50% !important;
         box-sizing: border-box !important;
+        flex: 1 !important;
+    }
+    
+    /* Make fretboard text smaller to fit */
+    .fretboard-card > div {
+        font-size: 10px !important;
     }
     
     /* Ensure all buttons and text stay within bounds */
