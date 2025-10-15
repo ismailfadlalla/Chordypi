@@ -272,6 +272,13 @@
         text-align: center !important;
     }
     
+    /* CRITICAL: Ensure fret numbers have matching gap */
+    .fret-numbers {
+        gap: 18px !important; /* MATCH the demo-fretboard-string gap */
+        padding-left: 25px !important; /* Match string label width + small gap */
+        transform: translateX(0px) !important; /* NO shift - let gap handle alignment */
+    }
+    
     /* Reduce fretboard string line positioning */
     .demo-fretboard-string::before {
         left: 25px !important;
