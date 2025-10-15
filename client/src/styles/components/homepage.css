@@ -1154,48 +1154,50 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
     .hero-section {
-        padding: 20px 15px;
-        min-height: 60vh !important;
-        max-height: 70vh !important;
+        padding: 15px 10px; /* Reduced padding */
+        min-height: 40vh !important; /* Reduced from 60vh */
+        max-height: 50vh !important; /* Reduced from 70vh */
     }
     
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 2rem; /* Smaller title */
         flex-direction: column;
-        gap: 10px;
+        gap: 5px; /* Tighter spacing */
     }
     
     .chord-symbol {
-        font-size: 2rem;
+        font-size: 1.5rem; /* Smaller */
     }
     
     .hero-subtitle {
-        font-size: 1.2rem;
+        font-size: 1rem; /* Slightly larger for readability */
+        padding: 0 5px;
     }
     
     .user-stats {
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
     }
     
     .auth-links {
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
     }
     
     .library-header {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
         text-align: center;
     }
     
     .song-preview-list {
-        grid-template-columns: 1fr;
-        gap: 15px;
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile like desktop */
+        gap: 10px;
     }
     
     .feature-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+        gap: 10px;
     }
     
     .premium-modal {
@@ -1209,12 +1211,13 @@ body {
     .user-library-preview,
     .featured-section,
     .pi-network-section {
-        padding: 20px 15px;
+        padding: 15px 10px; /* Reduced from 20px 15px */
     }
     
     .search-header h2,
     .section-header h2 {
-        font-size: 2rem;
+        font-size: 1.5rem; /* Reduced from 2rem */
+        margin-bottom: 10px;
     }
     
     /* Ensure home page doesn't get cut off */
