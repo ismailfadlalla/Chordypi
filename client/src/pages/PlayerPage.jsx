@@ -687,35 +687,29 @@ const PlayerPage = () => {
 
     return (
         <div className="player-page" style={{ 
-            minHeight: '100vh', 
-            width: '100%',
-            maxWidth: '100vw',
+            minHeight: '80vh', 
             backgroundColor: '#1a1a1a', 
             overflow: 'hidden',
-            overflowX: 'hidden',
             display: 'flex',
-            flexDirection: 'column',
-            position: 'relative'
+            flexDirection: 'column'
         }}>
             
             {/* Main Container - Proper containment */}
             <div style={{
                 flex: 1,
-                width: '100%',
-                maxWidth: '100%',
+                maxWidth: '1800px',
                 margin: '0 auto',
-                padding: '10px',
+                padding: window.innerWidth <= 768 ? '5px' : '20px', // Responsive padding
                 boxSizing: 'border-box',
-                overflow: 'hidden',
-                overflowX: 'hidden'
+                overflow: 'hidden'
             }}>
                 {/* Back Button and Song Info */}
                 <div style={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginBottom: '20px',
-                    padding: '15px',
+                    marginBottom: window.innerWidth <= 768 ? '10px' : '20px', // Responsive margin
+                    padding: window.innerWidth <= 768 ? '10px' : '15px', // Responsive padding
                     backgroundColor: 'rgba(255,255,255,0.1)',
                     borderRadius: '10px',
                     color: 'white'
@@ -771,14 +765,14 @@ const PlayerPage = () => {
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: window.innerWidth > 1024 ? '2fr 1fr' : '1fr',
-                    gap: '20px',
-                    marginBottom: '20px'
+                    gap: window.innerWidth <= 768 ? '10px' : '20px', // Responsive gap
+                    marginBottom: window.innerWidth <= 768 ? '10px' : '20px' // Responsive margin
                 }}>
                     {/* LEFT COLUMN: YouTube Video Player OR Audio Visualizer Section */}
                     <div style={{
                         backgroundColor: 'rgba(255,255,255,0.1)',
                         borderRadius: '10px',
-                        padding: '20px'
+                        padding: window.innerWidth <= 768 ? '10px' : '20px' // Responsive padding
                     }}>
                         <h3 style={{ color: 'white', marginBottom: '15px', textAlign: 'center' }}>
                             {isUploadedFile ? '� Audio Player' : '�🎥 Video Player'}
@@ -852,7 +846,7 @@ const PlayerPage = () => {
                         backgroundColor: 'rgba(108, 92, 231, 0.15)',
                         border: '2px solid rgba(108, 92, 231, 0.4)',
                         borderRadius: '10px',
-                        padding: '20px',
+                        padding: window.innerWidth <= 768 ? '10px' : '20px', // Responsive padding
                         display: 'flex',
                         flexDirection: 'column',
                         height: 'fit-content'
@@ -1067,8 +1061,8 @@ const PlayerPage = () => {
                 <div style={{
                     backgroundColor: 'rgba(255,255,255,0.05)',
                     borderRadius: '15px',
-                    padding: '15px',
-                    marginTop: '15px',
+                    padding: window.innerWidth <= 768 ? '10px' : '15px', // Responsive padding
+                    marginTop: window.innerWidth <= 768 ? '10px' : '15px', // Responsive margin
                     maxWidth: '900px',
                     marginLeft: 'auto',
                     marginRight: 'auto'
@@ -1086,7 +1080,7 @@ const PlayerPage = () => {
                     <div style={{
                         display: 'flex',
                         flexDirection: window.innerWidth > 768 ? 'row' : 'column',
-                        gap: '20px',
+                        gap: window.innerWidth <= 768 ? '10px' : '20px', // Responsive gap
                         justifyContent: 'center',
                         alignItems: 'stretch'
                     }}>
@@ -1097,7 +1091,7 @@ const PlayerPage = () => {
                             background: 'linear-gradient(135deg, rgba(255, 243, 176, 0.08), rgba(255, 224, 130, 0.03))',
                             border: '2px solid rgba(255, 215, 0, 0.3)',
                             borderRadius: '12px',
-                            padding: '15px',
+                            padding: window.innerWidth <= 768 ? '10px' : '15px', // Responsive padding
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
@@ -1127,7 +1121,7 @@ const PlayerPage = () => {
                             background: 'linear-gradient(135deg, rgba(108, 92, 231, 0.10), rgba(137, 155, 232, 0.06))',
                             border: '2px solid rgba(108, 92, 231, 0.25)',
                             borderRadius: '12px',
-                            padding: '15px',
+                            padding: window.innerWidth <= 768 ? '10px' : '15px', // Responsive padding
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',

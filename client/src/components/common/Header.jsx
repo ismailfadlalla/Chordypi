@@ -18,20 +18,15 @@ const Header = () => {
             }}>
                 <nav className="nav">
                     <ul>
+                        {/* REMOVED: Sign In/Sign Up - Using Pi Network authentication only */}
                         <li>
-                            <Link to="/auth">Sign In</Link>
-                        </li>
-                        <li>
-                            <Link to="/signup">Sign Up</Link>
-                        </li>
-                        <li>
-                            <Link to="/home">Home</Link>
+                            <Link to="/home">🏠 Home</Link>
                         </li>
                         <li>
                             <Link to="/library">📚 Library</Link>
                         </li>
                         <li>
-                            <Link to="/player">Player</Link>
+                            <Link to="/player">🎸 Player</Link>
                         </li>
                         <li>
                             <Link to="/graphics-showcase" className="showcase-link">🎨 Graphics</Link>
