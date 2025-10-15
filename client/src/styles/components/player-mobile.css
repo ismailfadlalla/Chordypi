@@ -160,6 +160,9 @@
         height: auto !important;
         max-height: none !important;
         overflow: visible !important;
+        pointer-events: auto !important;
+        position: relative !important;
+        z-index: 100 !important;
     }
     
     /* Make chord list show all items without scrolling on mobile */
@@ -167,13 +170,17 @@
         overflow-y: visible !important;
         max-height: none !important;
         height: auto !important;
+        pointer-events: auto !important;
     }
     
-    /* Compact chord items on mobile */
+    /* Compact chord items on mobile - ENSURE CLICKABLE */
     .dashboard-container > div > div {
         margin-bottom: 8px !important;
         padding: 8px !important;
         font-size: 14px !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        touch-action: manipulation !important;
     }
     
     .fretboard-section-container {

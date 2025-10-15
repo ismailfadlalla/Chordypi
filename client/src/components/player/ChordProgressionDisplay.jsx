@@ -497,8 +497,8 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                             // Convert pattern indices to display positions
                             const startDisplayIdx = numStrings - 1 - startStr; // Pattern to display
                             const endDisplayIdx = numStrings - 1 - endStr;     // Pattern to display
-                            const topPosition = Math.min(startDisplayIdx, endDisplayIdx) * stringSpacing; // Align with string center
-                            const height = (Math.abs(endDisplayIdx - startDisplayIdx) * stringSpacing) + 25; // Minimal height - just cover the strings
+                            const topPosition = Math.min(startDisplayIdx, endDisplayIdx) * stringSpacing + 10; // Start at string center + 10px
+                            const height = (Math.abs(endDisplayIdx - startDisplayIdx) * stringSpacing); // EXACT spacing - no padding
                             // Adjust position based on starting fret offset - UPDATED for wider frets
                             const fretOffset = barreFret - startingFret;
                             const leftPosition = 30 + fretOffset * 90 + 30; // 30px label + fret spacing (90px for wider frets) + center offset (30px)
