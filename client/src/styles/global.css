@@ -660,6 +660,18 @@ a {
         min-width: 120px;
         padding: 15px;
     }
+    
+    /* CRITICAL: Remove excessive spacing on PlayerPage mobile */
+    .player-page {
+        min-height: auto !important;
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+    }
+    
+    .app, body {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
 }
 
 .search-interface {
