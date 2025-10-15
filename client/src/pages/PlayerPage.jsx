@@ -909,8 +909,9 @@ const PlayerPage = () => {
                                 const percentage = (chordData.count / maxCount) * 100;
                                 
                                 return (
-                                    <div 
+                                    <button
                                         key={index}
+                                        type="button"
                                         style={{
                                             marginBottom: '12px',
                                             cursor: 'pointer',
@@ -921,8 +922,9 @@ const PlayerPage = () => {
                                             border: '1px solid rgba(255,255,255,0.1)',
                                             position: 'relative',
                                             overflow: 'hidden',
-                                            pointerEvents: 'auto',
-                                            touchAction: 'manipulation'
+                                            width: '100%',
+                                            textAlign: 'left',
+                                            display: 'block'
                                         }}
                                         onMouseEnter={(e) => {
                                             e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)';
@@ -934,14 +936,7 @@ const PlayerPage = () => {
                                         }}
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            e.stopPropagation();
                                             console.log(`🎸 Chord clicked: ${chordData.chord}`);
-                                            alert(`🎸 Practice mode for ${chordData.chord} coming in Phase 2!\n\nThis chord appears ${chordData.count} times in the song.`);
-                                        }}
-                                        onTouchEnd={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            console.log(`🎸 Chord touched: ${chordData.chord}`);
                                             alert(`🎸 Practice mode for ${chordData.chord} coming in Phase 2!\n\nThis chord appears ${chordData.count} times in the song.`);
                                         }}
                                     >
@@ -999,7 +994,7 @@ const PlayerPage = () => {
                                                 ))}
                                             </div>
                                         </div>
-                                    </div>
+                                    </button>
                                 );
                             })}
                     </div>
