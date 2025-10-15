@@ -2808,21 +2808,40 @@
 
 @media (max-width: 768px) {
     .player-page {
-        padding: 15px;
+        padding: 5px; /* Reduced from 15px for tighter mobile layout */
     }
     
     .song-info h1 {
-        font-size: 2rem;
+        font-size: 1.5rem; /* Smaller on mobile */
     }
     
     .player-header {
         flex-direction: column;
         text-align: center;
-        gap: 15px;
+        gap: 10px; /* Reduced gap */
+        padding: 10px 5px; /* Tighter padding */
+    }
+    
+    .player-top-section {
+        flex-direction: column;
+        gap: 10px; /* Reduced gap */
+        margin-bottom: 10px;
+    }
+    
+    .youtube-container {
+        padding: 10px; /* Reduced padding */
+        margin-bottom: 5px;
+    }
+    
+    .bottom-chord-section {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+        margin-bottom: 60px; /* Reduced bottom margin */
     }
     
     .chord-name-large {
-        font-size: 2rem;
+        font-size: 1.8rem; /* Smaller on mobile */
     }
     
     .progression-track {
