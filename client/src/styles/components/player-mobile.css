@@ -207,6 +207,55 @@
         flex: 1 !important;
     }
     
+    /* CRITICAL: Scale down fretboards to fit mobile properly */
+    .demo-fretboard-container {
+        transform: scale(0.45) !important;
+        transform-origin: top center !important;
+        margin-bottom: -120px !important; /* Negative margin to compensate for scale */
+    }
+    
+    .demo-chord-label {
+        font-size: 1.2rem !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .demo-fretboard-visual {
+        padding: 8px !important;
+    }
+    
+    .demo-fretboard-strings {
+        gap: 8px !important;
+    }
+    
+    .demo-fretboard-string {
+        gap: 10px !important;
+    }
+    
+    .string-label {
+        width: 20px !important;
+        font-size: 0.7rem !important;
+    }
+    
+    .demo-fret-position {
+        width: 30px !important;
+        height: 30px !important;
+    }
+    
+    .demo-finger-number {
+        font-size: 0.8rem !important;
+    }
+    
+    .fret-number {
+        width: 35px !important;
+        font-size: 0.75rem !important;
+        padding: 3px 0 !important;
+    }
+    
+    /* Reduce fretboard string line positioning */
+    .demo-fretboard-string::before {
+        left: 25px !important;
+    }
+    
     /* Make fretboard text smaller to fit */
     .fretboard-card > div {
         font-size: 10px !important;
