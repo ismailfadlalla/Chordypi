@@ -116,7 +116,7 @@
 .fret-numbers {
     display: flex;
     align-items: center;
-    gap: 20px; /* Match the gap between fret positions */
+    gap: 35px; /* MATCH the gap between fret positions (was 20px) */
     margin-top: 20px; /* Space from fretboard */
     margin-bottom: 0;
     padding-left: 50px; /* 30px string label + 20px gap to first fret */
@@ -143,7 +143,7 @@
     position: relative;
     z-index: 10;
     flex-shrink: 0; /* Prevent shrinking */
-    transform: translateX(35px); /* ADJUSTED for wider frets */
+    transform: translateX(0px); /* REMOVED shift - let gap handle alignment */
 }
 
 .demo-fretboard-strings {
@@ -184,10 +184,10 @@
 
 .demo-fret-position {
     width: 70px; /* INCREASED from 60px for much wider frets */
-    height: 50px;
+    height: 70px; /* MADE SQUARE - was 50px causing ovals */
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: transparent; /* CHANGED from rgba(255, 255, 255, 0.05) to hide empty dots */
+    border: 2px solid transparent; /* CHANGED to hide empty dot borders */
     display: flex;
     align-items: center;
     justify-content: center;

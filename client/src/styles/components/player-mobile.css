@@ -176,11 +176,14 @@
     /* Compact chord items on mobile - ENSURE CLICKABLE */
     .dashboard-container > div > div {
         margin-bottom: 8px !important;
-        padding: 8px !important;
+        padding: 12px !important; /* INCREASED from 8px for bigger tap target */
         font-size: 14px !important;
         pointer-events: auto !important;
         cursor: pointer !important;
         touch-action: manipulation !important;
+        -webkit-tap-highlight-color: rgba(255, 215, 0, 0.3) !important;
+        user-select: none !important;
+        min-height: 50px !important; /* Ensure enough height for tap */
     }
     
     .fretboard-section-container {
