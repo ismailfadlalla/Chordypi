@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, useLocation } from 'react-router-dom';
 import { PlayerProvider } from './context/PlayerContext';
-import PiNetworkAuth from './components/auth/PiNetworkAuth';
 import HomePage from './pages/HomePage';
 import PlayerPage from './pages/PlayerPage';
+// REMOVED: AuthPage - Using Pi Network authentication only for hackathon
 import ProfilePage from './pages/ProfilePage';
 import LibraryPage from './pages/LibraryPage';
 import JudgeDemoPage from './pages/JudgeDemoPage';
@@ -73,6 +73,7 @@ const AppContent = () => {
     const location = useLocation();
     const isPlayerPage = location.pathname === '/player';
     const isHomePage = location.pathname === '/' || location.pathname === '/home';
+    // REMOVED: isAuthPage - no email auth for Pi Network Hackathon
     const isDemoPage = location.pathname === '/demo' || location.pathname === '/demo-judge';
     const isSearchPage = location.pathname === '/search' || location.pathname === '/search-results';
     const isAnalyzingPage = location.pathname === '/analyzing';
@@ -109,6 +110,9 @@ const AppContent = () => {
                     <Route path="/home" component={HomePage} />
                     <Route path="/" exact component={HomePage} />
                     
+                    {/* Auth Routes - REMOVED FOR PI NETWORK HACKATHON */}
+                    {/* Using Pi Network authentication only - no email/password */}
+                    
                     {/* App Routes */}
                     <Route path="/analyzing" component={AnalyzingPage} />
                     <Route path="/player" component={PlayerPage} />
@@ -119,99 +123,13 @@ const AppContent = () => {
                 </Switch>
             </main>
             
-            {/* Hide footer on player, home, demo, search, and analyzing pages for clean, focused experience */}
-            {!isPlayerPage && !isHomePage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Footer />}
+            {/* Show footer on HomePage for Pi Network Hackathon */}
+            {!isPlayerPage && !isDemoPage && !isSearchPage && !isAnalyzingPage && <Footer />}
         </div>
     );
 };
 
 const App = () => {
-    const [piAuthenticated, setPiAuthenticated] = React.useState(false);
-    const [checkingAuth, setCheckingAuth] = React.useState(true);
-    const [isPiBrowser, setIsPiBrowser] = React.useState(false);
-
-    console.log('🚀 App component loaded');
-
-    React.useEffect(() => {
-        console.log('🔍 Checking authentication...');
-        
-        // TEMPORARY FIX: Skip all authentication for testing
-        console.log('⚠️ BYPASSING Pi authentication for testing');
-        setPiAuthenticated(true);
-        setCheckingAuth(false);
-        return; // Exit early
-        
-        // Detect if we're in Pi Browser
-        const checkPiBrowser = typeof window !== 'undefined' && window.Pi !== undefined;
-        setIsPiBrowser(checkPiBrowser);
-        console.log('Pi Browser detected:', checkPiBrowser);
-        
-        // Check if user is already authenticated
-        const checkExistingAuth = () => {
-            const piAuth = localStorage.getItem('piNetworkAuth');
-            console.log('Stored Pi auth:', piAuth ? 'exists' : 'none');
-            
-            if (piAuth) {
-                try {
-                    const authData = JSON.parse(piAuth);
-                    // Check if auth is still valid (less than 24 hours old)
-                    const isValid = authData.timestamp && (Date.now() - authData.timestamp < 24 * 60 * 60 * 1000);
-                    if (isValid) {
-                        console.log('✅ Existing Pi authentication found');
-                        setPiAuthenticated(true);
-                    }
-                } catch (e) {
-                    console.error('Error parsing Pi auth:', e);
-                }
-            }
-            
-            // If not in Pi Browser, skip authentication requirement
-            if (!checkPiBrowser) {
-                console.log('🖥️ Desktop browser detected - skipping Pi authentication');
-                setPiAuthenticated(true);
-            }
-            
-            setCheckingAuth(false);
-        };
-
-        checkExistingAuth();
-    }, []);
-
-    const handleAuthenticated = (user) => {
-        console.log('✅ Pi user authenticated:', user);
-        setPiAuthenticated(true);
-    };
-
-    console.log('App state:', { checkingAuth, piAuthenticated, isPiBrowser });
-
-    // Show loading while checking auth
-    if (checkingAuth) {
-        console.log('📄 Rendering: Loading screen');
-        return (
-            <div style={{
-                width: '100vw',
-                height: '100vh',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-            }}>
-                <div style={{ color: 'white', fontSize: '20px' }}>
-                    Loading ChordyPi...
-                </div>
-            </div>
-        );
-    }
-
-    // Show Pi authentication screen if not authenticated
-    if (!piAuthenticated) {
-        console.log('📄 Rendering: Pi authentication screen');
-        return <PiNetworkAuth onAuthenticated={handleAuthenticated} />;
-    }
-
-    console.log('📄 Rendering: Main app');
-
-    // Show main app if authenticated
     return (
         <PlayerProvider>
             <Router>
