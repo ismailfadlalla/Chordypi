@@ -4,9 +4,10 @@ import requests
 import hashlib
 import time
 from datetime import datetime
-from models import User, db
-from models.pi_payment import PiPayment
-from utils.auth_middleware import require_auth
+from ..models.user import User
+from ..models.pi_payment import PiPayment
+from ..utils.auth_middleware import require_auth
+from .. import db
 
 pi_bp = Blueprint('pi', __name__, url_prefix='/api/pi')
 
@@ -225,139 +226,6 @@ def payment_webhook():
         db.session.rollback()
         current_app.logger.error(f'Webhook processing error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
-
-@pi_bp.route('/payments/approve', methods=['POST'])
-def approve_payment():
-    """
-    Approve a Pi Network payment (called by Pi Network before showing payment dialog)
-    This endpoint is called by Pi Network, NOT by our frontend
-    """
-    try:
-        data = request.get_json()
-        current_app.logger.info(f'Payment approval request: {data}')
-        
-        # Extract payment data sent by Pi Network
-        payment_id = data.get('paymentId') or data.get('identifier')
-        amount = float(data.get('amount', 0))
-        memo = data.get('memo', '')
-        metadata = data.get('metadata', {})
-        user_uid = data.get('user', {}).get('uid') if isinstance(data.get('user'), dict) else data.get('user')
-        
-        # Validate payment amount (ensure it's reasonable)
-        if amount <= 0:
-            current_app.logger.error(f'Invalid payment amount: {amount}')
-            return jsonify({
-                'approved': False,
-                'error': 'Invalid payment amount'
-            }), 400
-        
-        # For sandbox/hackathon: Accept all payments up to 10 Pi
-        max_amount = 10.0
-        if amount > max_amount:
-            current_app.logger.error(f'Payment amount {amount} exceeds maximum {max_amount}')
-            return jsonify({
-                'approved': False,
-                'error': f'Amount exceeds maximum of {max_amount} Pi'
-            }), 400
-        
-        # Log the approval
-        current_app.logger.info(f'Approving payment {payment_id} for {amount} Pi from user {user_uid}')
-        
-        # Store pending payment in database (optional but recommended)
-        try:
-            # Try to find or create user (simplified for hackathon)
-            existing_payment = PiPayment.query.filter_by(payment_id=payment_id).first()
-            
-            if not existing_payment:
-                # Create pending payment record
-                payment = PiPayment(
-                    payment_id=payment_id,
-                    amount=amount,
-                    memo=memo,
-                    metadata=metadata,
-                    status='pending',
-                    pi_user_id=user_uid,
-                    created_at=datetime.utcnow()
-                )
-                db.session.add(payment)
-                db.session.commit()
-                current_app.logger.info(f'Payment {payment_id} saved as pending')
-        except Exception as db_error:
-            # Don't fail approval if database fails (for hackathon demo)
-            current_app.logger.warning(f'Database error (non-fatal): {db_error}')
-            db.session.rollback()
-        
-        # APPROVE THE PAYMENT
-        return jsonify({
-            'approved': True,
-            'message': 'Payment approved for ChordyPi premium features',
-            'paymentId': payment_id
-        }), 200
-        
-    except Exception as e:
-        current_app.logger.error(f'Payment approval error: {str(e)}')
-        return jsonify({
-            'approved': False,
-            'error': 'Internal server error'
-        }), 500
-
-@pi_bp.route('/payments/complete', methods=['POST'])
-def complete_payment():
-    """
-    Complete a Pi Network payment (called by Pi Network after user approves)
-    This endpoint is called by Pi Network, NOT by our frontend
-    """
-    try:
-        data = request.get_json()
-        current_app.logger.info(f'Payment completion request: {data}')
-        
-        # Extract payment data
-        payment_id = data.get('paymentId') or data.get('identifier')
-        txid = data.get('txid')
-        user_uid = data.get('user', {}).get('uid') if isinstance(data.get('user'), dict) else data.get('user')
-        
-        if not payment_id:
-            return jsonify({
-                'success': False,
-                'error': 'Missing payment ID'
-            }), 400
-        
-        # Find payment in database
-        payment = PiPayment.query.filter_by(payment_id=payment_id).first()
-        
-        if payment:
-            # Update payment to completed
-            payment.status = 'completed'
-            payment.txid = txid
-            payment.completed_at = datetime.utcnow()
-            
-            # Unlock premium feature
-            if payment.metadata and 'feature' in payment.metadata:
-                feature = payment.metadata['feature']
-                # For hackathon: Just log it (user model might not have this method)
-                current_app.logger.info(f'Unlocking feature: {feature} for payment {payment_id}')
-            
-            db.session.commit()
-            current_app.logger.info(f'Payment {payment_id} completed with txid {txid}')
-        else:
-            # Payment not found in database, but still acknowledge completion
-            current_app.logger.warning(f'Payment {payment_id} not found in database, acknowledging anyway')
-        
-        # ACKNOWLEDGE COMPLETION
-        return jsonify({
-            'success': True,
-            'message': 'Payment completed successfully',
-            'paymentId': payment_id,
-            'txid': txid
-        }), 200
-        
-    except Exception as e:
-        db.session.rollback()
-        current_app.logger.error(f'Payment completion error: {str(e)}')
-        return jsonify({
-            'success': False,
-            'error': 'Internal server error'
-        }), 500
 
 @pi_bp.route('/users/<int:user_id>/premium-features', methods=['GET'])
 @jwt_required()

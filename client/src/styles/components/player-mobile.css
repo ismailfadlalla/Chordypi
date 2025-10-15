@@ -184,6 +184,14 @@
         box-sizing: border-box !important;
     }
     
+    /* Dashboard moved after fretboards - add spacing */
+    .dashboard-container {
+        margin-top: 20px !important;
+        padding: 15px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
     .fretboard-cards-wrapper {
         flex-direction: row !important;
         gap: 5px !important;

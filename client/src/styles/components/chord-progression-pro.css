@@ -116,7 +116,7 @@
 .fret-numbers {
     display: flex;
     align-items: center;
-    gap: 20px; /* Match the gap between fret positions (same as dots) */
+    gap: 20px; /* Match the gap between fret positions */
     margin-top: 20px; /* Space from fretboard */
     margin-bottom: 0;
     padding-left: 50px; /* 30px string label + 20px gap to first fret */
@@ -130,26 +130,26 @@
 }
 
 .fret-number {
-    width: 40px; /* Match dot width (40px) for perfect alignment */
+    width: 50px; /* Match demo-fret-position width */
     text-align: center;
-    font-size: 0.85rem; /* Smaller font to fit in 40px */
+    font-size: 1.1rem;
     font-weight: 900;
     color: #1a1a1a;
     background: linear-gradient(135deg, #FFD700, #FFA500);
     border: 2px solid rgba(255, 215, 0, 0.8);
     border-radius: 6px;
-    padding: 4px 2px; /* Tight padding for 40px width */
+    padding: 6px 0;
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 4px 8px rgba(0, 0, 0, 0.4);
     position: relative;
     z-index: 10;
     flex-shrink: 0; /* Prevent shrinking */
-    transform: translateX(10px); /* Shift RIGHT to align with dot centers */
+    transform: translateX(30px); /* Shift right to align with dot centers */
 }
 
 .demo-fretboard-strings {
     display: flex;
     flex-direction: column;
-    gap: 8px; /* Reduced from 15px to make frets shorter */
+    gap: 15px;
 }
 
 .demo-fretboard-string {
@@ -183,10 +183,8 @@
 }
 
 .demo-fret-position {
-    width: 40px; /* Reduced from 50px */
-    height: 40px; /* Reduced from 50px */
-    min-width: 40px; /* Ensure it stays square */
-    min-height: 40px; /* Ensure it stays square */
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid rgba(255, 255, 255, 0.2);
@@ -196,7 +194,6 @@
     position: relative;
     z-index: 1;
     transition: all 0.3s;
-    flex-shrink: 0; /* Prevent compression */
 }
 
 .demo-fret-position.active {
