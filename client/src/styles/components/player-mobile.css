@@ -128,6 +128,15 @@
         width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+    
+    /* YouTube player iframe */
+    .video-player-container iframe,
+    .video-player-container > div > div {
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
     
     .dashboard-container {
@@ -136,6 +145,23 @@
         width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    
+    /* Make chord list show all items without scrolling on mobile */
+    .dashboard-container > div[style*="overflowY"] {
+        overflow-y: visible !important;
+        max-height: none !important;
+        height: auto !important;
+    }
+    
+    /* Compact chord items on mobile */
+    .dashboard-container > div > div {
+        margin-bottom: 8px !important;
+        padding: 8px !important;
+        font-size: 14px !important;
     }
     
     .fretboard-section-container {
@@ -158,5 +184,29 @@
         width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
+    }
+    
+    /* Ensure all buttons and text stay within bounds */
+    .player-page button,
+    .player-page a,
+    .player-page p,
+    .player-page h1,
+    .player-page h2,
+    .player-page h3,
+    .player-page div {
+        max-width: 100% !important;
+        overflow-wrap: break-word !important;
+        word-wrap: break-word !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Specific fix for Practice All Chords button */
+    .player-page button[style*="Practice"],
+    .dashboard-container button {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }
 }
