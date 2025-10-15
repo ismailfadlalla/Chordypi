@@ -131,12 +131,24 @@
         overflow: hidden !important;
     }
     
-    /* YouTube player iframe */
+    /* YouTube player iframe - responsive height */
     .video-player-container iframe,
     .video-player-container > div > div {
         max-width: 100% !important;
         width: 100% !important;
         box-sizing: border-box !important;
+    }
+    
+    /* YouTube player container - reduce height on mobile */
+    .video-player-container > div > div[style*="height"] {
+        height: 200px !important;
+        max-height: 200px !important;
+    }
+    
+    /* Specific targeting for the player ref div */
+    .video-player-container [style*="450px"] {
+        height: 200px !important;
+        max-height: 200px !important;
     }
     
     .dashboard-container {
