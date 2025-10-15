@@ -65,14 +65,15 @@ const ChordyPiLogo = ({
   const logoContent = (
     <LogoContainer size={size} clickable={clickable} onClick={onClick}>
       <LogoImage 
-        src="/images/chordypi-logo.png" 
+        src={`${window.location.origin}/images/chordypi-logo.png`}
         alt="ChordyPi Logo"
         size={size}
         onError={(e) => {
           // Fallback to text if image fails to load
           console.error('Failed to load ChordyPi logo image');
           e.target.style.display = 'none';
-          e.target.parentElement.innerHTML = '<span style="font-size: 2.5rem; font-weight: 800; color: #FFD700;">ChordyPi</span>';
+          const fallbackHTML = `<span style="font-size: ${size === 'small' ? '1.5rem' : size === 'large' ? '3rem' : '2rem'}; font-weight: 800; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">ChordyPi</span>`;
+          e.target.parentElement.innerHTML = fallbackHTML;
         }}
       />
     </LogoContainer>

@@ -1159,6 +1159,20 @@ body {
         max-height: 50vh !important; /* Reduced from 70vh */
     }
     
+    /* CRITICAL: Fix hero boxes overlapping on mobile */
+    .hero-boxes-container {
+        flex-direction: column !important; /* Stack vertically */
+        gap: 20px !important;
+        margin-top: 20px !important;
+        padding: 0 10px !important;
+    }
+    
+    .hero-box {
+        width: 100% !important;
+        height: auto !important; /* Auto height instead of fixed */
+        min-height: 280px !important;
+    }
+    
     .hero-title {
         font-size: 2rem; /* Smaller title */
         flex-direction: column;
