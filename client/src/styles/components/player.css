@@ -306,7 +306,7 @@
 
 /* Player page layout */
 .player-page {
-    min-height: 100vh;
+    min-height: auto;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 10px;
@@ -2806,6 +2806,14 @@
     }
 }
 
+/* Desktop: Full viewport height for proper layout */
+@media (min-width: 769px) {
+    .player-page {
+        min-height: 100vh;
+    }
+}
+
+/* Mobile: Auto height to prevent excessive spacing */
 @media (max-width: 768px) {
     .player-page {
         padding: 5px; /* Reduced from 15px for tighter mobile layout */
