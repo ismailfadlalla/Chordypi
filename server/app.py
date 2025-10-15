@@ -85,8 +85,6 @@ from routes.songs import songs_bp
 from routes.analysis import analysis_bp
 from routes.search import search_bp
 from routes.library import library_bp
-# Temporarily disabled Pi routes due to import issues
-# from routes.pi import pi_bp
 
 # Load environment variables from .env file
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
@@ -229,8 +227,6 @@ app.register_blueprint(songs_bp)
 app.register_blueprint(analysis_bp)
 app.register_blueprint(search_bp)
 app.register_blueprint(library_bp)
-# Temporarily disabled Pi routes due to import issues
-# app.register_blueprint(pi_bp)
 
 # Add request logging middleware - runs BEFORE any route
 @app.before_request
@@ -245,32 +241,6 @@ def log_request_info():
         print(f"Files: {list(request.files.keys())}", flush=True)
     print("=" * 80, flush=True)
     sys.stdout.flush()
-    
-    # Handle CORS preflight requests
-    if request.method == 'OPTIONS':
-        origin = request.headers.get('Origin')
-        allowed_origins = [
-            'http://localhost:3000', 'https://localhost:3000',
-            'http://127.0.0.1:3000', 'https://127.0.0.1:3000',
-            'http://localhost:5000', 'https://localhost:5000',
-            'http://127.0.0.1:5000', 'https://127.0.0.1:5000',
-            'https://localhost:3443', 'http://localhost:3443',
-            'https://chordypi.vercel.app',
-            'https://chordypi.com',
-            'https://chords-legend-pgno5szu8-ismails-projects-c328e53e.vercel.app'
-        ]
-        
-        response = make_response('', 204)
-        if origin in allowed_origins:
-            response.headers['Access-Control-Allow-Origin'] = origin
-        else:
-            response.headers['Access-Control-Allow-Origin'] = '*'
-        
-        response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
-        response.headers['Access-Control-Allow-Methods'] = 'GET,POST,PUT,DELETE,OPTIONS'
-        response.headers['Access-Control-Allow-Credentials'] = 'true'
-        response.headers['Access-Control-Max-Age'] = '3600'
-        return response
 
 # Set max content length (50 MB for audio files)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024

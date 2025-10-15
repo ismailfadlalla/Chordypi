@@ -1,5 +1,5 @@
 from datetime import datetime
-from models.user import db
+from .. import db
 from sqlalchemy.dialects.postgresql import JSON
 
 class PiPayment(db.Model):

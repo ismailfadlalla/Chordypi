@@ -469,18 +469,17 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
         return (
             <div className={`demo-fretboard-container ${isLarge ? 'large' : ''}`} style={{ 
                 maxWidth: '100%', 
-                overflow: 'visible',
-                paddingRight: '30px'
+                overflow: 'hidden'
             }}>
                 <div className="demo-chord-label">{chordName}</div>
                 <div className="demo-fretboard-visual" style={{ 
                     maxWidth: '100%', 
-                    overflow: 'visible'
+                    overflow: 'hidden'
                 }}>
                     <div className="demo-fretboard-strings" style={{ 
                         position: 'relative',
                         maxWidth: '100%',
-                        overflow: 'visible'
+                        overflow: 'hidden'
                     }}>
                         {/* Render barre lines first (behind the dots) */}
                         {pattern.barres?.map((barreInfo, barreIdx) => {
@@ -494,12 +493,12 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                             // Calculate position for vertical barre line
                             // Pattern uses 0=low E, 5=high E, but display is reversed (high E at top)
                             // So we need to convert pattern string indices to display positions
-                            const stringSpacing = 48; // Updated to match CSS gap (8px) + dot size (40px)
+                            const stringSpacing = 65;
                             // Convert pattern indices to display positions
                             const startDisplayIdx = numStrings - 1 - startStr; // Pattern to display
                             const endDisplayIdx = numStrings - 1 - endStr;     // Pattern to display
                             const topPosition = Math.min(startDisplayIdx, endDisplayIdx) * stringSpacing - 10; // Start 10px above first string
-                            const height = (Math.abs(endDisplayIdx - startDisplayIdx) * stringSpacing) + 60; // Adjusted height for smaller dots
+                            const height = (Math.abs(endDisplayIdx - startDisplayIdx) * stringSpacing) + 70; // Extended height to cover dots properly
                             // Adjust position based on starting fret offset
                             const fretOffset = barreFret - startingFret;
                             const leftPosition = 30 + fretOffset * 70 + 35; // 30px label + fret spacing (70px) + center offset (35px) - shifted right to center over dots

@@ -740,22 +740,13 @@ const PlayerPage = () => {
                     </button>
                 </div>
 
-                {/* Two-Column Layout: Video Player + Unique Chords Dashboard */}
+                {/* Video Player Section (Full Width on Mobile) */}
                 <div className="player-grid-layout">
-                    {/* LEFT COLUMN: YouTube Video Player OR Audio Visualizer Section */}
+                    {/* YouTube Video Player OR Audio Visualizer Section */}
                     <div className="video-player-container">
-                        <h3 style={{ color: 'white', marginBottom: '15px', textAlign: 'center' }}>
-                            {isUploadedFile ? '� Audio Player' : '�🎥 Video Player'}
-                        </h3>
-                        
                         {isUploadedFile ? (
                             // Audio player with visualizer for uploaded files
                             <div>
-                                <p style={{ color: audioReady ? '#90EE90' : '#FFD700', marginBottom: '10px', textAlign: 'center' }}>
-                                    {audioReady ? '✅' : '🔄'} {songData.title} 
-                                    {audioReady ? ' (Ready)' : ' (Loading...)'}
-                                </p>
-                                
                                 {/* Hidden audio element */}
                                 <audio
                                     ref={audioRef}
@@ -809,198 +800,6 @@ const PlayerPage = () => {
                                 </p>
                             </div>
                         )}
-                    </div>
-
-                    {/* RIGHT COLUMN: Unique Chords Practice Dashboard */}
-                    <div className="dashboard-container">
-                        <h3 style={{ 
-                            color: '#FFD700', 
-                            marginBottom: '10px', 
-                            textAlign: 'center',
-                            fontSize: '18px',
-                            fontWeight: '700',
-                            textShadow: '0 2px 4px rgba(0,0,0,0.5)'
-                        }}>
-                            🎸 Song Chords ({getUniqueChords().length} unique)
-                        </h3>
-                        
-                        <p style={{ 
-                            color: '#fff', 
-                            fontSize: '13px', 
-                            textAlign: 'center', 
-                            marginBottom: '15px',
-                            opacity: 0.9
-                        }}>
-                            Practice difficult chords before playing
-                        </p>
-
-                        {/* Unique Chords List with Frequency Bars */}
-                        <div style={{
-                            flex: 1,
-                            overflowY: 'auto',
-                            maxHeight: '350px',
-                            marginBottom: '15px'
-                        }}>
-                            {getUniqueChords()
-                                .sort((a, b) => b.count - a.count) // Sort by frequency (most common first)
-                                .map((chordData, index) => {
-                                    const maxCount = Math.max(...getUniqueChords().map(c => c.count));
-                                    const percentage = (chordData.count / maxCount) * 100;
-                                    
-                                    return (
-                                        <div 
-                                            key={index}
-                                            style={{
-                                                marginBottom: '12px',
-                                                cursor: 'pointer',
-                                                transition: 'all 0.2s',
-                                                padding: '10px',
-                                                borderRadius: '8px',
-                                                backgroundColor: 'rgba(255,255,255,0.05)',
-                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                position: 'relative',
-                                                overflow: 'hidden'
-                                            }}
-                                            onMouseEnter={(e) => {
-                                                e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)';
-                                                e.currentTarget.style.transform = 'translateX(5px)';
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)';
-                                                e.currentTarget.style.transform = 'translateX(0)';
-                                            }}
-                                            onClick={() => {
-                                                // TODO Phase 2: Open practice mode for this chord
-                                                alert(`🎸 Practice mode for ${chordData.chord} coming in Phase 2!\n\nThis chord appears ${chordData.count} times in the song.`);
-                                            }}
-                                        >
-                                            {/* Frequency Bar Background (Equalizer Style) */}
-                                            <div style={{
-                                                position: 'absolute',
-                                                left: 0,
-                                                top: 0,
-                                                height: '100%',
-                                                width: `${percentage}%`,
-                                                background: `linear-gradient(90deg, rgba(255, 215, 0, 0.6), rgba(255, 140, 0, 0.4), rgba(108, 92, 231, 0.3))`,
-                                                borderRadius: '8px',
-                                                zIndex: 0,
-                                                transition: 'width 0.3s ease',
-                                                boxShadow: '0 0 10px rgba(255, 215, 0, 0.3)'
-                                            }}></div>
-
-                                            {/* Chord Info (Above frequency bar) */}
-                                            <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                                    <span style={{ 
-                                                        fontSize: '18px', 
-                                                        fontWeight: '700',
-                                                        color: '#FFD700',
-                                                        textShadow: '0 1px 3px rgba(0,0,0,0.8)'
-                                                    }}>
-                                                        {chordData.chord}
-                                                    </span>
-                                                    <span style={{ 
-                                                        fontSize: '12px', 
-                                                        color: '#fff',
-                                                        opacity: 0.8,
-                                                        backgroundColor: 'rgba(108, 92, 231, 0.5)',
-                                                        padding: '2px 8px',
-                                                        borderRadius: '10px'
-                                                    }}>
-                                                        {chordData.count}x
-                                                    </span>
-                                                </div>
-                                                
-                                                {/* Mini equalizer visualization */}
-                                                <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end' }}>
-                                                    {[...Array(3)].map((_, i) => (
-                                                        <div 
-                                                            key={i}
-                                                            style={{
-                                                                width: '4px',
-                                                                height: `${8 + (chordData.count % 3) * (i + 1) * 3}px`,
-                                                                backgroundColor: '#6c5ce7',
-                                                                borderRadius: '2px',
-                                                                opacity: 0.6
-                                                            }}
-                                                        ></div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                            <button
-                                onClick={() => {
-                                    // TODO Phase 2: Open practice mode for all unique chords
-                                    alert(`🎯 Practice All Chords mode coming in Phase 2!\n\nYou'll be able to practice all ${getUniqueChords().length} unique chords with isolated audio segments.`);
-                                }}
-                                style={{
-                                    padding: '12px 20px',
-                                    fontSize: '15px',
-                                    fontWeight: '600',
-                                    backgroundColor: '#6c5ce7',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '8px',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.2s',
-                                    textShadow: '0 1px 2px rgba(0,0,0,0.3)'
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.target.style.backgroundColor = '#5848c7';
-                                    e.target.style.transform = 'translateY(-2px)';
-                                    e.target.style.boxShadow = '0 4px 12px rgba(108, 92, 231, 0.4)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.target.style.backgroundColor = '#6c5ce7';
-                                    e.target.style.transform = 'translateY(0)';
-                                    e.target.style.boxShadow = 'none';
-                                }}
-                            >
-                                🎓 Practice All Chords
-                            </button>
-
-                            <button
-                                onClick={() => {
-                                    // Skip practice and play the song directly
-                                    if (youTubePlayer && playerReady) {
-                                        if (isPlaying) {
-                                            youTubePlayer.pauseVideo();
-                                        } else {
-                                            youTubePlayer.playVideo();
-                                        }
-                                    }
-                                }}
-                                style={{
-                                    padding: '12px 20px',
-                                    fontSize: '15px',
-                                    fontWeight: '600',
-                                    backgroundColor: 'rgba(255,255,255,0.1)',
-                                    color: '#FFD700',
-                                    border: '2px solid rgba(255, 215, 0, 0.3)',
-                                    borderRadius: '8px',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.2s'
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.target.style.backgroundColor = 'rgba(255,255,255,0.2)';
-                                    e.target.style.borderColor = 'rgba(255, 215, 0, 0.6)';
-                                    e.target.style.transform = 'translateY(-2px)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.target.style.backgroundColor = 'rgba(255,255,255,0.1)';
-                                    e.target.style.borderColor = 'rgba(255, 215, 0, 0.3)';
-                                    e.target.style.transform = 'translateY(0)';
-                                }}
-                            >
-                                ⏭️ Skip & Play Song
-                            </button>
-                        </div>
                     </div>
                 </div>
 
@@ -1076,6 +875,197 @@ const PlayerPage = () => {
                                 fretboardHeight={120}
                             />
                         </div>
+                    </div>
+                </div>
+
+                {/* CHORD DASHBOARD - Moved after fretboards to prevent blocking controls */}
+                <div className="dashboard-container" style={{ marginTop: '20px' }}>
+                    <h3 style={{ 
+                        color: '#FFD700', 
+                        marginBottom: '10px', 
+                        textAlign: 'center',
+                        fontSize: '18px',
+                        fontWeight: '700',
+                        textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+                    }}>
+                        🎸 Song Chords ({getUniqueChords().length} unique)
+                    </h3>
+                    
+                    <p style={{ 
+                        color: '#fff', 
+                        fontSize: '13px', 
+                        textAlign: 'center', 
+                        marginBottom: '15px',
+                        opacity: 0.9
+                    }}>
+                        Practice difficult chords before playing
+                    </p>
+
+                    {/* Unique Chords List with Frequency Bars */}
+                    <div style={{
+                        flex: 1,
+                        overflowY: 'auto',
+                        maxHeight: '350px',
+                        marginBottom: '15px'
+                    }}>
+                        {getUniqueChords()
+                            .sort((a, b) => b.count - a.count) // Sort by frequency (most common first)
+                            .map((chordData, index) => {
+                                const maxCount = Math.max(...getUniqueChords().map(c => c.count));
+                                const percentage = (chordData.count / maxCount) * 100;
+                                
+                                return (
+                                    <div 
+                                        key={index}
+                                        style={{
+                                            marginBottom: '12px',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s',
+                                            padding: '10px',
+                                            borderRadius: '8px',
+                                            backgroundColor: 'rgba(255,255,255,0.05)',
+                                            border: '1px solid rgba(255,255,255,0.1)',
+                                            position: 'relative',
+                                            overflow: 'hidden'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)';
+                                            e.currentTarget.style.transform = 'translateX(5px)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)';
+                                            e.currentTarget.style.transform = 'translateX(0)';
+                                        }}
+                                        onClick={() => {
+                                            // TODO Phase 2: Open practice mode for this chord
+                                            alert(`🎸 Practice mode for ${chordData.chord} coming in Phase 2!\n\nThis chord appears ${chordData.count} times in the song.`);
+                                        }}
+                                    >
+                                        {/* Frequency Bar Background (Equalizer Style) */}
+                                        <div style={{
+                                            position: 'absolute',
+                                            left: 0,
+                                            top: 0,
+                                            height: '100%',
+                                            width: `${percentage}%`,
+                                            background: `linear-gradient(90deg, rgba(255, 215, 0, 0.6), rgba(255, 140, 0, 0.4), rgba(108, 92, 231, 0.3))`,
+                                            borderRadius: '8px',
+                                            zIndex: 0,
+                                            transition: 'width 0.3s ease',
+                                            boxShadow: '0 0 10px rgba(255, 215, 0, 0.3)'
+                                        }}></div>
+
+                                        {/* Chord Info (Above frequency bar) */}
+                                        <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                                <span style={{ 
+                                                    fontSize: '18px', 
+                                                    fontWeight: '700',
+                                                    color: '#FFD700',
+                                                    textShadow: '0 1px 3px rgba(0,0,0,0.8)'
+                                                }}>
+                                                    {chordData.chord}
+                                                </span>
+                                                <span style={{ 
+                                                    fontSize: '12px', 
+                                                    color: '#fff',
+                                                    opacity: 0.8,
+                                                    backgroundColor: 'rgba(108, 92, 231, 0.5)',
+                                                    padding: '2px 8px',
+                                                    borderRadius: '10px'
+                                                }}>
+                                                    {chordData.count}x
+                                                </span>
+                                            </div>
+                                            
+                                            {/* Mini equalizer visualization */}
+                                            <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end' }}>
+                                                {[...Array(3)].map((_, i) => (
+                                                    <div 
+                                                        key={i}
+                                                        style={{
+                                                            width: '4px',
+                                                            height: `${8 + (chordData.count % 3) * (i + 1) * 3}px`,
+                                                            backgroundColor: '#6c5ce7',
+                                                            borderRadius: '2px',
+                                                            opacity: 0.6
+                                                        }}
+                                                    ></div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <button
+                            onClick={() => {
+                                // TODO Phase 2: Open practice mode for all unique chords
+                                alert(`🎯 Practice All Chords mode coming in Phase 2!\n\nYou'll be able to practice all ${getUniqueChords().length} unique chords with isolated audio segments.`);
+                            }}
+                            style={{
+                                padding: '12px 20px',
+                                fontSize: '15px',
+                                fontWeight: '600',
+                                backgroundColor: '#6c5ce7',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s',
+                                textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = '#5848c7';
+                                e.target.style.transform = 'translateY(-2px)';
+                                e.target.style.boxShadow = '0 4px 12px rgba(108, 92, 231, 0.4)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = '#6c5ce7';
+                                e.target.style.transform = 'translateY(0)';
+                                e.target.style.boxShadow = 'none';
+                            }}
+                        >
+                            🎓 Practice All Chords
+                        </button>
+
+                        <button
+                            onClick={() => {
+                                // Skip practice and play the song directly
+                                if (youTubePlayer && playerReady) {
+                                    if (isPlaying) {
+                                        youTubePlayer.pauseVideo();
+                                    } else {
+                                        youTubePlayer.playVideo();
+                                    }
+                                }}
+                            style={{
+                                padding: '12px 20px',
+                                fontSize: '15px',
+                                fontWeight: '600',
+                                backgroundColor: 'rgba(255,255,255,0.1)',
+                                color: '#FFD700',
+                                border: '2px solid rgba(255, 215, 0, 0.3)',
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = 'rgba(255,255,255,0.2)';
+                                e.target.style.borderColor = 'rgba(255, 215, 0, 0.6)';
+                                e.target.style.transform = 'translateY(-2px)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = 'rgba(255,255,255,0.1)';
+                                e.target.style.borderColor = 'rgba(255, 215, 0, 0.3)';
+                                e.target.style.transform = 'translateY(0)';
+                            }}
+                        >
+                            ⏭️ Skip & Play Song
+                        </button>
                     </div>
                 </div>
             </div>
