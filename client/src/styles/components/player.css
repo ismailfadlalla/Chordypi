@@ -2809,6 +2809,8 @@
 @media (max-width: 768px) {
     .player-page {
         padding: 5px; /* Reduced from 15px for tighter mobile layout */
+        min-height: auto; /* Remove forced height on mobile */
+        padding-top: 0; /* Remove top padding */
     }
     
     .song-info h1 {
@@ -4026,3 +4028,5 @@
     position: relative;
     min-height: 315px;
 }
+ 
+ 
