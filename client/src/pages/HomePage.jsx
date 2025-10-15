@@ -336,9 +336,9 @@ const HomePage = () => {
                     </div>
                     
                     {/* Bottom: Two-column layout for user boxes */}
-                    {user && (
-                        <div className="hero-boxes-container">
-                            {/* Left Box: User Welcome */}
+                    <div className="hero-boxes-container">
+                        {/* Left Box: User Welcome OR Quick Start for non-users */}
+                        {user ? (
                             <div className="hero-box user-welcome">
                                 <div className="welcome-message">
                                     <span className="greeting">Welcome back, {user.username}!</span>
@@ -361,10 +361,9 @@ const HomePage = () => {
                                     )}
                                 </div>
                             </div>
-                            
-                            {/* Right Box: Featured Songs */}
+                        ) : (
                             <div className="hero-box hero-featured-preview">
-                                <h3 className="preview-title">🎸 Quick Start</h3>
+                                <h3 className="preview-title">🎸 Quick Start - Try These!</h3>
                                 <div className="preview-songs">
                                     <div className="preview-song-card" onClick={() => handleAnalyzeSong('9bZkp7q19f0', 'Gangnam Style', 'PSY')}>
                                         <div className="preview-thumbnail">
@@ -398,8 +397,45 @@ const HomePage = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                        
+                        {/* Right Box: Featured Songs (always visible) */}
+                        <div className="hero-box hero-featured-preview">
+                            <h3 className="preview-title">� Popular Songs</h3>
+                            <div className="preview-songs">
+                                    <div className="preview-song-card" onClick={() => handleAnalyzeSong('RgKAFK5djSk', 'Waka Waka', 'Shakira')}>
+                                        <div className="preview-thumbnail">
+                                            <img src="https://i.ytimg.com/vi/RgKAFK5djSk/default.jpg" alt="Waka Waka" />
+                                            <div className="play-overlay">▶</div>
+                                        </div>
+                                        <div className="preview-info">
+                                            <p className="preview-song-title">Waka Waka</p>
+                                            <p className="preview-artist">Shakira</p>
+                                        </div>
+                                    </div>
+                                    <div className="preview-song-card" onClick={() => handleAnalyzeSong('60ItHLz5WEA', 'Faded', 'Alan Walker')}>
+                                        <div className="preview-thumbnail">
+                                            <img src="https://i.ytimg.com/vi/60ItHLz5WEA/default.jpg" alt="Faded" />
+                                            <div className="play-overlay">▶</div>
+                                        </div>
+                                        <div className="preview-info">
+                                            <p className="preview-song-title">Faded</p>
+                                            <p className="preview-artist">Alan Walker</p>
+                                        </div>
+                                    </div>
+                                    <div className="preview-song-card" onClick={() => handleAnalyzeSong('PT2_F-1esPk', 'The Joker And The Queen', 'Ed Sheeran')}>
+                                        <div className="preview-thumbnail">
+                                            <img src="https://i.ytimg.com/vi/PT2_F-1esPk/default.jpg" alt="The Joker And The Queen" />
+                                            <div className="play-overlay">▶</div>
+                                        </div>
+                                        <div className="preview-info">
+                                            <p className="preview-song-title">The Joker And The Queen</p>
+                                            <p className="preview-artist">Ed Sheeran</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
                 </div>
             </div>
             
