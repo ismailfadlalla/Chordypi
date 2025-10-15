@@ -687,13 +687,7 @@ const PlayerPage = () => {
     const songKey = useMemo(() => songData?.key || 'C Major', [songData?.key]);
 
     return (
-        <div className="player-page" style={{ 
-            minHeight: '80vh', 
-            backgroundColor: '#1a1a1a', 
-            overflow: 'hidden',
-            display: 'flex',
-            flexDirection: 'column'
-        }}>
+        <div className="player-page">
             
             {/* Main Container - Proper containment */}
             <div className="player-main-container">
