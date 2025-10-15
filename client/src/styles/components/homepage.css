@@ -1152,7 +1152,7 @@ body {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .hero-section {
         padding: 15px 10px; /* Reduced padding */
         min-height: 40vh !important; /* Reduced from 60vh */
@@ -1164,13 +1164,26 @@ body {
         flex-direction: column !important; /* Stack vertically */
         gap: 20px !important;
         margin-top: 20px !important;
+        margin-bottom: 30px !important;
         padding: 0 10px !important;
     }
     
     .hero-box {
         width: 100% !important;
+        max-width: 100% !important;
+        flex: none !important; /* Remove flex grow */
         height: auto !important; /* Auto height instead of fixed */
-        min-height: 280px !important;
+        min-height: 250px !important;
+        padding: 20px !important;
+    }
+    
+    /* Ensure preview songs don't cause overflow */
+    .preview-songs {
+        gap: 10px !important;
+    }
+    
+    .preview-song-card {
+        min-height: 60px !important;
     }
     
     .hero-title {

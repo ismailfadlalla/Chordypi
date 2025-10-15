@@ -65,15 +65,21 @@ const ChordyPiLogo = ({
   const logoContent = (
     <LogoContainer size={size} clickable={clickable} onClick={onClick}>
       <LogoImage 
-        src={`${window.location.origin}/images/chordypi-logo.png`}
+        src="/images/chordypi-logo.png"
         alt="ChordyPi Logo"
         size={size}
+        crossOrigin="anonymous"
         onError={(e) => {
-          // Fallback to text if image fails to load
-          console.error('Failed to load ChordyPi logo image');
-          e.target.style.display = 'none';
-          const fallbackHTML = `<span style="font-size: ${size === 'small' ? '1.5rem' : size === 'large' ? '3rem' : '2rem'}; font-weight: 800; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">ChordyPi</span>`;
-          e.target.parentElement.innerHTML = fallbackHTML;
+          // Try SVG fallback first
+          console.error('Failed to load PNG logo, trying SVG...');
+          e.target.src = '/images/logo.svg';
+          e.target.onerror = () => {
+            // If SVG also fails, use gradient text fallback
+            console.error('Failed to load logo images, using text fallback');
+            e.target.style.display = 'none';
+            const fallbackHTML = `<span style="font-size: ${size === 'small' ? '1.5rem' : size === 'large' ? '3rem' : '2rem'}; font-weight: 800; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;">ChordyPi</span>`;
+            e.target.parentElement.innerHTML = fallbackHTML;
+          };
         }}
       />
     </LogoContainer>
