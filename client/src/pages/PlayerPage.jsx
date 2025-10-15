@@ -1035,7 +1035,8 @@ const PlayerPage = () => {
                                     } else {
                                         youTubePlayer.playVideo();
                                     }
-                                }}
+                                }
+                            }}
                             style={{
                                 padding: '12px 20px',
                                 fontSize: '15px',
