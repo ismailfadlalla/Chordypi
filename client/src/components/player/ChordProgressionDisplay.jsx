@@ -497,11 +497,11 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                             // Convert pattern indices to display positions
                             const startDisplayIdx = numStrings - 1 - startStr; // Pattern to display
                             const endDisplayIdx = numStrings - 1 - endStr;     // Pattern to display
-                            const topPosition = Math.min(startDisplayIdx, endDisplayIdx) * stringSpacing + 10; // Start at string center + 10px
-                            const height = (Math.abs(endDisplayIdx - startDisplayIdx) * stringSpacing); // EXACT spacing - no padding
-                            // Adjust position based on starting fret offset - UPDATED for wider frets
+                            const topPosition = Math.min(startDisplayIdx, endDisplayIdx) * stringSpacing + 15; // Start at string center + 15px
+                            const height = (Math.abs(endDisplayIdx - startDisplayIdx) * stringSpacing) - 5; // SUBTRACT 5px to make it tighter
+                            // Adjust position based on starting fret offset - UPDATED for WIDER frets (70px + 35px gap = 105px)
                             const fretOffset = barreFret - startingFret;
-                            const leftPosition = 30 + fretOffset * 90 + 30; // 30px label + fret spacing (90px for wider frets) + center offset (30px)
+                            const leftPosition = 30 + fretOffset * 105 + 35; // 30px label + fret spacing (105px) + center offset (35px)
                             
                             return (
                                 <div
@@ -510,21 +510,18 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                                         position: 'absolute',
                                         left: `${leftPosition}px`,
                                         top: `${topPosition}px`,
-                                        width: '32px',
-                                        maxWidth: '32px',
+                                        width: '28px',
+                                        maxWidth: '28px',
                                         height: `${height}px`,
-                                        background: 'linear-gradient(90deg, rgba(108, 92, 231, 0.95) 0%, rgba(108, 92, 231, 1) 50%, rgba(108, 92, 231, 0.95) 100%)',
-                                        borderRadius: '16px',
-                                        border: '2px solid rgba(255, 215, 0, 0.9)',
+                                        background: 'linear-gradient(90deg, rgba(108, 92, 231, 0.9) 0%, rgba(108, 92, 231, 1) 50%, rgba(108, 92, 231, 0.9) 100%)',
+                                        borderRadius: '14px',
+                                        border: '2px solid rgba(255, 215, 0, 0.85)',
                                         boxShadow: `
-                                            0 0 15px rgba(108, 92, 231, 0.7),
-                                            0 0 8px rgba(255, 215, 0, 0.4),
-                                            inset 0 2px 4px rgba(255, 255, 255, 0.3),
-                                            inset 0 -2px 4px rgba(0, 0, 0, 0.3)
+                                            0 0 12px rgba(108, 92, 231, 0.6),
+                                            0 0 6px rgba(255, 215, 0, 0.3)
                                         `,
                                         zIndex: 10,
                                         pointerEvents: 'none',
-                                        backdropFilter: 'blur(2px)',
                                         boxSizing: 'border-box'
                                     }}
                                 />
