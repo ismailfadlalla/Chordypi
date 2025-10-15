@@ -14,20 +14,6 @@ const LogoContainer = styled.div`
   }
 `;
 
-const LogoImage = styled.img`
-  width: ${props => {
-    switch(props.size) {
-      case 'small': return '120px';
-      case 'large': return '400px';
-      case 'medium':
-      default: return '250px';
-    }
-  }};
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
-`;
-
 const Tagline = styled.div`
   font-size: ${props => props.size === 'small' ? '0.7rem' : props.size === 'large' ? '1.2rem' : '0.9rem'};
   color: ${props => props.lightText ? '#b0b0b0' : '#666'};
@@ -43,10 +29,21 @@ const FullLogoContainer = styled.div`
   align-items: center;
 `;
 
+const LogoText = styled.span`
+  font-size: ${props => props.size === 'small' ? '1.5rem' : props.size === 'large' ? '3rem' : '2rem'};
+  font-weight: 800;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+`;
+
 /**
  * ChordyPi Logo Component
  * 
- * Displays the ChordyPi brand logo image
+ * Displays the ChordyPi brand logo (image or text fallback)
  * 
  * @param {Object} props
  * @param {string} props.size - 'small', 'medium', or 'large' (default: 'medium')
@@ -62,26 +59,10 @@ const ChordyPiLogo = ({
   clickable = false,
   onClick 
 }) => {
+  // For now, just use text logo since image keeps failing
   const logoContent = (
     <LogoContainer size={size} clickable={clickable} onClick={onClick}>
-      <LogoImage 
-        src="/images/chordypi-logo.png"
-        alt="ChordyPi Logo"
-        size={size}
-        crossOrigin="anonymous"
-        onError={(e) => {
-          // Try SVG fallback first
-          console.error('Failed to load PNG logo, trying SVG...');
-          e.target.src = '/images/logo.svg';
-          e.target.onerror = () => {
-            // If SVG also fails, use gradient text fallback
-            console.error('Failed to load logo images, using text fallback');
-            e.target.style.display = 'none';
-            const fallbackHTML = `<span style="font-size: ${size === 'small' ? '1.5rem' : size === 'large' ? '3rem' : '2rem'}; font-weight: 800; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;">ChordyPi</span>`;
-            e.target.parentElement.innerHTML = fallbackHTML;
-          };
-        }}
-      />
+      <LogoText size={size}>ChordyPi</LogoText>
     </LogoContainer>
   );
 
