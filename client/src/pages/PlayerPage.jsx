@@ -4,6 +4,7 @@ import ChordProgressionDisplay from '../components/player/ChordProgressionDispla
 import ChordQualityBadge from '../components/common/ChordQualityBadge';
 import AudioVisualizer from '../components/player/AudioVisualizer';
 import '../styles/components/player.css';
+import '../styles/components/player-mobile.css';
 
 const PlayerPage = () => {
     const location = useLocation();
@@ -695,25 +696,9 @@ const PlayerPage = () => {
         }}>
             
             {/* Main Container - Proper containment */}
-            <div style={{
-                flex: 1,
-                maxWidth: '1800px',
-                margin: '0 auto',
-                padding: window.innerWidth <= 768 ? '5px' : '20px', // Responsive padding
-                boxSizing: 'border-box',
-                overflow: 'hidden'
-            }}>
+            <div className="player-main-container">
                 {/* Back Button and Song Info */}
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: window.innerWidth <= 768 ? '10px' : '20px', // Responsive margin
-                    padding: window.innerWidth <= 768 ? '10px' : '15px', // Responsive padding
-                    backgroundColor: 'rgba(255,255,255,0.1)',
-                    borderRadius: '10px',
-                    color: 'white'
-                }}>
+                <div className="player-header-section">
                     <button 
                         onClick={() => history.push('/')}
                         style={{
@@ -762,18 +747,9 @@ const PlayerPage = () => {
                 </div>
 
                 {/* Two-Column Layout: Video Player + Unique Chords Dashboard */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: window.innerWidth > 1024 ? '2fr 1fr' : '1fr',
-                    gap: window.innerWidth <= 768 ? '10px' : '20px', // Responsive gap
-                    marginBottom: window.innerWidth <= 768 ? '10px' : '20px' // Responsive margin
-                }}>
+                <div className="player-grid-layout">
                     {/* LEFT COLUMN: YouTube Video Player OR Audio Visualizer Section */}
-                    <div style={{
-                        backgroundColor: 'rgba(255,255,255,0.1)',
-                        borderRadius: '10px',
-                        padding: window.innerWidth <= 768 ? '10px' : '20px' // Responsive padding
-                    }}>
+                    <div className="video-player-container">
                         <h3 style={{ color: 'white', marginBottom: '15px', textAlign: 'center' }}>
                             {isUploadedFile ? '� Audio Player' : '�🎥 Video Player'}
                         </h3>
@@ -842,15 +818,7 @@ const PlayerPage = () => {
                     </div>
 
                     {/* RIGHT COLUMN: Unique Chords Practice Dashboard */}
-                    <div style={{
-                        backgroundColor: 'rgba(108, 92, 231, 0.15)',
-                        border: '2px solid rgba(108, 92, 231, 0.4)',
-                        borderRadius: '10px',
-                        padding: window.innerWidth <= 768 ? '10px' : '20px', // Responsive padding
-                        display: 'flex',
-                        flexDirection: 'column',
-                        height: 'fit-content'
-                    }}>
+                    <div className="dashboard-container">
                         <h3 style={{ 
                             color: '#FFD700', 
                             marginBottom: '10px', 
@@ -1058,15 +1026,7 @@ const PlayerPage = () => {
                 </div>
 
                 {/* FRETBOARD SECTION - More Compact Layout */}
-                <div style={{
-                    backgroundColor: 'rgba(255,255,255,0.05)',
-                    borderRadius: '15px',
-                    padding: window.innerWidth <= 768 ? '10px' : '15px', // Responsive padding
-                    marginTop: window.innerWidth <= 768 ? '10px' : '15px', // Responsive margin
-                    maxWidth: '900px',
-                    marginLeft: 'auto',
-                    marginRight: 'auto'
-                }}>
+                <div className="fretboard-section-container">
                     <h3 style={{ 
                         color: 'white', 
                         marginBottom: '15px', 
@@ -1077,25 +1037,11 @@ const PlayerPage = () => {
                     }}>
                         🎸 Guitar Fretboard
                     </h3>
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: window.innerWidth > 768 ? 'row' : 'column',
-                        gap: window.innerWidth <= 768 ? '10px' : '20px', // Responsive gap
-                        justifyContent: 'center',
-                        alignItems: 'stretch'
-                    }}>
+                    <div className="fretboard-cards-wrapper">
                         {/* NOW PLAYING Fretboard */}
-                        <div style={{
-                            flex: 1,
-                            minWidth: '0',
+                        <div className="fretboard-card" style={{
                             background: 'linear-gradient(135deg, rgba(255, 243, 176, 0.08), rgba(255, 224, 130, 0.03))',
-                            border: '2px solid rgba(255, 215, 0, 0.3)',
-                            borderRadius: '12px',
-                            padding: window.innerWidth <= 768 ? '10px' : '15px', // Responsive padding
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'flex-start'
+                            border: '2px solid rgba(255, 215, 0, 0.3)'
                         }}>
                             <div style={{
                                 color: '#FFD700',
@@ -1115,17 +1061,9 @@ const PlayerPage = () => {
                             />
                         </div>
                         {/* UP NEXT Fretboard */}
-                        <div style={{
-                            flex: 1,
-                            minWidth: '0',
+                        <div className="fretboard-card" style={{
                             background: 'linear-gradient(135deg, rgba(108, 92, 231, 0.10), rgba(137, 155, 232, 0.06))',
-                            border: '2px solid rgba(108, 92, 231, 0.25)',
-                            borderRadius: '12px',
-                            padding: window.innerWidth <= 768 ? '10px' : '15px', // Responsive padding
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'flex-start'
+                            border: '2px solid rgba(108, 92, 231, 0.25)'
                         }}>
                             <div style={{
                                 color: '#6c5ce7',
