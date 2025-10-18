@@ -28,7 +28,7 @@
       "destination": "https://chordypi-production.up.railway.app/api/library/:path*"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!legal).*)",
       "destination": "/index.html"
     }
   ],
