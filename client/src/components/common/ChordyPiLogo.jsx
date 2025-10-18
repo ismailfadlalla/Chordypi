@@ -40,6 +40,13 @@ const LogoText = styled.span`
   text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
 `;
 
+const LogoImage = styled.img`
+  height: ${props => props.size === 'small' ? '40px' : props.size === 'large' ? '100px' : '60px'};
+  width: auto;
+  display: block;
+  object-fit: contain;
+`;
+
 /**
  * ChordyPi Logo Component
  * 
@@ -59,10 +66,20 @@ const ChordyPiLogo = ({
   clickable = false,
   onClick 
 }) => {
-  // For now, just use text logo since image keeps failing
+  const [imageError, setImageError] = React.useState(false);
+
   const logoContent = (
     <LogoContainer size={size} clickable={clickable} onClick={onClick}>
-      <LogoText size={size}>ChordyPi</LogoText>
+      {!imageError ? (
+        <LogoImage 
+          src="/images/chordypi-logo.png" 
+          alt="ChordyPi Logo"
+          size={size}
+          onError={() => setImageError(true)}
+        />
+      ) : (
+        <LogoText size={size}>ChordyPi</LogoText>
+      )}
     </LogoContainer>
   );
 
