@@ -2,12 +2,6 @@
   "version": 2,
   "buildCommand": "cd client && npm install && npm run build",
   "outputDirectory": "client/dist",
-  "routes": [
-    {
-      "src": "/legal/(.*)",
-      "dest": "/legal/$1"
-    }
-  ],
   "rewrites": [
     {
       "source": "/api/analyze-song",
@@ -34,7 +28,7 @@
       "destination": "https://chordypi-production.up.railway.app/api/library/:path*"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!legal/)(?!.*\\.html).*)",
       "destination": "/index.html"
     }
   ],
