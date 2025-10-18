@@ -166,7 +166,16 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
 
     // Create Pi payment for premium features
     const createPiPayment = async (amount, memo) => {
-        if (!window.Pi || !isAuthenticated) {
+        console.log('💳 createPiPayment called with:', { amount, memo });
+        
+        if (!window.Pi) {
+            console.error('❌ window.Pi not available');
+            setError('Pi SDK not available. Please refresh the page.');
+            return;
+        }
+        
+        if (!isAuthenticated) {
+            console.error('❌ User not authenticated');
             setError('Please authenticate with Pi Network first');
             return;
         }
@@ -175,7 +184,22 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         setError(null);
 
         try {
+            // Initialize SDK if not already done
+            if (!sdkInitialized) {
+                console.log('🔧 Initializing Pi SDK before payment...');
+                await initializePi();
+            }
+            
             console.log(`💰 Creating Pi payment: ${amount} π for "${memo}"`);
+            console.log('📋 Payment details:', {
+                amount,
+                memo,
+                metadata: {
+                    service: 'ChordyPi Premium',
+                    timestamp: Date.now(),
+                    user: piUser?.username
+                }
+            });
             
             const payment = await window.Pi.createPayment({
                 amount: amount,
@@ -213,13 +237,30 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
     };
 
     // Premium feature: Unlock advanced chord analysis
-    const unlockPremiumFeatures = () => {
-        createPiPayment(1, 'ChordyPi Premium Access - Advanced Features');
+    const unlockPremiumFeatures = async () => {
+        console.log('🚀 Unlock Premium Features button clicked');
+        console.log('🔍 isAuthenticated:', isAuthenticated);
+        console.log('🔍 piUser:', piUser);
+        console.log('🔍 window.Pi available:', !!window.Pi);
+        
+        try {
+            await createPiPayment(1, 'ChordyPi Premium Access - Advanced Features');
+        } catch (error) {
+            console.error('Failed to create payment:', error);
+        }
     };
 
     // Premium feature: Remove ads
-    const removeAds = () => {
-        createPiPayment(0.5, 'ChordyPi - Remove Advertisements');
+    const removeAds = async () => {
+        console.log('🚫 Remove Ads button clicked');
+        console.log('🔍 isAuthenticated:', isAuthenticated);
+        console.log('🔍 piUser:', piUser);
+        
+        try {
+            await createPiPayment(0.5, 'ChordyPi - Remove Advertisements');
+        } catch (error) {
+            console.error('Failed to create payment:', error);
+        }
     };
 
     // Show Pi Browser required message if SDK is not available
