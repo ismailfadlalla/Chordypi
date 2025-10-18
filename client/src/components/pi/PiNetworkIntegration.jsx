@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PiNetworkIntegration.css';
 
-const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
+const PiNetworkIntegration = ({ onAuthSuccess, authMode = false, onClose }) => {
     // Check for existing Pi user in localStorage on mount
     const existingPiUser = typeof window !== 'undefined' 
         ? JSON.parse(localStorage.getItem('piNetworkUser') || 'null')
@@ -11,9 +11,10 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
     const [piPayment, setPiPayment] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(!!existingPiUser);
+    const [isAuthenticated, setIsAuthenticated] = useState(false); // Changed: Don't trust localStorage, need fresh auth
     const [sdkInitialized, setSdkInitialized] = useState(false);
     const [isInitializing, setIsInitializing] = useState(false);
+    const [hasPaymentScope, setHasPaymentScope] = useState(false); // Track if user granted payments scope
 
     // Check if Pi SDK is available (non-blocking check only)
     const isPiAvailable = typeof window !== 'undefined' && window.Pi;
@@ -150,8 +151,21 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             clearTimeout(authTimeout);
             console.log('🎉 Authentication response received:', auth);
             console.log('✅ Pi Authentication successful:', auth);
+            console.log('📋 Scopes granted:', auth.scopes || 'N/A');
+            
             setPiUser(auth.user);
             setIsAuthenticated(true);
+            
+            // Check if payments scope was granted
+            const paymentsGranted = auth.scopes && auth.scopes.includes('payments');
+            setHasPaymentScope(paymentsGranted);
+            console.log(`💳 Payments scope granted: ${paymentsGranted}`);
+            
+            // Save auth data to localStorage with scopes info
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('piNetworkUser', JSON.stringify(auth.user));
+                localStorage.setItem('piPaymentScope', paymentsGranted ? 'true' : 'false');
+            }
             
             // Call the parent callback if provided
             if (onAuthSuccess) {
@@ -163,25 +177,26 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             
             // Handle specific error types
             if (error.message && error.message.includes('every is not a function')) {
-                setError('🔄 Pi SDK initialization error. Please refresh the page and try again.');
-            } else if (error.message && error.message.includes('declined')) {
-                setError('Authentication declined. Please allow access to continue.');
-            } else if (error.message && error.message.includes('postMessage')) {
-                setError('Connection error. Please make sure you\'re using the latest Pi Browser.');
-            } else {
-                setError(error.message || 'Failed to authenticate with Pi Network');
-            }
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     // Create Pi payment for premium features
     const createPiPayment = async (amount, memo) => {
         console.log('💳 createPiPayment called with:', { amount, memo });
         
         if (!window.Pi) {
             console.error('❌ window.Pi not available');
+            const errorMsg = 'Pi SDK not available. Please refresh the page.';
+            setError(errorMsg);
+            alert(`❌ ${errorMsg}`);
+            return;
+        }
+        
+        // Check if user needs to re-authenticate with payments scope
+        if (!isAuthenticated || !hasPaymentScope) {
+            console.error('❌ User not authenticated or missing payments scope');
+            const errorMsg = 'Please connect with Pi Network and grant payments permission first';
+            setError(errorMsg);
+            alert(`❌ ${errorMsg}\n\nClick "Connect with Pi Network" and approve the payment permission.`);
+            return;
+        }   console.error('❌ window.Pi not available');
             const errorMsg = 'Pi SDK not available. Please refresh the page.';
             setError(errorMsg);
             alert(`❌ ${errorMsg}`);
@@ -481,6 +496,60 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                             >
                                 {isLoading ? '⏳' : '✨ Remove Ads'}
                             </button>
+                        </div>
+
+                        {/* Continue Free Option */}
+                        <div className="continue-free-section" style={{
+                            marginTop: '25px',
+                            paddingTop: '25px',
+                            borderTop: '2px solid rgba(255, 255, 255, 0.1)',
+                            textAlign: 'center'
+                        }}>
+                            <p style={{ 
+                                fontSize: '14px', 
+                                color: '#b0b0b0', 
+                                marginBottom: '15px' 
+                            }}>
+                                Not ready to upgrade? No problem!
+                            </p>
+                            <button 
+                                className="pi-continue-free-button"
+                                onClick={() => {
+                                    console.log('👍 User chose to continue with free version');
+                                    // Close modal using parent callback
+                                    if (onClose) {
+                                        onClose();
+                                    }
+                                }}
+                                style={{
+                                    background: 'transparent',
+                                    border: '2px solid rgba(255, 255, 255, 0.3)',
+                                    color: '#fff',
+                                    padding: '12px 30px',
+                                    borderRadius: '10px',
+                                    fontSize: '16px',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s ease',
+                                    fontWeight: 'bold'
+                                }}
+                                onMouseOver={(e) => {
+                                    e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                                    e.target.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                                }}
+                                onMouseOut={(e) => {
+                                    e.target.style.background = 'transparent';
+                                    e.target.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                                }}
+                            >
+                                🎸 Continue Free
+                            </button>
+                            <p style={{ 
+                                fontSize: '12px', 
+                                color: '#888', 
+                                marginTop: '10px' 
+                            }}>
+                                You can upgrade anytime from your profile
+                            </p>
                         </div>
                     </div>
 
