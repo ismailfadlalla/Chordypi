@@ -121,7 +121,7 @@
 .fret-numbers {
     display: flex;
     align-items: center;
-    gap: 45px; /* UPDATED to match new wider fret spacing */
+    gap: 60px; /* UPDATED to match new much wider fret spacing */
     margin-top: 20px; /* Space from fretboard */
     margin-bottom: 0;
     padding-left: 50px; /* 30px string label + 20px gap to first fret */
@@ -135,7 +135,7 @@
 }
 
 .fret-number {
-    width: 95px; /* INCREASED to match wider fret positions (85px + gap) */
+    width: 110px; /* INCREASED to match much wider fret positions (100px + gap) */
     text-align: center;
     font-size: 1.1rem;
     font-weight: 900;
@@ -163,7 +163,7 @@
 .demo-fretboard-string {
     display: flex;
     align-items: center;
-    gap: 45px; /* INCREASED from 35px to make fretboard wider */
+    gap: 60px; /* INCREASED from 45px to make fretboard much wider */
     position: relative;
     overflow: hidden;
     max-width: 100%;
@@ -193,7 +193,7 @@
 }
 
 .demo-fret-position {
-    width: 85px; /* INCREASED from 70px to make frets wider */
+    width: 100px; /* INCREASED from 85px to make frets much wider */
     height: 50px; /* REDUCED from 70px to make frets shorter */
     border-radius: 50%;
     background: transparent; /* CHANGED from rgba(255, 255, 255, 0.05) to hide empty dots */
