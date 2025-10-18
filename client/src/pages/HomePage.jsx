@@ -440,22 +440,23 @@ const HomePage = () => {
                 </div>
             </div>
             
-            {/* Pi Network Authentication Section - Only visible in Pi Browser */}
-            {window.Pi && (
-                <div className="pi-auth-section" style={{
-                    maxWidth: '100%',
-                    padding: '20px',
-                    margin: '20px auto',
-                    background: 'linear-gradient(135deg, rgba(123, 97, 255, 0.1) 0%, rgba(72, 52, 212, 0.1) 100%)',
-                    borderRadius: '16px',
-                    border: '2px solid rgba(123, 97, 255, 0.3)',
-                    textAlign: 'center'
-                }}>
-                    <h2 style={{ color: '#7b61ff', marginBottom: '15px' }}>🔐 Pi Network Integration</h2>
-                    <p style={{ marginBottom: '20px', color: '#ccc' }}>
-                        Connect with Pi Network to unlock premium features and support the creator economy!
-                    </p>
-                    {!isPiUser ? (
+            {/* Pi Network Authentication Section - Visible in ALL browsers */}
+            <div className="pi-auth-section" style={{
+                maxWidth: '100%',
+                padding: '20px',
+                margin: '20px auto',
+                background: 'linear-gradient(135deg, rgba(123, 97, 255, 0.1) 0%, rgba(72, 52, 212, 0.1) 100%)',
+                borderRadius: '16px',
+                border: '2px solid rgba(123, 97, 255, 0.3)',
+                textAlign: 'center'
+            }}>
+                <h2 style={{ color: '#7b61ff', marginBottom: '15px' }}>🔐 Pi Network Integration</h2>
+                <p style={{ marginBottom: '20px', color: '#ccc' }}>
+                    Connect with Pi Network to unlock premium features and support the creator economy!
+                </p>
+                {window.Pi ? (
+                    // Pi Browser detected - show connect button
+                    !isPiUser ? (
                         <button 
                             onClick={() => setShowPremiumModal(true)}
                             style={{
@@ -479,9 +480,41 @@ const HomePage = () => {
                         <div style={{ color: '#4ade80', fontSize: '1.2rem', fontWeight: 'bold' }}>
                             ✅ Connected to Pi Network - Welcome Pioneer!
                         </div>
-                    )}
-                </div>
-            )}
+                    )
+                ) : (
+                    // Regular browser - show info about Pi Browser
+                    <div style={{
+                        background: 'rgba(255, 215, 0, 0.1)',
+                        border: '1px solid rgba(255, 215, 0, 0.3)',
+                        borderRadius: '12px',
+                        padding: '20px',
+                        maxWidth: '500px',
+                        margin: '0 auto'
+                    }}>
+                        <p style={{ color: '#FFD700', fontWeight: 'bold', marginBottom: '10px' }}>
+                            📱 To use Pi Network features, please open this app in Pi Browser
+                        </p>
+                        <p style={{ color: '#ccc', fontSize: '0.9rem', marginBottom: '15px' }}>
+                            Pi Browser is available in the Pi Network mobile app
+                        </p>
+                        <button
+                            onClick={() => setShowPremiumModal(true)}
+                            style={{
+                                padding: '10px 20px',
+                                fontSize: '14px',
+                                background: 'rgba(123, 97, 255, 0.2)',
+                                color: '#7b61ff',
+                                border: '1px solid rgba(123, 97, 255, 0.5)',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            Learn More
+                        </button>
+                    </div>
+                )}
+            </div>
             
             {/* Feature Highlights - Removed "for Non-Users" condition to show always */}
             <div className="feature-highlights">
