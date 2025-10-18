@@ -60,18 +60,18 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             // Get environment variables - default to production for Pi Hackathon
             const piApiKey = process.env.REACT_APP_PI_API_KEY || process.env.REACT_APP_PI_NETWORK_API_KEY;
             
-            // Auto-detect environment based on domain
-            // Use production mode for deployed apps (vercel.app)
-            const isProduction = window.location.hostname.includes('vercel.app') || 
-                                window.location.hostname.includes('chordypi.com');
-            const environment = isProduction ? 'production' : 'sandbox';
+            // FORCE SANDBOX MODE FOR TESTNET APP TESTING
+            // Change this to false when switching to Mainnet app
+            const useSandbox = true;
+            const environment = useSandbox ? 'sandbox (testnet)' : 'production (mainnet)';
             
-            console.log(`🌍 Environment: ${environment} mode (isProduction: ${isProduction})`);
+            console.log(`🌍 Environment: ${environment}`);
+            console.log(`🔧 Sandbox mode: ${useSandbox}`);
             
             // Initialize Pi SDK - fast, non-blocking
             await window.Pi.init({
                 version: "2.0",
-                sandbox: !isProduction // Use production mode on vercel.app
+                sandbox: useSandbox // TRUE = Testnet, FALSE = Mainnet
             });
             
             console.log(`✅ Pi Network SDK initialized successfully (${environment} mode)`);
