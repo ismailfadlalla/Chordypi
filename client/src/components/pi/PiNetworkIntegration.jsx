@@ -170,17 +170,24 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         setError(null);
 
         try {
+            console.log(`💰 Creating Pi payment: ${amount} π for "${memo}"`);
+            
             const payment = await window.Pi.createPayment({
                 amount: amount,
                 memo: memo,
                 metadata: { 
                     service: 'ChordyPi Premium',
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    user: piUser?.username
                 }
             });
 
-            console.log('💳 Pi Payment created:', payment);
+            console.log('✅ Pi Payment created successfully:', payment);
+            console.log('💳 Payment ID:', payment.identifier);
             setPiPayment(payment);
+            
+            // Show success message
+            alert(`🎉 Payment Successful!\n\nPayment ID: ${payment.identifier}\nAmount: ${amount} π\n\nThank you for supporting ChordyPi!`);
             
             // Here you would submit payment to your backend for verification
             // await submitPaymentToBackend(payment);
@@ -189,7 +196,12 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             
         } catch (error) {
             console.error('❌ Pi Payment creation failed:', error);
-            setError('Failed to create Pi payment');
+            
+            if (error.message && error.message.includes('cancelled')) {
+                setError('Payment was cancelled. No charges were made.');
+            } else {
+                setError(error.message || 'Failed to create Pi payment');
+            }
         } finally {
             setIsLoading(false);
         }
@@ -295,13 +307,32 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                 </div>
             ) : (
                 <div className="pi-user-section">
-                    <div className="pi-user-info">
-                        <h4>👤 Welcome, {piUser?.username || 'Pi User'}!</h4>
-                        <p>Your Pi Network account is connected.</p>
+                    <div className="pi-user-info" style={{
+                        background: 'linear-gradient(135deg, #00ff88 0%, #00cc88 100%)',
+                        padding: '20px',
+                        borderRadius: '15px',
+                        marginBottom: '20px',
+                        color: 'white',
+                        textAlign: 'center'
+                    }}>
+                        <h4 style={{ margin: '0 0 10px 0', fontSize: '24px' }}>
+                            ✅ Connected to Pi Network
+                        </h4>
+                        <p style={{ margin: '0', fontSize: '18px', fontWeight: 'bold' }}>
+                            Welcome Pioneer! 👋
+                        </p>
+                        {piUser?.username && (
+                            <p style={{ margin: '10px 0 0 0', fontSize: '14px', opacity: 0.9 }}>
+                                @{piUser.username}
+                            </p>
+                        )}
                     </div>
 
                     <div className="pi-premium-features">
                         <h4>🌟 Premium Features</h4>
+                        <p style={{ fontSize: '13px', marginBottom: '15px', color: '#666' }}>
+                            Support ChordyPi and unlock premium features with Pi cryptocurrency!
+                        </p>
                         
                         <div className="premium-option">
                             <div className="feature-info">
@@ -314,7 +345,7 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                                 onClick={unlockPremiumFeatures}
                                 disabled={isLoading}
                             >
-                                {isLoading ? '⏳' : '🚀 Upgrade'}
+                                {isLoading ? '⏳ Processing...' : '🚀 Upgrade Now'}
                             </button>
                         </div>
 
