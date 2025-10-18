@@ -67,16 +67,22 @@ def cors_enabled(f):
             # Production URLs
             'https://chordypi.vercel.app',
             'https://chordypi.com',
-            'https://chords-legend-pgno5szu8-ismails-projects-c328e53e.vercel.app'
+            'https://chords-legend-pgno5szu8-ismails-projects-c328e53e.vercel.app',
+            # Pi Browser specific origins
+            'https://sdk.minepi.com',
+            'https://api.pi.network',
+            'https://app-cdn.minepi.com'
         ]
         if origin in allowed_origins:
             response.headers['Access-Control-Allow-Origin'] = origin
         else:
             response.headers['Access-Control-Allow-Origin'] = '*'
         
-        response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization,X-Requested-With'
         response.headers['Access-Control-Allow-Methods'] = 'GET,POST,PUT,DELETE,OPTIONS'
         response.headers['Access-Control-Allow-Credentials'] = 'true'
+        response.headers['Cross-Origin-Opener-Policy'] = 'same-origin-allow-popups'
+        response.headers['Cross-Origin-Embedder-Policy'] = 'credentialless'
         
         return response
     return decorated_function
@@ -118,19 +124,31 @@ class CORSMiddleware:
             # Remove ALL CORS headers and add clean ones
             filtered_headers = []
             for name, value in response_headers:
-                if not name.startswith('Access-Control-'):
+                if not name.startswith('Access-Control-') and not name.startswith('Cross-Origin-'):
                     filtered_headers.append((name, value))
             
             # Add clean CORS headers
             origin = environ.get('HTTP_ORIGIN', '*')
-            if origin in ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5000', 'http://127.0.0.1:5000']:
+            allowed_origins = [
+                'http://localhost:3000', 'http://127.0.0.1:3000',
+                'http://localhost:5000', 'http://127.0.0.1:5000',
+                'https://localhost:3000', 'https://127.0.0.1:3000',
+                'https://localhost:5000', 'https://127.0.0.1:5000',
+                'https://chordypi.vercel.app',
+                'https://sdk.minepi.com',
+                'https://api.pi.network',
+                'https://app-cdn.minepi.com'
+            ]
+            if origin in allowed_origins:
                 filtered_headers.append(('Access-Control-Allow-Origin', origin))
             else:
                 filtered_headers.append(('Access-Control-Allow-Origin', '*'))
             
-            filtered_headers.append(('Access-Control-Allow-Headers', 'Content-Type,Authorization'))
+            filtered_headers.append(('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With'))
             filtered_headers.append(('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS'))
             filtered_headers.append(('Access-Control-Allow-Credentials', 'true'))
+            filtered_headers.append(('Cross-Origin-Opener-Policy', 'same-origin-allow-popups'))
+            filtered_headers.append(('Cross-Origin-Embedder-Policy', 'credentialless'))
             
             return start_response(status, filtered_headers)
         
