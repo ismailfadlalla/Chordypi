@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import './PiNetworkIntegration.css';
 
 const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
-    const [piUser, setPiUser] = useState(null);
+    // Check for existing Pi user in localStorage on mount
+    const existingPiUser = typeof window !== 'undefined' 
+        ? JSON.parse(localStorage.getItem('piNetworkUser') || 'null')
+        : null;
+    
+    const [piUser, setPiUser] = useState(existingPiUser);
     const [piPayment, setPiPayment] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(!!existingPiUser);
     const [sdkInitialized, setSdkInitialized] = useState(false);
     const [isInitializing, setIsInitializing] = useState(false);
 
