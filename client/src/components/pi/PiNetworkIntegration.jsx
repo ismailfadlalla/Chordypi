@@ -13,12 +13,15 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
     // Check if Pi SDK is available (non-blocking check only)
     const isPiAvailable = typeof window !== 'undefined' && window.Pi;
     
-    // Detect if we're actually in Pi Browser
+    // Detect if we're actually in Pi Browser - check multiple indicators
     const isPiBrowser = typeof window !== 'undefined' && (
-        navigator.userAgent.includes('PiBrowser') ||
-        navigator.userAgent.includes('Pi Browser') ||
+        navigator.userAgent.toLowerCase().includes('pibrowser') ||
+        navigator.userAgent.toLowerCase().includes('pi browser') ||
+        navigator.userAgent.toLowerCase().includes('pi-browser') ||
         window.location.hostname.includes('minepi.com') ||
-        window.location.hostname.includes('pi.app')
+        window.location.hostname.includes('pi.app') ||
+        // If Pi SDK loads successfully, assume we're in compatible environment
+        (window.Pi && window.Pi.authenticate)
     );
 
     // Initialize Pi SDK (only when user clicks connect)
@@ -78,11 +81,11 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             console.log('🔍 User Agent:', navigator.userAgent);
             console.log('🔍 Window.Pi available:', !!window.Pi);
             console.log('🔍 Window.Pi.authenticate available:', !!window.Pi.authenticate);
-            console.log('🔍 Is Pi Browser:', isPiBrowser);
+            console.log('🔍 Is Pi Browser detected:', isPiBrowser);
             
-            // Check if we're in Pi Browser for real authentication
+            // Log warning if not detected as Pi Browser but allow authentication attempt
             if (!isPiBrowser) {
-                throw new Error('Pi Network authentication requires the official Pi Browser app. Please open this app in Pi Browser to authenticate.');
+                console.warn('⚠️ Pi Browser not detected in user agent, but attempting authentication anyway...');
             }
             
             // This triggers the native Pi Browser permission dialog
@@ -91,7 +94,15 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             // - Username: Your Pi username
             // - Payments: Enable Pi payments
             
-            // Pi SDK v2.0 authenticate format
+            // Pi SDK v2.0 authenticate format with timeout detection
+            console.log('⏳ Calling window.Pi.authenticate()...');
+            
+            // Set a timeout to detect if authentication is hanging
+            const authTimeout = setTimeout(() => {
+                console.log('⏰ Authentication is taking longer than expected...');
+                console.log('💡 If you see this, check if Pi Browser is showing a permission dialog');
+            }, 5000);
+            
             const auth = await window.Pi.authenticate(
                 ['username', 'payments'],  // scopes array
                 function onIncompletePaymentFound(payment) {
@@ -100,8 +111,8 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                 }
             );
             
+            clearTimeout(authTimeout);
             console.log('🎉 Authentication response received:', auth);
-
             console.log('✅ Pi Authentication successful:', auth);
             setPiUser(auth.user);
             setIsAuthenticated(true);
@@ -211,20 +222,19 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                 </div>
             </div>
             
-            {/* Show warning if not in Pi Browser */}
+            {/* Show info banner about Pi Browser - informational only */}
             {!isPiBrowser && (
-                <div className="pi-browser-warning" style={{
-                    background: 'linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%)',
-                    padding: '15px',
-                    borderRadius: '12px',
-                    marginBottom: '20px',
-                    color: 'white',
-                    textAlign: 'center'
+                <div className="pi-browser-info-banner" style={{
+                    background: 'linear-gradient(135deg, rgba(123,97,255,0.2) 0%, rgba(255,106,136,0.2) 100%)',
+                    padding: '12px',
+                    borderRadius: '10px',
+                    marginBottom: '15px',
+                    color: '#333',
+                    textAlign: 'center',
+                    border: '1px solid rgba(123,97,255,0.3)'
                 }}>
-                    <h4 style={{ margin: '0 0 10px 0' }}>📱 Pi Browser Required</h4>
-                    <p style={{ margin: '0', fontSize: '14px' }}>
-                        Pi Network authentication only works in the official <strong>Pi Browser</strong> app.
-                        Please open this app in Pi Browser to connect your Pi account.
+                    <p style={{ margin: '0', fontSize: '13px' }}>
+                        💡 For the best experience, use the official <strong>Pi Browser</strong> app
                     </p>
                 </div>
             )}
