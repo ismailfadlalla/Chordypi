@@ -170,18 +170,25 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         
         if (!window.Pi) {
             console.error('❌ window.Pi not available');
-            setError('Pi SDK not available. Please refresh the page.');
+            const errorMsg = 'Pi SDK not available. Please refresh the page.';
+            setError(errorMsg);
+            alert(`❌ ${errorMsg}`);
             return;
         }
         
         if (!isAuthenticated) {
             console.error('❌ User not authenticated');
-            setError('Please authenticate with Pi Network first');
+            const errorMsg = 'Please authenticate with Pi Network first';
+            setError(errorMsg);
+            alert(`❌ ${errorMsg}`);
             return;
         }
 
         setIsLoading(true);
         setError(null);
+        
+        // Show visual feedback
+        alert(`💰 Creating payment for ${amount} π...\n\nPi Browser will show the payment dialog next.`);
 
         try {
             // Initialize SDK if not already done
@@ -243,10 +250,22 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         console.log('🔍 piUser:', piUser);
         console.log('🔍 window.Pi available:', !!window.Pi);
         
+        // Visual feedback for debugging
+        if (!window.Pi) {
+            alert('❌ Error: Pi SDK not available. Please refresh the page.');
+            return;
+        }
+        
+        if (!isAuthenticated) {
+            alert('❌ Error: Not authenticated. Please sign in first.');
+            return;
+        }
+        
         try {
             await createPiPayment(1, 'ChordyPi Premium Access - Advanced Features');
         } catch (error) {
             console.error('Failed to create payment:', error);
+            alert(`❌ Payment Error: ${error.message || 'Unknown error'}`);
         }
     };
 
