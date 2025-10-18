@@ -246,7 +246,11 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false, onClose }) => {
         // If payment scope not confirmed, try to re-authenticate to get it
         if (!hasPaymentScope) {
             console.warn('⚠️ Payment scope not confirmed, attempting to re-authenticate...');
+            alert('⚠️ Payment Permission Needed\n\nPi Browser will ask you to approve payments permission.\n\nPlease click ALLOW when prompted.');
+            
             try {
+                console.log('📞 Calling Pi.authenticate for payment scope...');
+                
                 // Re-authenticate to ensure we have payment scope
                 const auth = await window.Pi.authenticate(
                     ['username', 'payments'],
@@ -256,19 +260,26 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false, onClose }) => {
                     }
                 );
                 
+                console.log('✅ Re-authentication successful, checking scopes...');
+                alert('✅ Authentication response received!\n\nChecking payment permission...');
+                
                 // Check if payments scope was granted
                 const paymentsGranted = auth.scopes && auth.scopes.includes('payments');
                 setHasPaymentScope(paymentsGranted);
+                
+                console.log(`💳 Payments scope granted: ${paymentsGranted}`);
+                console.log(`📋 All scopes: ${JSON.stringify(auth.scopes)}`);
                 
                 if (!paymentsGranted) {
                     throw new Error('Payments permission was not granted. Please approve payments when prompted.');
                 }
                 
                 console.log('✅ Payment scope confirmed');
+                alert('✅ Payment permission confirmed!\n\nProceeding to payment...');
             } catch (authError) {
                 console.error('❌ Failed to get payment scope:', authError);
                 setError('Please grant payments permission to continue');
-                alert(`❌ Payment Permission Required\n\nPlease approve the payments permission when prompted by Pi Browser.`);
+                alert(`❌ Payment Permission Required\n\n${authError.message}\n\nPlease approve the payments permission when prompted by Pi Browser.`);
                 return;
             }
         }
