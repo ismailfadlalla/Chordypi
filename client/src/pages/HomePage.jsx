@@ -29,11 +29,50 @@ const HomePage = () => {
     
     // For Pi Network features, we'll check localStorage directly
     const [isPiUser, setIsPiUser] = useState(false);
+    const [piAuthenticating, setPiAuthenticating] = useState(false);
     
     useEffect(() => {
         const piUser = localStorage.getItem('piNetworkUser');
         setIsPiUser(!!piUser);
     }, []);
+    
+    // Handle Pi Network authentication directly
+    const handlePiConnect = async () => {
+        if (!window.Pi) {
+            alert('Pi Browser required. Please open this app in Pi Browser.');
+            return;
+        }
+        
+        setPiAuthenticating(true);
+        
+        try {
+            // Initialize Pi SDK
+            await window.Pi.init({ version: "2.0", sandbox: false });
+            
+            // Trigger native Pi Browser authentication dialog
+            const auth = await window.Pi.authenticate(
+                ['username', 'payments'],
+                function onIncompletePaymentFound(payment) {
+                    console.log('Incomplete payment found:', payment);
+                }
+            );
+            
+            console.log('Pi authentication successful:', auth);
+            
+            // Save user data
+            localStorage.setItem('piNetworkUser', JSON.stringify(auth.user));
+            setIsPiUser(true);
+            
+            // Now show the premium modal with payment options
+            setShowPremiumModal(true);
+            
+        } catch (error) {
+            console.error('Pi authentication failed:', error);
+            alert('Authentication failed. Please try again.');
+        } finally {
+            setPiAuthenticating(false);
+        }
+    };
     
     // State management
     const [searchResults, setSearchResults] = useState([]);
@@ -350,30 +389,36 @@ const HomePage = () => {
                     // Pi Browser detected - show connect button
                     !isPiUser ? (
                         <button 
-                            onClick={() => setShowPremiumModal(true)}
+                            onClick={handlePiConnect}
+                            disabled={piAuthenticating}
                             style={{
                                 padding: '18px 50px',
                                 fontSize: '1.3rem',
-                                background: 'linear-gradient(135deg, #7b61ff 0%, #4834d4 100%)',
+                                background: piAuthenticating 
+                                    ? 'linear-gradient(135deg, #888 0%, #666 100%)' 
+                                    : 'linear-gradient(135deg, #7b61ff 0%, #4834d4 100%)',
                                 color: 'white',
                                 border: 'none',
                                 borderRadius: '12px',
-                                cursor: 'pointer',
+                                cursor: piAuthenticating ? 'wait' : 'pointer',
                                 fontWeight: 'bold',
                                 boxShadow: '0 6px 25px rgba(123, 97, 255, 0.6)',
                                 transition: 'all 0.3s',
-                                marginTop: '10px'
+                                marginTop: '10px',
+                                opacity: piAuthenticating ? 0.7 : 1
                             }}
                             onMouseEnter={(e) => {
-                                e.target.style.transform = 'scale(1.08)';
-                                e.target.style.boxShadow = '0 8px 35px rgba(123, 97, 255, 0.8)';
+                                if (!piAuthenticating) {
+                                    e.target.style.transform = 'scale(1.08)';
+                                    e.target.style.boxShadow = '0 8px 35px rgba(123, 97, 255, 0.8)';
+                                }
                             }}
                             onMouseLeave={(e) => {
                                 e.target.style.transform = 'scale(1)';
                                 e.target.style.boxShadow = '0 6px 25px rgba(123, 97, 255, 0.6)';
                             }}
                         >
-                            💎 Connect with Pi Network
+                            {piAuthenticating ? '🔄 Connecting...' : '💎 Connect with Pi Network'}
                         </button>
                     ) : (
                         <div style={{ 
