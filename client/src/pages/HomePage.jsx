@@ -14,6 +14,7 @@ import SearchResultsPage from './SearchResultsPage';
 import UserLibrary from '../components/library/UserLibrary';
 import SongCard from '../components/common/SongCard';
 import ChordyPiLogo from '../components/common/ChordyPiLogo';
+import PiNetworkIntegration from '../components/pi/PiNetworkIntegration';
 import { useAuth } from '../hooks/useAuth';
 import { analyzeSong, addToHistory, getFavorites, getHistory, addToFavorites, removeFromFavorites, analyzeUploadedAudio } from '../services/api';
 import '../styles/global.css';
@@ -456,7 +457,7 @@ const HomePage = () => {
                     </p>
                     {!isPiUser ? (
                         <button 
-                            onClick={() => history.push('/signup?method=pi')}
+                            onClick={() => setShowPremiumModal(true)}
                             style={{
                                 padding: '15px 40px',
                                 fontSize: '18px',
@@ -466,14 +467,17 @@ const HomePage = () => {
                                 borderRadius: '8px',
                                 cursor: 'pointer',
                                 fontWeight: 'bold',
-                                boxShadow: '0 4px 15px rgba(123, 97, 255, 0.4)'
+                                boxShadow: '0 4px 15px rgba(123, 97, 255, 0.4)',
+                                transition: 'transform 0.2s'
                             }}
+                            onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+                            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                         >
                             💎 Connect with Pi Network
                         </button>
                     ) : (
-                        <div style={{ color: '#4ade80' }}>
-                            ✅ Connected to Pi Network
+                        <div style={{ color: '#4ade80', fontSize: '1.2rem', fontWeight: 'bold' }}>
+                            ✅ Connected to Pi Network - Welcome Pioneer!
                         </div>
                     )}
                 </div>
@@ -758,41 +762,42 @@ const HomePage = () => {
                 <FeaturedSongs onSongSelect={handleSongSelect} analyzing={analyzingSongId} analyzingChords={analyzingChords} />
             </div>
             
-            {/* Premium Modal */}
-            {showPremiumModal && !isPiUser && (
+            {/* Premium Modal with Pi Network Integration */}
+            {showPremiumModal && (
                 <div className="premium-modal-overlay" onClick={() => setShowPremiumModal(false)}>
-                    <div className="premium-modal" onClick={(e) => e.stopPropagation()}>
+                    <div className="premium-modal" onClick={(e) => e.stopPropagation()} style={{
+                        maxWidth: '600px',
+                        maxHeight: '90vh',
+                        overflowY: 'auto'
+                    }}>
                         <button 
                             className="modal-close"
                             onClick={() => setShowPremiumModal(false)}
+                            style={{
+                                position: 'absolute',
+                                top: '15px',
+                                right: '15px',
+                                background: 'transparent',
+                                border: 'none',
+                                fontSize: '1.5rem',
+                                color: '#fff',
+                                cursor: 'pointer',
+                                zIndex: 10
+                            }}
                         >
                             ✕
                         </button>
                         <div className="modal-content">
-                            <h2>🌟 Unlock Premium Features</h2>
-                            <p>Connect with Pi Network to access advanced features:</p>
-                            <ul className="premium-features">
-                                <li>🎯 Advanced chord analysis</li>
-                                <li>🎸 Custom playback speeds</li>
-                                <li>💾 Unlimited song library</li>
-                                <li>🔧 Advanced fretboard tools</li>
-                                <li>📱 Priority support</li>
-                            </ul>
-                            <div className="modal-actions">
-                                <Link 
-                                    to="/signup?method=pi" 
-                                    className="pi-connect-button"
-                                    onClick={() => setShowPremiumModal(false)}
-                                >
-                                    Connect with Pi Network
-                                </Link>
-                                <button 
-                                    className="maybe-later-button"
-                                    onClick={() => setShowPremiumModal(false)}
-                                >
-                                    Maybe Later
-                                </button>
-                            </div>
+                            {/* Pi Network Integration Component */}
+                            <PiNetworkIntegration 
+                                onAuthSuccess={(piUser) => {
+                                    console.log('✅ Pi User authenticated:', piUser);
+                                    localStorage.setItem('piNetworkUser', JSON.stringify(piUser));
+                                    setIsPiUser(true);
+                                    setShowPremiumModal(false);
+                                }}
+                                authMode={true}
+                            />
                         </div>
                     </div>
                 </div>
