@@ -177,6 +177,19 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false, onClose }) => {
             
             // Handle specific error types
             if (error.message && error.message.includes('every is not a function')) {
+                setError('🔄 Pi SDK initialization error. Please refresh the page and try again.');
+            } else if (error.message && error.message.includes('declined')) {
+                setError('Authentication declined. Please allow access to continue.');
+            } else if (error.message && error.message.includes('postMessage')) {
+                setError('Connection error. Please make sure you\'re using the latest Pi Browser.');
+            } else {
+                setError(error.message || 'Failed to authenticate with Pi Network');
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     // Create Pi payment for premium features
     const createPiPayment = async (amount, memo) => {
         console.log('💳 createPiPayment called with:', { amount, memo });
@@ -195,19 +208,6 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false, onClose }) => {
             const errorMsg = 'Please connect with Pi Network and grant payments permission first';
             setError(errorMsg);
             alert(`❌ ${errorMsg}\n\nClick "Connect with Pi Network" and approve the payment permission.`);
-            return;
-        }   console.error('❌ window.Pi not available');
-            const errorMsg = 'Pi SDK not available. Please refresh the page.';
-            setError(errorMsg);
-            alert(`❌ ${errorMsg}`);
-            return;
-        }
-        
-        if (!isAuthenticated) {
-            console.error('❌ User not authenticated');
-            const errorMsg = 'Please authenticate with Pi Network first';
-            setError(errorMsg);
-            alert(`❌ ${errorMsg}`);
             return;
         }
 
