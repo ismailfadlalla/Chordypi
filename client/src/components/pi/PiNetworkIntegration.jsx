@@ -208,7 +208,13 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                 }
             });
             
-            const payment = await window.Pi.createPayment({
+            // Check if createPayment method exists
+            if (typeof window.Pi.createPayment !== 'function') {
+                throw new Error('window.Pi.createPayment is not available. SDK may not be properly initialized.');
+            }
+            
+            // Add timeout to detect hanging payment
+            const paymentPromise = window.Pi.createPayment({
                 amount: amount,
                 memo: memo,
                 metadata: { 
@@ -217,6 +223,20 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                     user: piUser?.username
                 }
             });
+            
+            // Show a message after 3 seconds if still waiting
+            const warningTimeout = setTimeout(() => {
+                alert('⏰ Still waiting for Pi Browser payment dialog...\n\nIf nothing appears, there may be a configuration issue with the Pi Developer Portal.');
+            }, 3000);
+            
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => {
+                    reject(new Error('Payment request timed out after 30 seconds. This may indicate:\n\n1. App not fully configured in Pi Developer Portal\n2. Payment permissions not granted\n3. Network connectivity issues'));
+                }, 30000);
+            });
+            
+            const payment = await Promise.race([paymentPromise, timeoutPromise]);
+            clearTimeout(warningTimeout);
 
             console.log('✅ Pi Payment created successfully:', payment);
             console.log('💳 Payment ID:', payment.identifier);
