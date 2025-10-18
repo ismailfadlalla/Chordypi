@@ -11,14 +11,15 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false, onClose }) => {
     const [piPayment, setPiPayment] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(!!existingPiUser); // If user exists in localStorage, consider authenticated
+    // Don't trust localStorage - user must authenticate in THIS session to use payments
+    const [isAuthenticated, setIsAuthenticated] = useState(false); 
     const [sdkInitialized, setSdkInitialized] = useState(false);
     const [isInitializing, setIsInitializing] = useState(false);
     // Check if payment scope was granted in previous session
     const existingPaymentScope = typeof window !== 'undefined' 
         ? localStorage.getItem('piPaymentScope') === 'true'
         : false;
-    const [hasPaymentScope, setHasPaymentScope] = useState(existingPaymentScope);
+    const [hasPaymentScope, setHasPaymentScope] = useState(false); // Always require fresh auth for payments
 
     // Check if Pi SDK is available (non-blocking check only)
     const [isPiAvailable, setIsPiAvailable] = useState(typeof window !== 'undefined' && !!window.Pi);
