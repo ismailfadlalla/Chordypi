@@ -27,9 +27,12 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         try {
             console.log('🥧 Initializing Pi Network SDK...');
             
-            // Get environment variables
+            // Get environment variables - default to production for Pi Hackathon
             const piApiKey = process.env.REACT_APP_PI_API_KEY || process.env.REACT_APP_PI_NETWORK_API_KEY;
-            const environment = process.env.REACT_APP_PI_ENVIRONMENT || 'sandbox';
+            // Check if we're in production (vercel.app domain) or development
+            const isProduction = window.location.hostname.includes('vercel.app') || 
+                                window.location.hostname.includes('minepi.com');
+            const environment = isProduction ? 'production' : 'sandbox';
             
             // Initialize Pi SDK - fast, non-blocking
             await window.Pi.init({
@@ -69,14 +72,15 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             // User will see: "Share information with ChordyPi?"
             // - Auth: Authenticate you on this app with your Pi account
             // - Username: Your Pi username
-            // - Roles: Your Pi Community roles
-            const auth = await window.Pi.authenticate({
-                scopes: ['username', 'payments'],
-                onIncompletePaymentFound: (payment) => {
+            // - Payments: Enable Pi payments
+            const auth = await window.Pi.authenticate(
+                ['username', 'payments'],  // scopes as simple array
+                (payment) => {
+                    // onIncompletePaymentFound callback
                     console.log('💰 Incomplete payment found:', payment);
                     setPiPayment(payment);
                 }
-            });
+            );
 
             console.log('✅ Pi Authentication successful:', auth);
             setPiUser(auth.user);
