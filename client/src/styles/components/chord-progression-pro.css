@@ -83,6 +83,8 @@
 /* Horizontal Fretboard - Demo Style */
 .demo-fretboard-container {
     width: 100%;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .demo-fretboard-container.large .demo-chord-label {
@@ -110,6 +112,9 @@
     border-radius: 15px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     border: 2px solid rgba(139, 90, 43, 0.3);
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
 }
 
 /* Fret Numbers - Positioned at Bottom OUTSIDE fretboard */
@@ -150,6 +155,9 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
 }
 
 .demo-fretboard-string {
@@ -157,6 +165,8 @@
     align-items: center;
     gap: 35px; /* INCREASED from 30px for even wider fret spacing */
     position: relative;
+    overflow: hidden;
+    max-width: 100%;
 }
 
 .demo-fretboard-string::before {

@@ -50,6 +50,7 @@
     max-width: 900px;
     margin-left: auto;
     margin-right: auto;
+    overflow: hidden;
 }
 
 .fretboard-cards-wrapper {
@@ -58,6 +59,7 @@
     gap: 20px;
     justify-content: center;
     align-items: stretch;
+    overflow: hidden;
 }
 
 .fretboard-card {
@@ -69,6 +71,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    overflow: hidden;
+    max-width: 100%;
 }
 
 /* Mobile responsive overrides - WIDER RANGE for tablets and Pi Browser */
