@@ -377,25 +377,39 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false, onClose }) => {
     // Premium feature: Unlock advanced chord analysis
     const unlockPremiumFeatures = async () => {
         console.log('🚀 Unlock Premium Features button clicked');
-        console.log('🔍 isAuthenticated:', isAuthenticated);
-        console.log('🔍 piUser:', piUser);
-        console.log('🔍 window.Pi available:', !!window.Pi);
+        console.log('🔍 Current State:', {
+            isAuthenticated,
+            hasPaymentScope,
+            piUser,
+            sdkInitialized,
+            isPiAvailable,
+            'window.Pi': !!window.Pi,
+            'window.Pi.authenticate': !!(window.Pi && window.Pi.authenticate),
+            'window.Pi.createPayment': !!(window.Pi && window.Pi.createPayment)
+        });
+        
+        // Show immediate feedback
+        alert('🚀 Starting premium upgrade...\n\nPlease wait...');
         
         // Visual feedback for debugging
         if (!window.Pi) {
-            alert('❌ Error: Pi SDK not available. Please refresh the page.');
+            console.error('❌ Pi SDK not available');
+            alert('❌ Error: Pi SDK not available. Please refresh the page and try again.');
             return;
         }
         
         if (!isAuthenticated) {
-            alert('❌ Error: Not authenticated. Please sign in first.');
+            console.error('❌ Not authenticated');
+            alert('❌ Error: Not authenticated. Please sign in with Pi Network first.');
             return;
         }
         
         try {
-            await createPiPayment(1, 'ChordyPi Premium Access - Advanced Features');
+            console.log('📞 Calling createPiPayment with amount: 1 π');
+            const result = await createPiPayment(1, 'ChordyPi Premium Access - Advanced Features');
+            console.log('✅ Payment creation completed:', result);
         } catch (error) {
-            console.error('Failed to create payment:', error);
+            console.error('❌ Failed to create payment:', error);
             alert(`❌ Payment Error: ${error.message || 'Unknown error'}`);
         }
     };
