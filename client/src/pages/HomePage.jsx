@@ -942,6 +942,7 @@ const HomePage = () => {
                                     setIsPiUser(true);
                                     setShowPremiumModal(false);
                                 }}
+                                onClose={() => setShowPremiumModal(false)}
                                 authMode={true}
                             />
                         </div>
