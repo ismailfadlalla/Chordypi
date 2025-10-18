@@ -38,17 +38,23 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         try {
             console.log('🥧 Initializing Pi Network SDK...');
             console.log('🔍 Pi Browser detected:', isPiBrowser);
+            console.log('🔍 Current hostname:', window.location.hostname);
             
             // Get environment variables - default to production for Pi Hackathon
             const piApiKey = process.env.REACT_APP_PI_API_KEY || process.env.REACT_APP_PI_NETWORK_API_KEY;
-            // Force sandbox mode for testing
-            const isProduction = false; // Set to true for production deployment
-            const environment = 'sandbox'; // Always use sandbox for now
+            
+            // Auto-detect environment based on domain
+            // Use production mode for deployed apps (vercel.app)
+            const isProduction = window.location.hostname.includes('vercel.app') || 
+                                window.location.hostname.includes('chordypi.com');
+            const environment = isProduction ? 'production' : 'sandbox';
+            
+            console.log(`🌍 Environment: ${environment} mode (isProduction: ${isProduction})`);
             
             // Initialize Pi SDK - fast, non-blocking
             await window.Pi.init({
                 version: "2.0",
-                sandbox: true // Always use sandbox mode for testing
+                sandbox: !isProduction // Use production mode on vercel.app
             });
             
             console.log(`✅ Pi Network SDK initialized successfully (${environment} mode)`);
@@ -96,20 +102,33 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             
             // Pi SDK v2.0 authenticate format with timeout detection
             console.log('⏳ Calling window.Pi.authenticate()...');
+            console.log('📋 Scopes requested: username, payments');
             
             // Set a timeout to detect if authentication is hanging
             const authTimeout = setTimeout(() => {
-                console.log('⏰ Authentication is taking longer than expected...');
-                console.log('💡 If you see this, check if Pi Browser is showing a permission dialog');
+                console.log('⏰ Authentication is taking longer than expected (5+ seconds)...');
+                console.log('💡 Possible issues:');
+                console.log('   1. Check if Pi Browser is showing a permission dialog');
+                console.log('   2. Check if you need to approve in Pi Browser');
+                console.log('   3. Network connectivity to Pi servers');
             }, 5000);
             
-            const auth = await window.Pi.authenticate(
+            // Race between authentication and 30-second timeout
+            const authPromise = window.Pi.authenticate(
                 ['username', 'payments'],  // scopes array
                 function onIncompletePaymentFound(payment) {
                     console.log('💰 Incomplete payment found:', payment);
                     setPiPayment(payment);
                 }
             );
+            
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => {
+                    reject(new Error('Pi Network authentication timed out after 30 seconds. This might be a network issue or the app needs to be registered in Pi Developer Portal.'));
+                }, 30000);
+            });
+            
+            const auth = await Promise.race([authPromise, timeoutPromise]);
             
             clearTimeout(authTimeout);
             console.log('🎉 Authentication response received:', auth);
