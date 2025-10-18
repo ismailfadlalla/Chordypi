@@ -990,12 +990,14 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Changed from center to flex-start */
     justify-content: center;
-    z-index: 1000;
-    padding: 20px;
+    z-index: 2000; /* Increased z-index to ensure it's above everything */
+    padding: 80px 20px 20px; /* Added top padding to position below header */
+    overflow-y: auto; /* Allow scrolling if content is tall */
+    backdrop-filter: blur(5px); /* Add blur effect for better focus */
 }
 
 .premium-modal {
@@ -1007,6 +1009,19 @@ body {
     position: relative;
     color: #333;
     text-align: center;
+    animation: slideDownModal 0.3s ease-out;
+    box-shadow: 0 10px 60px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes slideDownModal {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .modal-close {
@@ -1229,7 +1244,13 @@ body {
     
     .premium-modal {
         padding: 30px 20px;
-        margin: 20px;
+        margin: 10px;
+        max-width: 95%;
+        max-height: 85vh;
+    }
+    
+    .premium-modal-overlay {
+        padding: 60px 10px 20px; /* Adjusted top padding for mobile */
     }
     
     /* Reduce section paddings on mobile for better content visibility */
