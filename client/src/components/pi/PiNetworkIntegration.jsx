@@ -12,6 +12,14 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
 
     // Check if Pi SDK is available (non-blocking check only)
     const isPiAvailable = typeof window !== 'undefined' && window.Pi;
+    
+    // Detect if we're actually in Pi Browser
+    const isPiBrowser = typeof window !== 'undefined' && (
+        navigator.userAgent.includes('PiBrowser') ||
+        navigator.userAgent.includes('Pi Browser') ||
+        window.location.hostname.includes('minepi.com') ||
+        window.location.hostname.includes('pi.app')
+    );
 
     // Initialize Pi SDK (only when user clicks connect)
     const initializePi = async () => {
@@ -26,6 +34,7 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
 
         try {
             console.log('🥧 Initializing Pi Network SDK...');
+            console.log('🔍 Pi Browser detected:', isPiBrowser);
             
             // Get environment variables - default to production for Pi Hackathon
             const piApiKey = process.env.REACT_APP_PI_API_KEY || process.env.REACT_APP_PI_NETWORK_API_KEY;
@@ -69,6 +78,12 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             console.log('🔍 User Agent:', navigator.userAgent);
             console.log('🔍 Window.Pi available:', !!window.Pi);
             console.log('🔍 Window.Pi.authenticate available:', !!window.Pi.authenticate);
+            console.log('🔍 Is Pi Browser:', isPiBrowser);
+            
+            // Check if we're in Pi Browser for real authentication
+            if (!isPiBrowser) {
+                throw new Error('Pi Network authentication requires the official Pi Browser app. Please open this app in Pi Browser to authenticate.');
+            }
             
             // This triggers the native Pi Browser permission dialog
             // User will see: "Share information with ChordyPi?"
@@ -195,6 +210,24 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                     )}
                 </div>
             </div>
+            
+            {/* Show warning if not in Pi Browser */}
+            {!isPiBrowser && (
+                <div className="pi-browser-warning" style={{
+                    background: 'linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%)',
+                    padding: '15px',
+                    borderRadius: '12px',
+                    marginBottom: '20px',
+                    color: 'white',
+                    textAlign: 'center'
+                }}>
+                    <h4 style={{ margin: '0 0 10px 0' }}>📱 Pi Browser Required</h4>
+                    <p style={{ margin: '0', fontSize: '14px' }}>
+                        Pi Network authentication only works in the official <strong>Pi Browser</strong> app.
+                        Please open this app in Pi Browser to connect your Pi account.
+                    </p>
+                </div>
+            )}
 
             {error && (
                 <div className="error-message">
