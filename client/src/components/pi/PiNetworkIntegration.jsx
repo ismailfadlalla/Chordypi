@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './PiNetworkIntegration.css';
 
 const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
@@ -28,6 +28,18 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         // If Pi SDK loads successfully, assume we're in compatible environment
         (window.Pi && window.Pi.authenticate)
     );
+
+    // Auto-initialize SDK if user is already authenticated from previous session
+    useEffect(() => {
+        const autoInitialize = async () => {
+            if (isAuthenticated && !sdkInitialized && isPiAvailable) {
+                console.log('🔄 Auto-initializing Pi SDK for returning user...');
+                await initializePi();
+            }
+        };
+        
+        autoInitialize();
+    }, []); // Run once on mount
 
     // Initialize Pi SDK (only when user clicks connect)
     const initializePi = async () => {
