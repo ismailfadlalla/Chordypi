@@ -92,65 +92,46 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false, onClose }) => {
         setError(null);
 
         try {
-            // Initialize SDK first if needed
-            if (!sdkInitialized) {
-                const initialized = await initializePi();
-                if (!initialized) {
-                    setIsLoading(false);
-                    return;
-                }
+            // Check if Pi SDK is available first
+            if (!window.Pi) {
+                throw new Error('Pi SDK not available. Please make sure you are using Pi Browser.');
             }
 
-            console.log('🔐 Requesting Pi Network authentication...');
+            console.log('🔐 Starting Pi Network authentication...');
             console.log('🔍 User Agent:', navigator.userAgent);
             console.log('🔍 Window.Pi available:', !!window.Pi);
             console.log('🔍 Window.Pi.authenticate available:', !!window.Pi.authenticate);
             console.log('🔍 Is Pi Browser detected:', isPiBrowser);
             
-            // Log warning if not detected as Pi Browser but allow authentication attempt
-            if (!isPiBrowser) {
-                console.warn('⚠️ Pi Browser not detected in user agent, but attempting authentication anyway...');
+            // Initialize SDK first if needed
+            if (!sdkInitialized) {
+                console.log('🔧 Initializing Pi SDK...');
+                const initialized = await initializePi();
+                if (!initialized) {
+                    throw new Error('Failed to initialize Pi SDK');
+                }
+                console.log('✅ Pi SDK initialized successfully');
             }
             
-            // This triggers the native Pi Browser permission dialog
-            // User will see: "Share information with ChordyPi?"
-            // - Auth: Authenticate you on this app with your Pi account
-            // - Username: Your Pi username
-            // - Payments: Enable Pi payments
+            // Log warning if not detected as Pi Browser
+            if (!isPiBrowser) {
+                console.warn('⚠️ Pi Browser not detected in user agent');
+            }
             
-            // Pi SDK v2.0 authenticate format with timeout detection
             console.log('⏳ Calling window.Pi.authenticate()...');
             console.log('📋 Scopes requested: username, payments');
             
-            // Set a timeout to detect if authentication is hanging
-            const authTimeout = setTimeout(() => {
-                console.log('⏰ Authentication is taking longer than expected (5+ seconds)...');
-                console.log('💡 Possible issues:');
-                console.log('   1. Check if Pi Browser is showing a permission dialog');
-                console.log('   2. Check if you need to approve in Pi Browser');
-                console.log('   3. Network connectivity to Pi servers');
-            }, 5000);
-            
-            // Race between authentication and 30-second timeout
-            const authPromise = window.Pi.authenticate(
-                ['username', 'payments'],  // scopes array
+            // Call Pi authenticate - this should trigger the native dialog
+            const auth = await window.Pi.authenticate(
+                ['username', 'payments'],
                 function onIncompletePaymentFound(payment) {
                     console.log('💰 Incomplete payment found:', payment);
                     setPiPayment(payment);
                 }
             );
             
-            const timeoutPromise = new Promise((_, reject) => {
-                setTimeout(() => {
-                    reject(new Error('Pi Network authentication timed out after 30 seconds. This might be a network issue or the app needs to be registered in Pi Developer Portal.'));
-                }, 30000);
-            });
-            
-            const auth = await Promise.race([authPromise, timeoutPromise]);
-            
-            clearTimeout(authTimeout);
             console.log('🎉 Authentication response received:', auth);
-            console.log('✅ Pi Authentication successful:', auth);
+            console.log('✅ Pi Authentication successful!');
             console.log('📋 Scopes granted:', auth.scopes || 'N/A');
             
             setPiUser(auth.user);
@@ -174,17 +155,31 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false, onClose }) => {
             
         } catch (error) {
             console.error('❌ Pi Authentication failed:', error);
+            console.error('❌ Error details:', {
+                message: error.message,
+                stack: error.stack,
+                type: error.constructor.name
+            });
             
             // Handle specific error types
+            let errorMessage = 'Failed to authenticate with Pi Network. ';
+            
             if (error.message && error.message.includes('every is not a function')) {
-                setError('🔄 Pi SDK initialization error. Please refresh the page and try again.');
+                errorMessage += 'SDK initialization error. Please refresh the page.';
             } else if (error.message && error.message.includes('declined')) {
-                setError('Authentication declined. Please allow access to continue.');
+                errorMessage += 'You declined the authentication request.';
+            } else if (error.message && error.message.includes('not available')) {
+                errorMessage += 'Please make sure you are using Pi Browser.';
             } else if (error.message && error.message.includes('postMessage')) {
-                setError('Connection error. Please make sure you\'re using the latest Pi Browser.');
+                errorMessage += 'Connection error. Please update Pi Browser.';
+            } else if (error.message) {
+                errorMessage += error.message;
             } else {
-                setError(error.message || 'Failed to authenticate with Pi Network');
+                errorMessage += 'Unknown error occurred.';
             }
+            
+            setError(errorMessage);
+            alert(`❌ ${errorMessage}`);
         } finally {
             setIsLoading(false);
         }
