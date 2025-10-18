@@ -135,9 +135,9 @@
 }
 
 .fret-number {
-    width: 110px; /* INCREASED to match much wider fret positions (100px + gap) */
+    width: 55px; /* MATCH the fret dot width exactly */
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: 900;
     color: #1a1a1a;
     background: linear-gradient(135deg, #FFD700, #FFA500);
@@ -193,8 +193,8 @@
 }
 
 .demo-fret-position {
-    width: 100px; /* INCREASED from 85px to make frets much wider */
-    height: 50px; /* REDUCED from 70px to make frets shorter */
+    width: 55px; /* FIXED to make dots circular, not oval */
+    height: 55px; /* SAME as width for perfect circles */
     border-radius: 50%;
     background: transparent; /* CHANGED from rgba(255, 255, 255, 0.05) to hide empty dots */
     border: 2px solid transparent; /* CHANGED to hide empty dot borders */

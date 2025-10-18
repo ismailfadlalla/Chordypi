@@ -247,7 +247,7 @@
     }
     
     .demo-fretboard-string {
-        gap: 32px !important; /* INCREASED for much wider fret spacing */
+        gap: 24px !important; /* Gap between fret positions */
     }
     
     .string-label {
@@ -256,8 +256,8 @@
     }
     
     .demo-fret-position {
-        width: 68px !important; /* INCREASED for much wider frets */
-        height: 35px !important; /* REDUCED for shorter frets */
+        width: 40px !important; /* FIXED to make dots circular */
+        height: 40px !important; /* SAME as width for perfect circles */
     }
     
     /* CRITICAL: Ensure active dots are VISIBLE */
@@ -275,8 +275,8 @@
     }
     
     .fret-number {
-        width: 72px !important; /* UPDATED to match much wider fret positions */
-        font-size: 0.7rem !important; /* Smaller font */
+        width: 40px !important; /* MATCH the dot width exactly */
+        font-size: 0.65rem !important; /* Smaller font */
         padding: 3px 0 !important;
         text-align: center !important;
         box-sizing: border-box !important;
@@ -288,8 +288,8 @@
     .demo-fretboard-visual + .fret-numbers,
     .fret-numbers {
         display: flex !important;
-        gap: 32px !important; /* UPDATED to match the much wider demo-fretboard-string gap */
-        padding-left: 42px !important; /* Adjusted for alignment */
+        gap: 24px !important; /* MATCH the demo-fretboard-string gap exactly */
+        padding-left: 38px !important; /* Adjusted for alignment */
         transform: translateX(0px) !important; /* NO shift - let gap handle alignment */
         margin-top: 12px !important;
         justify-content: flex-start !important;

@@ -504,21 +504,21 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                                 }
                                 
                                 // Calculate position for vertical barre line
-                                // UPDATED dimensions: 50px fret height + 8px gap = 58px spacing
-                                const stringSpacing = 58; // UPDATED for shorter fretboard
+                                // FIXED dimensions: 55px dot height + 8px gap = 63px spacing
+                                const stringSpacing = 63; // Updated to match 55px dots + 8px gap
                                 const startDisplayIdx = numStrings - 1 - startStr;
                                 const endDisplayIdx = numStrings - 1 - endStr;
                                 
                                 // Calculate vertical position (top and height)
                                 const minIdx = Math.min(startDisplayIdx, endDisplayIdx);
                                 const maxIdx = Math.max(startDisplayIdx, endDisplayIdx);
-                                const topPosition = minIdx * stringSpacing + 25; // Center on first string
-                                const bottomPosition = maxIdx * stringSpacing + 25; // Center on last string
-                                const height = Math.max(25, bottomPosition - topPosition); // Minimum 25px height
+                                const topPosition = minIdx * stringSpacing + 27; // Center on first string (55/2 = 27.5)
+                                const bottomPosition = maxIdx * stringSpacing + 27; // Center on last string
+                                const height = Math.max(30, bottomPosition - topPosition); // Minimum 30px height
                                 
-                                // Calculate horizontal position - UPDATED for much wider frets (100px + 60px gap = 160px)
+                                // Calculate horizontal position - FIXED for proper alignment (55px dots + 60px gap = 115px)
                                 const fretOffset = barreFret - startingFret;
-                                const leftPosition = 50 + fretOffset * 160 + 50; // Adjusted for much wider spacing
+                                const leftPosition = 50 + fretOffset * 115 + 27; // Center on dots (55/2 = 27.5)
                                 
                                 return (
                                     <div
@@ -527,15 +527,17 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                                             position: 'absolute',
                                             left: `${leftPosition}px`,
                                             top: `${topPosition}px`,
-                                            width: '26px',
+                                            width: '28px',
                                             height: `${height}px`,
+                                            maxHeight: `${height}px`,
                                             background: 'linear-gradient(90deg, rgba(108, 92, 231, 0.9) 0%, rgba(108, 92, 231, 1) 50%, rgba(108, 92, 231, 0.9) 100%)',
-                                            borderRadius: '13px',
+                                            borderRadius: '14px',
                                             border: '2px solid rgba(255, 215, 0, 0.85)',
                                             boxShadow: '0 0 12px rgba(108, 92, 231, 0.6), 0 0 6px rgba(255, 215, 0, 0.3)',
                                             zIndex: 10,
                                             pointerEvents: 'none',
-                                            boxSizing: 'border-box'
+                                            boxSizing: 'border-box',
+                                            overflow: 'hidden'
                                         }}
                                     />
                                 );
