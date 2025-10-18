@@ -41,7 +41,7 @@ const LogoText = styled.span`
 `;
 
 const LogoImage = styled.img`
-  height: ${props => props.size === 'small' ? '40px' : props.size === 'large' ? '150px' : '60px'};
+  height: ${props => props.size === 'small' ? '40px' : props.size === 'large' ? '300px' : '150px'};
   width: auto;
   display: block;
   object-fit: contain;
