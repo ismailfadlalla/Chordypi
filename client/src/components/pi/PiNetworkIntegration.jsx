@@ -11,13 +11,17 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false, onClose }) => {
     const [piPayment, setPiPayment] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false); // Changed: Don't trust localStorage, need fresh auth
+    const [isAuthenticated, setIsAuthenticated] = useState(!!existingPiUser); // If user exists in localStorage, consider authenticated
     const [sdkInitialized, setSdkInitialized] = useState(false);
     const [isInitializing, setIsInitializing] = useState(false);
-    const [hasPaymentScope, setHasPaymentScope] = useState(false); // Track if user granted payments scope
+    // Check if payment scope was granted in previous session
+    const existingPaymentScope = typeof window !== 'undefined' 
+        ? localStorage.getItem('piPaymentScope') === 'true'
+        : false;
+    const [hasPaymentScope, setHasPaymentScope] = useState(existingPaymentScope);
 
     // Check if Pi SDK is available (non-blocking check only)
-    const isPiAvailable = typeof window !== 'undefined' && window.Pi;
+    const [isPiAvailable, setIsPiAvailable] = useState(typeof window !== 'undefined' && !!window.Pi);
     
     // Detect if we're actually in Pi Browser - check multiple indicators
     const isPiBrowser = typeof window !== 'undefined' && (
@@ -29,6 +33,39 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false, onClose }) => {
         // If Pi SDK loads successfully, assume we're in compatible environment
         (window.Pi && window.Pi.authenticate)
     );
+
+    // Check for Pi SDK availability on mount and periodically
+    useEffect(() => {
+        const checkPiSDK = () => {
+            const available = typeof window !== 'undefined' && !!window.Pi;
+            setIsPiAvailable(available);
+            if (available) {
+                console.log('✅ Pi SDK detected and available');
+            } else {
+                console.log('⚠️ Pi SDK not yet available, will retry...');
+            }
+            return available;
+        };
+
+        // Initial check
+        checkPiSDK();
+
+        // Retry every 500ms for up to 5 seconds if SDK not found
+        let attempts = 0;
+        const maxAttempts = 10;
+        const interval = setInterval(() => {
+            attempts++;
+            if (checkPiSDK() || attempts >= maxAttempts) {
+                clearInterval(interval);
+                if (attempts >= maxAttempts && !window.Pi) {
+                    console.error('❌ Pi SDK not loaded after 5 seconds');
+                    setError('Pi SDK not loaded. Please refresh the page or make sure you are using Pi Browser.');
+                }
+            }
+        }, 500);
+
+        return () => clearInterval(interval);
+    }, []);
 
     // Auto-initialize SDK if user is already authenticated from previous session
     useEffect(() => {
@@ -417,12 +454,51 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false, onClose }) => {
                     <p>Connect your Pi Network account to sign in securely!</p>
                     <p className="pi-auth-hint">📱 You'll be asked to allow ChordyPi to access your Pi username</p>
                     
+                    {!isPiAvailable && !isLoading && (
+                        <div style={{
+                            background: 'rgba(255, 193, 7, 0.2)',
+                            border: '2px solid #ffc107',
+                            borderRadius: '10px',
+                            padding: '15px',
+                            marginBottom: '15px',
+                            color: '#333'
+                        }}>
+                            <p style={{ margin: '0 0 10px 0', fontWeight: 'bold' }}>⚠️ Pi SDK Not Loaded</p>
+                            <p style={{ margin: '0 0 10px 0', fontSize: '14px' }}>
+                                The Pi Network SDK hasn't loaded yet. This usually means:
+                            </p>
+                            <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '13px' }}>
+                                <li>You need to refresh the page</li>
+                                <li>You need to use Pi Browser app</li>
+                                <li>Network connection issue</li>
+                            </ul>
+                            <button
+                                onClick={() => window.location.reload()}
+                                style={{
+                                    marginTop: '10px',
+                                    padding: '8px 20px',
+                                    background: '#ffc107',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    cursor: 'pointer',
+                                    fontWeight: 'bold'
+                                }}
+                            >
+                                🔄 Refresh Page
+                            </button>
+                        </div>
+                    )}
+                    
                     <button 
                         className="pi-auth-button"
                         onClick={handlePiAuth}
-                        disabled={isLoading}
+                        disabled={isLoading || !isPiAvailable}
+                        style={{
+                            opacity: (!isPiAvailable && !isLoading) ? 0.5 : 1,
+                            cursor: (!isPiAvailable && !isLoading) ? 'not-allowed' : 'pointer'
+                        }}
                     >
-                        {isLoading ? '🔄 Connecting...' : '🥧 Sign in with Pi Network'}
+                        {isLoading ? '🔄 Connecting...' : (isPiAvailable ? '🥧 Sign in with Pi Network' : '⏳ Waiting for Pi SDK...')}
                     </button>
                     
                     <div className="pi-auth-benefits">
