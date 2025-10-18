@@ -3,11 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Content Security Policy - Allow Pi Network SDK and external resources -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' https://sdk.minepi.com https://*.minepi.com https://api.pi.network;
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://sdk.minepi.com https://*.minepi.com;
+        connect-src 'self' https://sdk.minepi.com https://*.minepi.com https://api.pi.network https://*.railway.app https://*.vercel.app https://rapidapi.com https://*.rapidapi.com https://youtube.googleapis.com https://*.youtube.com https://*.googleusercontent.com;
+        img-src 'self' data: https: http:;
+        style-src 'self' 'unsafe-inline';
+        font-src 'self' data:;
+        frame-src 'self' https://sdk.minepi.com https://*.minepi.com https://www.youtube.com;
+    ">
+    
     <title>ChordyPi - AI Guitar Learning with Pi Network</title>
     <link rel="icon" href="/favicon.ico" />
     
     <!-- Pi Network SDK - Required for Pi Browser authentication -->
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <script src="https://sdk.minepi.com/pi-sdk.js" crossorigin="anonymous"></script>
     
     <!-- Pi Browser Optimization Styles -->
     <style>
