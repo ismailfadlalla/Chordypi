@@ -73,10 +73,11 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             // - Auth: Authenticate you on this app with your Pi account
             // - Username: Your Pi username
             // - Payments: Enable Pi payments
+            
+            // Pi SDK v2.0 authenticate format
             const auth = await window.Pi.authenticate(
-                ['username', 'payments'],  // scopes as simple array
-                (payment) => {
-                    // onIncompletePaymentFound callback
+                ['username', 'payments'],  // scopes array
+                function onIncompletePaymentFound(payment) {
                     console.log('💰 Incomplete payment found:', payment);
                     setPiPayment(payment);
                 }
@@ -94,9 +95,13 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
         } catch (error) {
             console.error('❌ Pi Authentication failed:', error);
             
-            // Handle user decline
-            if (error.message && error.message.includes('declined')) {
+            // Handle specific error types
+            if (error.message && error.message.includes('every is not a function')) {
+                setError('🔄 Pi SDK initialization error. Please refresh the page and try again.');
+            } else if (error.message && error.message.includes('declined')) {
                 setError('Authentication declined. Please allow access to continue.');
+            } else if (error.message && error.message.includes('postMessage')) {
+                setError('Connection error. Please make sure you\'re using the latest Pi Browser.');
             } else {
                 setError(error.message || 'Failed to authenticate with Pi Network');
             }
