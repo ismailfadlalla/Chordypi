@@ -516,9 +516,9 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                                 const bottomPosition = maxIdx * stringSpacing + 25; // Center on last string
                                 const height = Math.max(25, bottomPosition - topPosition); // Minimum 25px height
                                 
-                                // Calculate horizontal position - UPDATED for wider frets (85px + 45px gap = 130px)
+                                // Calculate horizontal position - UPDATED for much wider frets (100px + 60px gap = 160px)
                                 const fretOffset = barreFret - startingFret;
-                                const leftPosition = 50 + fretOffset * 130 + 42; // Adjusted for wider spacing
+                                const leftPosition = 50 + fretOffset * 160 + 50; // Adjusted for much wider spacing
                                 
                                 return (
                                     <div
