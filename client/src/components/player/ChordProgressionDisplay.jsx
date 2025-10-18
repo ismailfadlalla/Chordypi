@@ -480,54 +480,67 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                     <div className="demo-fretboard-strings" style={{ 
                         position: 'relative',
                         maxWidth: '100%',
-                        overflow: 'hidden'
+                        overflow: 'hidden',
+                        clipPath: 'inset(0)'
                     }}>
-                        {/* Render barre lines first (behind the dots) */}
-                        {pattern.barres?.map((barreInfo, barreIdx) => {
-                            const [barreFret, startStr, endStr] = barreInfo;
-                            
-                            // Only render barre if it's within the displayed fret range
-                            if (barreFret < startingFret || barreFret >= startingFret + numFrets) {
-                                return null;
-                            }
-                            
-                            // Calculate position for vertical barre line
-                            // Pattern uses 0=low E, 5=high E, but display is reversed (high E at top)
-                            // So we need to convert pattern string indices to display positions
-                            const stringSpacing = 65;
-                            // Convert pattern indices to display positions
-                            const startDisplayIdx = numStrings - 1 - startStr; // Pattern to display
-                            const endDisplayIdx = numStrings - 1 - endStr;     // Pattern to display
-                            const topPosition = Math.min(startDisplayIdx, endDisplayIdx) * stringSpacing + 15; // Start at string center + 15px
-                            const height = (Math.abs(endDisplayIdx - startDisplayIdx) * stringSpacing) - 5; // SUBTRACT 5px to make it tighter
-                            // Adjust position based on starting fret offset - UPDATED for WIDER frets (70px + 35px gap = 105px)
-                            const fretOffset = barreFret - startingFret;
-                            const leftPosition = 30 + fretOffset * 105 + 35; // 30px label + fret spacing (105px) + center offset (35px)
-                            
-                            return (
-                                <div
-                                    key={`barre-${barreIdx}`}
-                                    style={{
-                                        position: 'absolute',
-                                        left: `${leftPosition}px`,
-                                        top: `${topPosition}px`,
-                                        width: '28px',
-                                        maxWidth: '28px',
-                                        height: `${height}px`,
-                                        background: 'linear-gradient(90deg, rgba(108, 92, 231, 0.9) 0%, rgba(108, 92, 231, 1) 50%, rgba(108, 92, 231, 0.9) 100%)',
-                                        borderRadius: '14px',
-                                        border: '2px solid rgba(255, 215, 0, 0.85)',
-                                        boxShadow: `
-                                            0 0 12px rgba(108, 92, 231, 0.6),
-                                            0 0 6px rgba(255, 215, 0, 0.3)
-                                        `,
-                                        zIndex: 10,
-                                        pointerEvents: 'none',
-                                        boxSizing: 'border-box'
-                                    }}
-                                />
-                            );
-                        })}
+                        {/* Barre lines wrapper with strict clipping */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            overflow: 'hidden',
+                            clipPath: 'inset(0)',
+                            zIndex: 5
+                        }}>
+                            {/* Render barre lines first (behind the dots) */}
+                            {pattern.barres?.map((barreInfo, barreIdx) => {
+                                const [barreFret, startStr, endStr] = barreInfo;
+                                
+                                // Only render barre if it's within the displayed fret range
+                                if (barreFret < startingFret || barreFret >= startingFret + numFrets) {
+                                    return null;
+                                }
+                                
+                                // Calculate position for vertical barre line
+                                // UPDATED dimensions: 50px fret height + 8px gap = 58px spacing
+                                const stringSpacing = 58; // UPDATED for shorter fretboard
+                                const startDisplayIdx = numStrings - 1 - startStr;
+                                const endDisplayIdx = numStrings - 1 - endStr;
+                                
+                                // Calculate vertical position (top and height)
+                                const minIdx = Math.min(startDisplayIdx, endDisplayIdx);
+                                const maxIdx = Math.max(startDisplayIdx, endDisplayIdx);
+                                const topPosition = minIdx * stringSpacing + 25; // Center on first string
+                                const bottomPosition = maxIdx * stringSpacing + 25; // Center on last string
+                                const height = Math.max(25, bottomPosition - topPosition); // Minimum 25px height
+                                
+                                // Calculate horizontal position - UPDATED for wider frets (85px + 45px gap = 130px)
+                                const fretOffset = barreFret - startingFret;
+                                const leftPosition = 50 + fretOffset * 130 + 42; // Adjusted for wider spacing
+                                
+                                return (
+                                    <div
+                                        key={`barre-${barreIdx}`}
+                                        style={{
+                                            position: 'absolute',
+                                            left: `${leftPosition}px`,
+                                            top: `${topPosition}px`,
+                                            width: '26px',
+                                            height: `${height}px`,
+                                            background: 'linear-gradient(90deg, rgba(108, 92, 231, 0.9) 0%, rgba(108, 92, 231, 1) 50%, rgba(108, 92, 231, 0.9) 100%)',
+                                            borderRadius: '13px',
+                                            border: '2px solid rgba(255, 215, 0, 0.85)',
+                                            boxShadow: '0 0 12px rgba(108, 92, 231, 0.6), 0 0 6px rgba(255, 215, 0, 0.3)',
+                                            zIndex: 10,
+                                            pointerEvents: 'none',
+                                            boxSizing: 'border-box'
+                                        }}
+                                    />
+                                );
+                            })}
+                        </div>
                         
                         {[...Array(numStrings)].map((_, stringIdx) => {
                             // String labels - High E first (standard guitar tab view)
