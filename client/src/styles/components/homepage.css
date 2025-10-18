@@ -210,16 +210,16 @@ body {
 }
 
 .hero-text {
-    background: rgba(0, 0, 0, 0.7); /* Stronger background for better contrast */
+    background: transparent; /* Remove black background - match Pi Network section */
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     padding: 40px;
-    border: 2px solid rgba(255, 255, 255, 0.2); /* Stronger border */
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Add shadow for depth */
+    border: none; /* Remove border to match clean look */
+    box-shadow: none; /* Remove shadow */
     text-align: center;
     margin: 0 auto;
-    max-width: 800px;
+    max-width: 1200px; /* Match hero-boxes-container width */
 }
 
 .hero-title {
