@@ -234,13 +234,43 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false, onClose }) => {
             return;
         }
         
-        // Check if user needs to re-authenticate with payments scope
-        if (!isAuthenticated || !hasPaymentScope) {
-            console.error('❌ User not authenticated or missing payments scope');
-            const errorMsg = 'Please connect with Pi Network and grant payments permission first';
+        // Check if user is authenticated
+        if (!isAuthenticated) {
+            console.error('❌ User not authenticated');
+            const errorMsg = 'Please connect with Pi Network first';
             setError(errorMsg);
-            alert(`❌ ${errorMsg}\n\nClick "Connect with Pi Network" and approve the payment permission.`);
+            alert(`❌ ${errorMsg}\n\nClick "Connect with Pi Network" to continue.`);
             return;
+        }
+        
+        // If payment scope not confirmed, try to re-authenticate to get it
+        if (!hasPaymentScope) {
+            console.warn('⚠️ Payment scope not confirmed, attempting to re-authenticate...');
+            try {
+                // Re-authenticate to ensure we have payment scope
+                const auth = await window.Pi.authenticate(
+                    ['username', 'payments'],
+                    function onIncompletePaymentFound(payment) {
+                        console.log('💰 Incomplete payment found:', payment);
+                        setPiPayment(payment);
+                    }
+                );
+                
+                // Check if payments scope was granted
+                const paymentsGranted = auth.scopes && auth.scopes.includes('payments');
+                setHasPaymentScope(paymentsGranted);
+                
+                if (!paymentsGranted) {
+                    throw new Error('Payments permission was not granted. Please approve payments when prompted.');
+                }
+                
+                console.log('✅ Payment scope confirmed');
+            } catch (authError) {
+                console.error('❌ Failed to get payment scope:', authError);
+                setError('Please grant payments permission to continue');
+                alert(`❌ Payment Permission Required\n\nPlease approve the payments permission when prompted by Pi Browser.`);
+                return;
+            }
         }
 
         setIsLoading(true);
