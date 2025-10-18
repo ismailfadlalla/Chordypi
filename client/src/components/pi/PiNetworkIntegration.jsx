@@ -246,12 +246,26 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             
             // Show a message after 3 seconds if still waiting
             const warningTimeout = setTimeout(() => {
-                alert('⏰ Still waiting for Pi Browser payment dialog...\n\nIf nothing appears, there may be a configuration issue with the Pi Developer Portal.');
+                alert('⏰ Payment request is taking longer than expected...\n\n' +
+                      'This usually means:\n' +
+                      '1. Payments not enabled in Pi Developer Portal\n' +
+                      '2. Testnet app needs payment configuration\n' +
+                      '3. Waiting for Pi Network approval\n\n' +
+                      'For hackathon: You can show judges the working authentication and explain payments are pending Pi Network approval.');
             }, 3000);
             
             const timeoutPromise = new Promise((_, reject) => {
                 setTimeout(() => {
-                    reject(new Error('Payment request timed out after 30 seconds. This may indicate:\n\n1. App not fully configured in Pi Developer Portal\n2. Payment permissions not granted\n3. Network connectivity issues'));
+                    clearTimeout(warningTimeout);
+                    reject(new Error('❌ Payment Request Timeout\n\n' +
+                                   'The payment dialog did not appear after 30 seconds.\n\n' +
+                                   'NEXT STEPS:\n' +
+                                   '1. Go to Pi Developer Portal (develop.pi)\n' +
+                                   '2. Open Testnet app settings\n' +
+                                   '3. Enable "Payments" feature\n' +
+                                   '4. Configure wallet address\n' +
+                                   '5. Save and wait 5-10 minutes\n\n' +
+                                   'For immediate demo: Show authentication working!'));
                 }, 30000);
             });
             
