@@ -66,6 +66,9 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
             }
 
             console.log('🔐 Requesting Pi Network authentication...');
+            console.log('🔍 User Agent:', navigator.userAgent);
+            console.log('🔍 Window.Pi available:', !!window.Pi);
+            console.log('🔍 Window.Pi.authenticate available:', !!window.Pi.authenticate);
             
             // This triggers the native Pi Browser permission dialog
             // User will see: "Share information with ChordyPi?"
@@ -81,6 +84,8 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                     setPiPayment(payment);
                 }
             );
+            
+            console.log('🎉 Authentication response received:', auth);
 
             console.log('✅ Pi Authentication successful:', auth);
             setPiUser(auth.user);
