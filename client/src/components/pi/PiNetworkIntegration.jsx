@@ -213,6 +213,14 @@ const PiNetworkIntegration = ({ onAuthSuccess, authMode = false }) => {
                 throw new Error('window.Pi.createPayment is not available. SDK may not be properly initialized.');
             }
             
+            // Log SDK state for debugging
+            alert(`🔍 SDK Debug Info:\n\n` +
+                  `✅ SDK Initialized: ${sdkInitialized}\n` +
+                  `✅ User Authenticated: ${isAuthenticated}\n` +
+                  `✅ Username: ${piUser?.username || 'N/A'}\n` +
+                  `✅ createPayment available: Yes\n\n` +
+                  `Now calling Pi Browser payment API...`);
+            
             // Add timeout to detect hanging payment
             const paymentPromise = window.Pi.createPayment({
                 amount: amount,
