@@ -421,16 +421,46 @@ const HomePage = () => {
                             {piAuthenticating ? '🔄 Connecting...' : '💎 Connect with Pi Network'}
                         </button>
                     ) : (
-                        <div style={{ 
-                            color: '#4ade80', 
-                            fontSize: '1.4rem', 
-                            fontWeight: 'bold',
-                            padding: '15px',
-                            background: 'rgba(74, 222, 128, 0.1)',
-                            borderRadius: '12px',
-                            display: 'inline-block'
-                        }}>
-                            ✅ Connected to Pi Network - Welcome Pioneer!
+                        <div style={{ textAlign: 'center' }}>
+                            <div style={{ 
+                                color: '#4ade80', 
+                                fontSize: '1.4rem', 
+                                fontWeight: 'bold',
+                                padding: '15px',
+                                background: 'rgba(74, 222, 128, 0.1)',
+                                borderRadius: '12px',
+                                display: 'inline-block',
+                                marginBottom: '20px'
+                            }}>
+                                ✅ Connected to Pi Network - Welcome Pioneer!
+                            </div>
+                            <br />
+                            <button 
+                                onClick={() => setShowPremiumModal(true)}
+                                style={{
+                                    padding: '15px 40px',
+                                    fontSize: '1.2rem',
+                                    background: 'linear-gradient(135deg, #ffd700 0%, #ffb700 100%)',
+                                    color: '#1a1a1a',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    cursor: 'pointer',
+                                    fontWeight: 'bold',
+                                    boxShadow: '0 6px 25px rgba(255, 215, 0, 0.4)',
+                                    transition: 'all 0.3s',
+                                    marginTop: '10px'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.target.style.transform = 'scale(1.08)';
+                                    e.target.style.boxShadow = '0 8px 35px rgba(255, 215, 0, 0.6)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.target.style.transform = 'scale(1)';
+                                    e.target.style.boxShadow = '0 6px 25px rgba(255, 215, 0, 0.4)';
+                                }}
+                            >
+                                🌟 Unlock Premium Features
+                            </button>
                         </div>
                     )
                 ) : (
