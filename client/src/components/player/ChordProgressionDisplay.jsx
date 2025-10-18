@@ -474,7 +474,8 @@ const ChordProgressionDisplay = ({ currentChord, nextChord, realisticChords, cur
                 <div className="demo-chord-label">{chordName}</div>
                 <div className="demo-fretboard-visual" style={{ 
                     maxWidth: '100%', 
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    position: 'relative'
                 }}>
                     <div className="demo-fretboard-strings" style={{ 
                         position: 'relative',
