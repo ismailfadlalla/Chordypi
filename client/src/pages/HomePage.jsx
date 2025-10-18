@@ -318,6 +318,120 @@ const HomePage = () => {
                 </p>
             </div>
             
+            {/* 🥧 PI NETWORK CONNECT SECTION - Prominent placement for hackathon */}
+            <div className="pi-auth-section" style={{
+                maxWidth: '900px',
+                padding: '30px',
+                margin: '30px auto',
+                background: 'linear-gradient(135deg, rgba(123, 97, 255, 0.15) 0%, rgba(72, 52, 212, 0.15) 100%)',
+                borderRadius: '20px',
+                border: '3px solid rgba(123, 97, 255, 0.5)',
+                textAlign: 'center',
+                boxShadow: '0 8px 40px rgba(123, 97, 255, 0.3)',
+                position: 'relative',
+                zIndex: 100
+            }}>
+                <h2 style={{ 
+                    color: '#7b61ff', 
+                    marginBottom: '15px', 
+                    fontSize: '2rem',
+                    textShadow: '0 2px 10px rgba(123, 97, 255, 0.5)'
+                }}>🔐 Pi Network Integration</h2>
+                <p style={{ 
+                    marginBottom: '25px', 
+                    color: '#e0e0e0',
+                    fontSize: '1.1rem',
+                    maxWidth: '600px',
+                    margin: '0 auto 25px'
+                }}>
+                    Connect with Pi Network to unlock premium features and support the creator economy!
+                </p>
+                {window.Pi ? (
+                    // Pi Browser detected - show connect button
+                    !isPiUser ? (
+                        <button 
+                            onClick={() => setShowPremiumModal(true)}
+                            style={{
+                                padding: '18px 50px',
+                                fontSize: '1.3rem',
+                                background: 'linear-gradient(135deg, #7b61ff 0%, #4834d4 100%)',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '12px',
+                                cursor: 'pointer',
+                                fontWeight: 'bold',
+                                boxShadow: '0 6px 25px rgba(123, 97, 255, 0.6)',
+                                transition: 'all 0.3s',
+                                marginTop: '10px'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.transform = 'scale(1.08)';
+                                e.target.style.boxShadow = '0 8px 35px rgba(123, 97, 255, 0.8)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.transform = 'scale(1)';
+                                e.target.style.boxShadow = '0 6px 25px rgba(123, 97, 255, 0.6)';
+                            }}
+                        >
+                            💎 Connect with Pi Network
+                        </button>
+                    ) : (
+                        <div style={{ 
+                            color: '#4ade80', 
+                            fontSize: '1.4rem', 
+                            fontWeight: 'bold',
+                            padding: '15px',
+                            background: 'rgba(74, 222, 128, 0.1)',
+                            borderRadius: '12px',
+                            display: 'inline-block'
+                        }}>
+                            ✅ Connected to Pi Network - Welcome Pioneer!
+                        </div>
+                    )
+                ) : (
+                    // Regular browser - show info about Pi Browser
+                    <div style={{
+                        background: 'rgba(255, 215, 0, 0.15)',
+                        border: '2px solid rgba(255, 215, 0, 0.4)',
+                        borderRadius: '15px',
+                        padding: '25px',
+                        maxWidth: '600px',
+                        margin: '0 auto'
+                    }}>
+                        <p style={{ 
+                            color: '#FFD700', 
+                            fontWeight: 'bold', 
+                            marginBottom: '12px',
+                            fontSize: '1.2rem'
+                        }}>
+                            📱 To use Pi Network features, please open this app in Pi Browser
+                        </p>
+                        <p style={{ 
+                            color: '#e0e0e0', 
+                            fontSize: '1rem', 
+                            marginBottom: '18px'
+                        }}>
+                            Pi Browser is available in the Pi Network mobile app
+                        </p>
+                        <button
+                            onClick={() => setShowPremiumModal(true)}
+                            style={{
+                                padding: '12px 25px',
+                                fontSize: '1rem',
+                                background: 'rgba(123, 97, 255, 0.3)',
+                                color: '#7b61ff',
+                                border: '2px solid rgba(123, 97, 255, 0.6)',
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            Learn More
+                        </button>
+                    </div>
+                )}
+            </div>
+            
             {/* Hero Section */}
             <div className="hero-section">
                 <div className="hero-content">
@@ -438,82 +552,6 @@ const HomePage = () => {
                             </div>
                     </div>
                 </div>
-            </div>
-            
-            {/* Pi Network Authentication Section - Visible in ALL browsers */}
-            <div className="pi-auth-section" style={{
-                maxWidth: '100%',
-                padding: '20px',
-                margin: '20px auto',
-                background: 'linear-gradient(135deg, rgba(123, 97, 255, 0.1) 0%, rgba(72, 52, 212, 0.1) 100%)',
-                borderRadius: '16px',
-                border: '2px solid rgba(123, 97, 255, 0.3)',
-                textAlign: 'center'
-            }}>
-                <h2 style={{ color: '#7b61ff', marginBottom: '15px' }}>🔐 Pi Network Integration</h2>
-                <p style={{ marginBottom: '20px', color: '#ccc' }}>
-                    Connect with Pi Network to unlock premium features and support the creator economy!
-                </p>
-                {window.Pi ? (
-                    // Pi Browser detected - show connect button
-                    !isPiUser ? (
-                        <button 
-                            onClick={() => setShowPremiumModal(true)}
-                            style={{
-                                padding: '15px 40px',
-                                fontSize: '18px',
-                                background: 'linear-gradient(135deg, #7b61ff 0%, #4834d4 100%)',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '8px',
-                                cursor: 'pointer',
-                                fontWeight: 'bold',
-                                boxShadow: '0 4px 15px rgba(123, 97, 255, 0.4)',
-                                transition: 'transform 0.2s'
-                            }}
-                            onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
-                            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-                        >
-                            💎 Connect with Pi Network
-                        </button>
-                    ) : (
-                        <div style={{ color: '#4ade80', fontSize: '1.2rem', fontWeight: 'bold' }}>
-                            ✅ Connected to Pi Network - Welcome Pioneer!
-                        </div>
-                    )
-                ) : (
-                    // Regular browser - show info about Pi Browser
-                    <div style={{
-                        background: 'rgba(255, 215, 0, 0.1)',
-                        border: '1px solid rgba(255, 215, 0, 0.3)',
-                        borderRadius: '12px',
-                        padding: '20px',
-                        maxWidth: '500px',
-                        margin: '0 auto'
-                    }}>
-                        <p style={{ color: '#FFD700', fontWeight: 'bold', marginBottom: '10px' }}>
-                            📱 To use Pi Network features, please open this app in Pi Browser
-                        </p>
-                        <p style={{ color: '#ccc', fontSize: '0.9rem', marginBottom: '15px' }}>
-                            Pi Browser is available in the Pi Network mobile app
-                        </p>
-                        <button
-                            onClick={() => setShowPremiumModal(true)}
-                            style={{
-                                padding: '10px 20px',
-                                fontSize: '14px',
-                                background: 'rgba(123, 97, 255, 0.2)',
-                                color: '#7b61ff',
-                                border: '1px solid rgba(123, 97, 255, 0.5)',
-                                borderRadius: '6px',
-                                cursor: 'pointer',
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            Learn More
-                        </button>
-                    </div>
-                )}
             </div>
             
             {/* Feature Highlights - Removed "for Non-Users" condition to show always */}
