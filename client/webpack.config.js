@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
@@ -43,6 +44,30 @@ module.exports = (env, argv) => {
         systemvars: true,
         defaults: false
       }),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: path.resolve(__dirname, 'public/legal'),
+            to: path.resolve(__dirname, 'dist/legal'),
+            noErrorOnMissing: false
+          },
+          {
+            from: path.resolve(__dirname, 'public/images'),
+            to: path.resolve(__dirname, 'dist/images'),
+            noErrorOnMissing: true
+          },
+          {
+            from: path.resolve(__dirname, 'public/manifest.json'),
+            to: path.resolve(__dirname, 'dist/manifest.json'),
+            noErrorOnMissing: true
+          },
+          {
+            from: path.resolve(__dirname, 'public/favicon.ico'),
+            to: path.resolve(__dirname, 'dist/favicon.ico'),
+            noErrorOnMissing: true
+          }
+        ]
+      })
     ],
     resolve: {
       extensions: ['.js', '.jsx'],
