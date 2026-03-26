@@ -6,10 +6,12 @@ import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'r
 // Import AuthProvider for development
 import { AuthProvider } from './src/context/AuthProvider';
 
+// Import Pi Browser Router - detects if running in Pi Browser
+
 // Import SearchScreen
 import AuthScreen from './src/screens/AuthScreen';
-import PlayerScreen from './src/screens/PlayerScreen';
 import LibraryScreen from './src/screens/LibraryScreen';
+import PlayerScreen from './src/screens/PlayerScreen';
 import SearchScreen from './src/screens/SearchScreen';
 
 const Stack = createNativeStackNavigator();
@@ -87,49 +89,51 @@ export default function App() {
   console.log('🎵 Professional App Loading...');
 
   return (
-    <AuthProvider>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Home"
-          screenOptions={{
-            headerStyle: { backgroundColor: '#2c3e50' },
-            headerTintColor: '#ecf0f1',
-            headerTitleStyle: { fontWeight: 'bold' }
-          }}
-        >
-        <Stack.Screen 
-          name="Home" 
-          component={HomeScreen} 
-          options={{ title: '🎵 Chords Legend' }}
-        />
-        <Stack.Screen 
-          name="Search" 
-          component={SearchScreen} 
-          options={{ title: '🔍 Search Songs' }}
-        />
-        <Stack.Screen 
-          name="Library" 
-          component={LibraryScreen} 
-          options={{ title: '📚 My Library' }}
-        />
-        <Stack.Screen 
-          name="Auth" 
-          component={AuthScreen} 
-          options={{ title: '👤 Signup / Signin' }}
-        />
-        <Stack.Screen 
-          name="Player" 
-          component={PlayerScreen} 
-          options={{ title: '🎸 Chord Player' }}
-        />
-        <Stack.Screen 
-          name="ChordPlayer" 
-          component={PlayerScreen} 
-          options={{ title: '🎸 Chord Progression Sheet' }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-    </AuthProvider>
+    <PiBrowserRouter>
+      <AuthProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+              headerStyle: { backgroundColor: '#2c3e50' },
+              headerTintColor: '#ecf0f1',
+              headerTitleStyle: { fontWeight: 'bold' }
+            }}
+          >
+          <Stack.Screen 
+            name="Home" 
+            component={HomeScreen} 
+            options={{ title: '🎵 Chords Legend' }}
+          />
+          <Stack.Screen 
+            name="Search" 
+            component={SearchScreen} 
+            options={{ title: '🔍 Search Songs' }}
+          />
+          <Stack.Screen 
+            name="Library" 
+            component={LibraryScreen} 
+            options={{ title: '📚 My Library' }}
+          />
+          <Stack.Screen 
+            name="Auth" 
+            component={AuthScreen} 
+            options={{ title: '👤 Signup / Signin' }}
+          />
+          <Stack.Screen 
+            name="Player" 
+            component={PlayerScreen} 
+            options={{ title: '🎸 Chord Player' }}
+          />
+          <Stack.Screen 
+            name="ChordPlayer" 
+            component={PlayerScreen} 
+            options={{ title: '🎸 Chord Progression Sheet' }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+      </AuthProvider>
+    </PiBrowserRouter>
   );
 }
 
