@@ -14,5 +14,8 @@
     "api/**": {
       "runtime": "nodejs22.x"
     }
+  },
+  "buildEnvironment": {
+    "DESCRIPTION": "Chordypi app - Pi Browser native UX"
   }
 }
