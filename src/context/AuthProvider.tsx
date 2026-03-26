@@ -2,6 +2,7 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, User } from 'firebase/auth';
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { getAuthInstance, testFirebaseConnection } from '../firebase';
+import piNetworkService from '../services/piNetworkService';
 
 type AuthContextType = {
   user: User | null;
@@ -31,7 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [error, setError] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
-  // Initialize Firebase Auth on mount
+  // Initialize Firebase Auth and Pi Network on mount
   useEffect(() => {
     const initializeAuth = async () => {
       try {
@@ -58,6 +59,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           await testFirebaseConnection();
         } catch (testError) {
           // Connection test failed, but auth listener might still work
+        }
+
+        // ✅ NEW: Initialize Pi Network in background
+        try {
+          console.log('🥧 Initializing Pi Network in background...');
+          const piInitialized = await piNetworkService.initialize();
+          if (piInitialized) {
+            console.log('✅ Pi Network ready for payments');
+          } else {
+            console.log('ℹ️ Pi Network not available (fallback mode)');
+          }
+        } catch (piError) {
+          console.warn('⚠️ Pi Network initialization warning:', piError);
+          // Non-critical: Continue without Pi Network
         }
         
         return unsubscribe;
@@ -134,6 +149,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const auth = getAuthInstance();
       if (!auth) {
         throw new Error('Firebase Auth not initialized');
+      }
+      
+      // ✅ NEW: Cleanup Pi Network session on logout
+      try {
+        await piNetworkService.signOut();
+        console.log('✅ Pi Network session cleared');
+      } catch (piError) {
+        console.warn('⚠️ Pi Network cleanup warning:', piError);
+        // Continue with Firebase logout even if Pi cleanup fails
       }
       
       await signOut(auth);
