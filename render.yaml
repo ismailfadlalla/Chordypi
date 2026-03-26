@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: cordypi-backend
+    runtime: python
+    pythonVersion: 3.11
+    startCommand: cd server && gunicorn app:app --bind 0.0.0.0:8080
+    buildCommand: cd server && pip install -r requirements.txt
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PORT
+        value: 8080
