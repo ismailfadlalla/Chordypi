@@ -1,8 +1,7 @@
 {
   "buildCommand": "npm run build:web",
   "outputDirectory": "dist",
-  "framework": "expo",  
-  "nodeVersion": "22.x",
+  "framework": "expo",
   "env": {
     "EXPO_PUBLIC_FIREBASE_API_KEY": "@firebase_api_key",
     "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "@firebase_auth_domain",
